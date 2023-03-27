@@ -1,16 +1,16 @@
-package game.states;
+package game;
 
 import flixel.FlxCamera;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import game.MusicBeatState;
+import game.editors.*;
 import game.gameplay.Character;
 import game.gameplay.Highscore;
 import game.gameplay.NoteHandler.BabyGroup;
 import game.gameplay.NoteHandler.Note;
 import game.gameplay.stage.*;
-import game.states.MusicBeatState;
-import game.states.editors.*;
-import game.states.subStates.*;
+import game.subStates.*;
 import game.ui.GameplayUI;
 import game.ui.RatingPopup;
 import rhythm.Conductor;
@@ -296,9 +296,9 @@ class PlayState extends MusicBeatState
 			case STORY_MODE:
 			// placeholder
 			case FREEPLAY:
-				FlxG.switchState(new game.states.menus.FreeplayMenu());
+				FlxG.switchState(new game.menus.FreeplayMenu());
 			case CHARTING:
-				FlxG.switchState(new game.states.editors.ChartEditor(constructor));
+				FlxG.switchState(new game.editors.ChartEditor(constructor));
 		}
 	}
 

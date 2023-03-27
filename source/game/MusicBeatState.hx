@@ -1,4 +1,4 @@
-package game.states;
+package game;
 
 import core.Controls;
 import flixel.addons.ui.FlxUIState;

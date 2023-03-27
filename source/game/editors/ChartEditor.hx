@@ -1,7 +1,7 @@
-package game.states.editors;
+package game.editors;
 
+import game.PlayState;
 import game.gameplay.NoteHandler;
-import game.states.PlayState;
 import haxe.Json;
 import rhythm.chart.ChartDefs.ChartFormat;
 import rhythm.chart.ChartLoader;

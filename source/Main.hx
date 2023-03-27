@@ -28,7 +28,7 @@ class Main extends Sprite
 		self = this;
 		Controls.self = new Controls();
 
-		var baseGame:CustomGame = new CustomGame(1280, 720, game.states.menus.MainMenu, 60, 60, true, false);
+		var baseGame:CustomGame = new CustomGame(1280, 720, game.menus.MainMenu, 60, 60, true, false);
 		addChild(baseGame);
 
 		fpsCounter = new FPS();

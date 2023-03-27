@@ -1,4 +1,4 @@
-package game.states.menus;
+package game.menus;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;

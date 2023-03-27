@@ -1,4 +1,4 @@
-package game.states.menus;
+package game.menus;
 
 import game.ui.Alphabet;
 import rhythm.LevelManager;

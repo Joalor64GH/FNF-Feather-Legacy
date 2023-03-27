@@ -63,6 +63,6 @@ class CrashState extends FlxUIState
 		// if (FlxG.keys.justPressed.SPACE)
 		//	openURL('https://github.com/BeastlyGabi/FNF-Feather');
 		if (FlxG.keys.justPressed.ESCAPE)
-			FlxG.switchState(Type.createInstance(game.states.menus.MainMenu, []));
+			FlxG.switchState(Type.createInstance(game.menus.MainMenu, []));
 	}
 }

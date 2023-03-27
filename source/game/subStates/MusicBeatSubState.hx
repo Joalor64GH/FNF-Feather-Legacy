@@ -1,4 +1,4 @@
-package game.states.subStates;
+package game.subStates;
 
 import core.Controls;
 import flixel.FlxSubState;

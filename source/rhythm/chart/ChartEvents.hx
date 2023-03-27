@@ -1,6 +1,6 @@
 package rhythm.chart;
 
-import game.states.PlayState;
+import game.PlayState;
 import haxe.Json;
 import openfl.Assets;
 

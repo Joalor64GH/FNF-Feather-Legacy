@@ -1,8 +1,8 @@
 package game.ui;
 
 import core.FNFSprite;
+import game.PlayState;
 import game.gameplay.Highscore;
-import game.states.PlayState;
 import rhythm.Conductor;
 
 class RatingPopup

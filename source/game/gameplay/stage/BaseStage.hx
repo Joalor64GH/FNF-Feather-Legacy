@@ -1,7 +1,7 @@
 package game.gameplay.stage;
 
 import flixel.group.FlxGroup;
-import game.states.PlayState;
+import game.PlayState;
 
 /*
  * Extensible Class for handling the game's backgrounds, the so called "Stages"

@@ -1,9 +1,9 @@
-package game.states.menus;
+package game.menus;
 
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
-import game.states.menus.MenuBase.MenuOption;
+import game.menus.MenuBase.MenuOption;
 import lime.app.Application;
 import openfl.utils.Assets;
 

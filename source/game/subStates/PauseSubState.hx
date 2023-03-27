@@ -1,4 +1,4 @@
-package game.states.subStates;
+package game.subStates;
 
 import flixel.math.FlxMath;
 import game.ui.Alphabet;
@@ -28,7 +28,7 @@ class PauseSubState extends MusicBeatSubState
 					{
 						case STORY_MODE:
 						default:
-							FlxG.switchState(new game.states.menus.FreeplayMenu());
+							FlxG.switchState(new game.menus.FreeplayMenu());
 					}
 				}
 			}

@@ -4,7 +4,7 @@ import core.FNFSprite;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;
-import game.states.PlayState;
+import game.PlayState;
 import rhythm.Conductor;
 
 using StringTools;
