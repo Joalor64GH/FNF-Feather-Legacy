@@ -71,11 +71,11 @@ class FPS extends TextField
 		text = "";
 		if (visible)
 		{
-			text += 'FPS: ${curFPS}';
+			text += '[FPS]: ${curFPS}';
 
 			#if cpp
 			curMEM = System.totalMemory;
-			text += separator + 'Memory: ${FlxStringUtil.formatBytes(curMEM)}';
+			text += separator + '[MEMORY]: ${FlxStringUtil.formatBytes(curMEM)}';
 			#end
 			text += '\n';
 		}
@@ -92,11 +92,11 @@ class FPS extends TextField
 }
 
 /**
-	* Code originally from sayofthelor's Lore Engine
-	* https://github.com/sayofthelor/lore-engine
-
-	* changed for ease of use and more reliability
-**/
+ * Code originally from sayofthelor's Lore Engine
+ * https://github.com/sayofthelor/lore-engine
+ *
+ * changed for ease of use and more reliability
+ */
 class BorderField extends TextField
 {
 	public var parentField:TextField;
@@ -109,7 +109,7 @@ class BorderField extends TextField
 	 * @param parentField the attached field to this border
 	 * @param size [OPTIONAL] the border's size, defaults to 2
 	 * @param borderColor [OPTIONAL] the border's color, defaults to black
-	**/
+	 */
 	public function new(parentField:TextField, size:Float = 1.5, borderColor:Int = 0):Void
 	{
 		super();
@@ -158,7 +158,7 @@ class BorderField extends TextField
 		}
 	}
 
-	public function copyParent(field:TextField)
+	public function copyParent(field:TextField):Void
 	{
 		if (parentField != null)
 		{
@@ -178,8 +178,8 @@ class BorderField extends TextField
 
 	/**
 	 * Adds the created border instances below the parent field on `Main.hx`
-	**/
-	public function addChildren()
+	 */
+	public function addChildren():Void
 	{
 		for (i in 0...children.length)
 			Main.self.addChild(children[i]);
@@ -187,8 +187,8 @@ class BorderField extends TextField
 
 	/**
 	 * Removes all the created border instances below the parent field on `Main.hx`
-	**/
-	public function killChildren()
+	 */
+	public function killChildren():Void
 	{
 		for (i in 0...children.length)
 			Main.self.removeChild(children[i]);

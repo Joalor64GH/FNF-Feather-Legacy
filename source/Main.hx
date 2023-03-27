@@ -133,7 +133,7 @@ class CustomGame extends FlxGame
 				FileSystem.createDirectory('logs');
 
 			File.saveContent(logSavePath,
-				'[Error Stack]\n-----------\n${msg}\n-----------\n[Caught: ${e.message}]\n-----------\nConsider reporting this error to our Gamebanana: https://gamebanana.com/mods/412233\n');
+				'[Error Stack]\n-----------\n${msg}\n-----------\n[Caught: ${e.message}]\n-----------\nConsider reporting this error to our GitHub Page: https://github.com/BeastlyGabi/FNF-Feather\n');
 		}
 		catch (e:Dynamic)
 			Sys.println('Error!\nCouldn\'t save crash log\nCaught: ${e}');
