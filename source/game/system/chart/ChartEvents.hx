@@ -1,10 +1,8 @@
-package rhythm.chart;
+package game.system.chart;
 
 import game.PlayState;
 import haxe.Json;
 import openfl.Assets;
-
-using StringTools;
 
 typedef EventLine =
 {
@@ -31,7 +29,7 @@ class ChartEvents
 
 		var eventsFolder:String = 'data/songs/chart/${songName.toLowerCase()}/events.json';
 
-		if (Assets.exists(AssetHandler.getPath(eventsFolder, JSON)))
+		if (AssetHandler.exists(AssetHandler.getPath(eventsFolder, JSON)))
 		{
 			var jsonPath:String = AssetHandler.getAsset(eventsFolder, JSON);
 

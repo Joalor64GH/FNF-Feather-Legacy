@@ -1,4 +1,4 @@
-package rhythm;
+package game.system;
 
 class Levels
 {
@@ -41,7 +41,7 @@ class Levels
 			songs: [
 				{name: "Satin-Panties", opponent: "mom", color: 0xFFFC96B7},
 				{name: "High", opponent: "mom", color: 0xFFFC96B7},
-				{name: "M.I.L.F", opponent: "mom", color: 0xFFFC96B7}
+				{name: "MILF", opponent: "mom", color: 0xFFFC96B7}
 			],
 			chars: ["mom", "bf", "gf"],
 			label: "MOMMY MUST MURDER"

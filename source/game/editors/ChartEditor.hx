@@ -2,9 +2,9 @@ package game.editors;
 
 import game.PlayState;
 import game.gameplay.NoteHandler;
+import game.system.chart.ChartDefs.ChartFormat;
+import game.system.chart.ChartLoader;
 import haxe.Json;
-import rhythm.chart.ChartDefs.ChartFormat;
-import rhythm.chart.ChartLoader;
 
 /**
  * State for Editing and Exporting new Charts

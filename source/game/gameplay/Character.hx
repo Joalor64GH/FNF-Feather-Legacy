@@ -2,9 +2,7 @@ package game.gameplay;
 
 import core.FNFSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
-import rhythm.Conductor;
-
-using StringTools;
+import game.system.Conductor;
 
 enum DanceType
 {
@@ -123,13 +121,16 @@ class Character extends FNFSprite
 				singDuration = 6.1;
 
 			default:
-				frames = getFrames("face");
+				frames = AssetHandler.getAsset('images/characters/face/face', XML);
 
 				addAnim("idle", "Idle", isPlayer ? [0, -10] : [0, -350]);
 				addAnim("singLEFT", isPlayer ? "Right" : "Left", isPlayer ? [33, -6] : [22, -353]);
 				addAnim("singDOWN", "Down", isPlayer ? [-48, -31] : [17, -375]);
 				addAnim("singUP", "Up", isPlayer ? [-45, 11] : [8, -334]);
 				addAnim("singRIGHT", isPlayer ? "Left" : "Right", isPlayer ? [-61, -14] : [50, -348]);
+
+				if (!isPlayer)
+					cameraOffset = [20, 300];
 
 				flipX = isPlayer;
 		}

@@ -49,8 +49,8 @@ class CacheHandler
 
 	public static function purgeStored():Void
 	{
-		_purgeStored();
 		_purgeUnused();
+		_purgeStored();
 	}
 
 	static function _purgeStored():Void
@@ -60,7 +60,7 @@ class CacheHandler
 			{
 				if (OpenFLAssets.cache.hasBitmapData(data) && !trackedIDs.contains(data))
 				{
-					OpenFLAssets.cache.removeBitmapData(data);
+					OpenFLAssets.cache.clear(data);
 					FlxG.bitmap._cache.remove(data);
 				}
 			}
@@ -70,7 +70,6 @@ class CacheHandler
 		{
 			if (OpenFLAssets.cache.hasSound(data) && !trackedIDs.contains(data))
 			{
-				OpenFLAssets.cache.removeSound(data);
 				OpenFLAssets.cache.clear(data);
 				cachedSounds.remove(data);
 			}
@@ -86,12 +85,11 @@ class CacheHandler
 			if (OpenFLAssets.cache.hasBitmapData(data))
 			{
 				OpenFLAssets.cache.clear(data);
-				OpenFLAssets.cache.removeBitmapData(data);
 				@:privateAccess FlxG.bitmap._cache.remove(data);
 			}
 			cachedGraphics.remove(data);
 		}
 
-		openfl.system.System.gc();
+		SysGC.run(true);
 	}
 }

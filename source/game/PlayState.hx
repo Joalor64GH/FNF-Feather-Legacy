@@ -9,14 +9,12 @@ import game.gameplay.Highscore;
 import game.gameplay.NoteHandler;
 import game.stage.*;
 import game.subStates.*;
+import game.system.Conductor;
+import game.system.chart.ChartDefs.ChartFormat;
+import game.system.chart.ChartEvents;
+import game.system.chart.ChartLoader;
 import game.ui.GameplayUI;
 import game.ui.RatingPopup;
-import rhythm.Conductor;
-import rhythm.chart.ChartDefs.ChartFormat;
-import rhythm.chart.ChartEvents;
-import rhythm.chart.ChartLoader;
-
-using StringTools;
 
 enum GameplayMode
 {
@@ -121,9 +119,6 @@ class PlayState extends MusicBeatState
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		camGame.follow(camFollow, LOCKON, 0.04);
-		camGame.focusOn(camFollow.getPosition());
-
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
 		persistentUpdate = true;
@@ -162,7 +157,10 @@ class PlayState extends MusicBeatState
 		add(opponent);
 		add(player);
 
-		camFollow.setPosition(opponent.getGraphicMidpoint().x, opponent.getGraphicMidpoint().y);
+		camFollow.setPosition(Math.floor(opponent.getMidpoint().x + FlxG.width / 4), Math.floor(opponent.getGraphicMidpoint().y - FlxG.height / 2));
+
+		camGame.follow(camFollow, LOCKON, 0.04);
+		camGame.focusOn(camFollow.getPosition());
 
 		// ui
 		gameUI = new GameplayUI();

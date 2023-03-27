@@ -2,8 +2,8 @@ package game.subStates;
 
 import core.Controls;
 import flixel.FlxSubState;
-import rhythm.BeatManager;
-import rhythm.Conductor;
+import game.system.BeatManager;
+import game.system.Conductor;
 
 class MusicBeatSubState extends FlxSubState
 {

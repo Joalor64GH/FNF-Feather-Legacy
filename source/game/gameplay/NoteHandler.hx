@@ -5,9 +5,7 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;
 import game.PlayState;
-import rhythm.Conductor;
-
-using StringTools;
+import game.system.Conductor;
 
 typedef NoteGroup = FlxTypedGroup<Note>;
 

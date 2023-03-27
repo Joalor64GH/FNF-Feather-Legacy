@@ -25,6 +25,9 @@ class MenuBase extends MusicBeatState
 	{
 		super.update(elapsed);
 
+		if (FlxG.sound.music != null && FlxG.sound.music.volume < 0.7)
+			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+
 		if (controls.anyJustPressed(["up", "down"]))
 		{
 			updateSelection(controls.justPressed("up") ? -1 : 1);

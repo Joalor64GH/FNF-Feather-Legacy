@@ -2,8 +2,8 @@ package game;
 
 import core.Controls;
 import flixel.addons.ui.FlxUIState;
-import rhythm.BeatManager;
-import rhythm.Conductor;
+import game.system.BeatManager;
+import game.system.Conductor;
 
 class MusicBeatState extends FlxUIState
 {

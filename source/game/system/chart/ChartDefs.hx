@@ -1,4 +1,4 @@
-package rhythm.chart;
+package game.system.chart;
 
 typedef ChartFormat =
 {

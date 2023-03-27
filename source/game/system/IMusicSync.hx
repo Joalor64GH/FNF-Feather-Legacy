@@ -1,4 +1,4 @@
-package rhythm;
+package game.system;
 
 interface IMusicSync
 {

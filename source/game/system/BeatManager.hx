@@ -1,6 +1,6 @@
-package rhythm;
+package game.system;
 
-import rhythm.Conductor.ChangeBPMEvent;
+import game.system.Conductor.ChangeBPMEvent;
 
 /**
  * Manages Updates for song variables, Beats, Steps, and Sections

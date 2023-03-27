@@ -1,6 +1,6 @@
 package game.gameplay;
 
-import rhythm.Conductor;
+import game.system.Conductor;
 
 typedef GradeStatus =
 {

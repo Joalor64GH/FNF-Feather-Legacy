@@ -1,15 +1,12 @@
-package rhythm.chart;
+package game.system.chart;
 
 import flixel.system.FlxSound;
 import flixel.util.FlxSort;
+import game.system.chart.ChartDefs;
+import game.system.chart.ChartEvents;
 import haxe.Json;
-import openfl.Assets;
 import openfl.media.Sound;
 import openfl.net.FileReference;
-import rhythm.chart.ChartDefs;
-import rhythm.chart.ChartEvents;
-
-using StringTools;
 
 /**
  * Class for parsing and loading song charts
@@ -55,7 +52,7 @@ class ChartLoader
 		songName = songName.toLowerCase();
 
 		difficulty = '-${difficulty}';
-		if (!Assets.exists(AssetHandler.getPath('data/songs/chart/${songName}/${songName}${difficulty}', JSON)))
+		if (!AssetHandler.exists(AssetHandler.getPath('data/songs/chart/${songName}/${songName}${difficulty}', JSON)))
 			difficulty = '';
 
 		var jsonPath:String = AssetHandler.getAsset('data/songs/chart/${songName}/${songName}${difficulty}', JSON);
@@ -193,7 +190,7 @@ class MusicPlayback
 		inst = new FlxSound().loadEmbedded(getSoundFile("Inst"));
 		FlxG.sound.list.add(inst);
 
-		if (Assets.exists(AssetHandler.getPath('data/songs/audio/${songName}/Voices', SOUND)))
+		if (AssetHandler.exists(AssetHandler.getPath('data/songs/audio/${songName}/Voices', SOUND)))
 		{
 			vocals = new FlxSound().loadEmbedded(getSoundFile('Voices'));
 			FlxG.sound.list.add(vocals);

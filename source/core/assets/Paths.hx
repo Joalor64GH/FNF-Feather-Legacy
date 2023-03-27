@@ -27,6 +27,16 @@ class Paths
 	public static inline function font(font:String):String
 		return AssetHandler.getAsset('data/fonts/${font}', FONT);
 
+	public static inline function inst(song:String):String
+		return AssetHandler.getPath('data/songs/audio/${song}/Inst', SOUND);
+
+	public static inline function vocals(song:String):String
+	{
+		if (AssetHandler.exists(AssetHandler.getPath('data/songs/audio/${song}/Voices', SOUND)))
+			return AssetHandler.getPath('data/songs/audio/${song}/Voices', SOUND);
+		return null;
+	}
+
 	public static inline function getSparrowAtlas(xml:String):FlxAtlasFrames
 		return AssetHandler.getAsset('images/${xml}', XML);
 

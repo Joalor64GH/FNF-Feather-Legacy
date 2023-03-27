@@ -1,6 +1,6 @@
-package rhythm;
+package game.system;
 
-import rhythm.chart.ChartDefs.ChartFormat;
+import game.system.chart.ChartDefs.ChartFormat;
 
 typedef ChangeBPMEvent =
 {

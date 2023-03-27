@@ -3,7 +3,7 @@ package game.ui;
 import core.FNFSprite;
 import game.PlayState;
 import game.gameplay.Highscore;
-import rhythm.Conductor;
+import game.system.Conductor;
 
 class RatingPopup
 {

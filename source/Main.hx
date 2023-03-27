@@ -4,12 +4,10 @@ import core.Controls;
 import core.FPS;
 import core.assets.CacheHandler;
 import flixel.FlxGame;
+import flixel.FlxState;
 import haxe.CallStack;
 import haxe.Exception;
 import openfl.display.Sprite;
-
-using StringTools;
-
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -28,6 +26,10 @@ class Main extends Sprite
 		self = this;
 		Controls.self = new Controls();
 
+		#if cpp
+		cpp.vm.Gc.enable(true);
+		#end
+
 		var baseGame:CustomGame = new CustomGame(1280, 720, game.menus.MainMenu, 60, 60, true, false);
 		addChild(baseGame);
 
@@ -39,11 +41,12 @@ class Main extends Sprite
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 
-		FlxG.signals.preStateSwitch.add(function():Void
+		FlxG.signals.preStateCreate.add(function(state:FlxState):Void
 		{
-			CacheHandler.purgeStored();
-			// @:privateAccess CacheHandler._purgeUnused();
+			// if (state != FlxG.state)
+			// @:privateAccess SysGC.run(true);
 		});
+		// FlxG.signals.postStateSwitch.add(function():Void @:privateAccess CacheHandler._purgeUnused());
 	}
 }
 

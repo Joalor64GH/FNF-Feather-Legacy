@@ -1,12 +1,10 @@
 package core;
 
 import flixel.system.FlxSound;
+import game.system.Conductor;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.net.FileReference;
-import rhythm.Conductor;
-
-using StringTools;
 
 class Utils
 {

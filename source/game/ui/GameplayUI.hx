@@ -5,7 +5,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.util.FlxStringUtil;
 import game.PlayState;
-import rhythm.Conductor;
+import game.system.Conductor;
 
 class GameplayUI extends FlxSpriteGroup
 {

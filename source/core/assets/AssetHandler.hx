@@ -3,8 +3,6 @@ package core.assets;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.Assets as OpenFLAssets;
 
-using StringTools;
-
 class AssetHandler
 {
 	public static function getPath(?folder:String, ?type:AssetType):String
@@ -25,13 +23,19 @@ class AssetHandler
 			case XML: FlxAtlasFrames.fromSparrow(getPath(folder, IMAGE), getPath(folder, XML));
 			case TXT: FlxAtlasFrames.fromSpriteSheetPacker(getPath(folder, IMAGE), getPath(folder, TXT));
 			case JSON:
-				var json = OpenFLAssets.getText(finalPath);
+				var json = AssetHandler.getContent(finalPath);
 				while (!json.endsWith("}"))
 					json = json.substr(0, json.length - 1);
 				json;
 			default: finalPath;
 		}
 	}
+
+	public static function exists(path:String):Bool
+		return #if sys sys.FileSystem.exists(path) #else OpenFLAssets.exists(path) #end;
+
+	public static function getContent(path:String):String
+		return #if sys sys.io.File.getContent(path) #else OpenFLAssets.getText(path) #end;
 }
 
 @:enum abstract AssetType(String) to String from String
@@ -49,7 +53,7 @@ class AssetHandler
 		if (getExtension() != null)
 		{
 			for (i in getExtension())
-				if (OpenFLAssets.exists('${path}${i}'))
+				if (AssetHandler.exists('${path}${i}'))
 					return '${path}${i}';
 		}
 

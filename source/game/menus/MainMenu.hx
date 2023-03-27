@@ -7,8 +7,6 @@ import game.menus.MenuBase.MenuOption;
 import lime.app.Application;
 import openfl.utils.Assets;
 
-using StringTools;
-
 class MainMenu extends MusicBeatState
 {
 	static var curSelection:Int = 0;
@@ -87,6 +85,9 @@ class MainMenu extends MusicBeatState
 	public override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+
+		if (FlxG.sound.music != null && FlxG.sound.music.volume < 0.7)
+			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 
 		if (!lockedMovement)
 		{
@@ -199,9 +200,9 @@ class MainMenuItem extends FlxSprite
 
 	public function defineType():String
 	{
-		if (Assets.exists(AssetHandler.getPath('images/menus/options/${name}', XML)))
+		if (AssetHandler.exists(AssetHandler.getPath('images/menus/options/${name}', XML)))
 			return "frames-sparrow";
-		else if (Assets.exists(AssetHandler.getPath('images/menus/options/${name}', TXT)))
+		else if (AssetHandler.exists(AssetHandler.getPath('images/menus/options/${name}', TXT)))
 			return "frames-packer";
 		return "graphic";
 	}
