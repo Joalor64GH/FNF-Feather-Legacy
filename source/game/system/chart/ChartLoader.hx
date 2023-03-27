@@ -218,7 +218,12 @@ class MusicPlayback
 	}
 
 	public function cease():Void
-		Utils.killMusic([inst, vocals]);
+	{
+		var toKill:Array<FlxSound> = [inst];
+		if (vocals != null)
+			toKill.push(vocals);
+		Utils.killMusic(toKill);
+	}
 
 	public function resyncVocals():Void
 	{

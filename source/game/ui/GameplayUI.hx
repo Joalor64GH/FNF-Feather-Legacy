@@ -15,7 +15,12 @@ class GameplayUI extends FlxSpriteGroup
 	public var healthBar:FlxBar;
 
 	public var scoreText:FlxText;
-	public var timeText:FlxText;
+	public var infoText:FlxText;
+
+	/**
+	 * Time, Song, None
+	 */
+	public var infoDisplay:String = 'song';
 
 	public function new():Void
 	{
@@ -37,12 +42,17 @@ class GameplayUI extends FlxSpriteGroup
 		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE_FAST, 0xFF000000);
 		add(scoreText);
 
-		timeText = new FlxText(0, 0, 0, '');
-		timeText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 23, 0xFFFFFFFF, CENTER, OUTLINE_FAST, 0xFF000000);
-		add(timeText);
+		if (infoDisplay != 'none')
+		{
+			infoText = new FlxText(0, 0, 0, infoDisplay == 'song' ? '- ${game.song.name.toUpperCase()} -' : '');
+			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE_FAST, 0xFF000000);
+			infoText.y = game.downscroll ? FlxG.height - infoText.height - 15 : 15;
+			infoText.screenCenter(X);
+			add(infoText);
+		}
 
 		var featherText:FlxText = new FlxText(0, 0, '[FEATHER BETA v${lime.app.Application.current.meta.get("version")}]');
-		featherText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, RIGHT, OUTLINE_FAST, 0xFF000000);
+		featherText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 16, 0xFFFFFFFF, RIGHT, OUTLINE_FAST, 0xFF000000);
 		featherText.setPosition(FlxG.width - featherText.width - 5, FlxG.height - featherText.height - 5);
 		add(featherText);
 
@@ -57,14 +67,17 @@ class GameplayUI extends FlxSpriteGroup
 
 		healthBar.percent = game.currentStat.health * 50;
 
-		if (game != null && timeText != null && Conductor.songPosition > 0)
+		if (infoDisplay == 'time')
 		{
-			var time:Float = Math.floor(Conductor.songPosition / 1000);
-			var length:Float = Math.floor(game.music.inst.length / 1000);
+			if (game != null && infoText != null && Conductor.songPosition > 0)
+			{
+				var time:Float = Math.floor(Conductor.songPosition / 1000);
+				var length:Float = Math.floor(game.music.inst.length / 1000);
 
-			timeText.text = '- ${FlxStringUtil.formatTime(time)} / ${FlxStringUtil.formatTime(length)} -';
-			timeText.y = game.downscroll ? FlxG.height - timeText.height - 15 : 15;
-			timeText.screenCenter(X);
+				infoText.text = '- ${FlxStringUtil.formatTime(time)} / ${FlxStringUtil.formatTime(length)} -';
+				infoText.y = game.downscroll ? FlxG.height - infoText.height - 15 : 15;
+				infoText.screenCenter(X);
+			}
 		}
 	}
 

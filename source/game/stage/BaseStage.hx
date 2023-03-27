@@ -31,6 +31,11 @@ class BaseStage extends FlxGroup
 	public var hudZoom:Float = 1;
 
 	/**
+	 * Defines whether or not the crowd should appear on Stage
+	 */
+	public var displayCrowd:Bool = true;
+
+	/**
 	 * Use this to create your stage objects
 	 * remember to always call `super();`
 	 */

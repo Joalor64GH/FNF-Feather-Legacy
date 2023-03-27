@@ -149,11 +149,22 @@ class PlayState extends MusicBeatState
 		camHUD.zoom = gameStage.hudZoom;
 
 		// characters
-		crowd = new Character(400, 130).loadChar(song.metadata.crowd);
+		if (gameStage.displayCrowd)
+			crowd = new Character(400, 130).loadChar(song.metadata.crowd);
+
 		opponent = new Character(100, 100).loadChar(song.metadata.opponent);
 		player = new Character(770, 450).loadChar(song.metadata.player, true);
 
-		add(crowd);
+		if (crowd != null)
+		{
+			if (song.metadata.opponent == song.metadata.crowd)
+			{
+				crowd.visible = false;
+				opponent.setPosition(crowd.x, crowd.y);
+			}
+			add(crowd);
+		}
+
 		add(opponent);
 		add(player);
 
