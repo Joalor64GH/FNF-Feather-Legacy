@@ -154,12 +154,12 @@ class Highscore
 		updateGrade();
 	}
 
-	public function updateHealth(rate:Int):Void
+	public function updateHealth(rate:Int, isSustain:Bool = false):Void
 	{
 		var mult:Float = switch (rate)
 		{
 			case 3, 4: 0.10;
-			default: 0.05;
+			default: isSustain ? 0.01 : 0.05;
 		}
 
 		health += mult * (RATINGS[2][rate]) / 100;

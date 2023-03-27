@@ -596,7 +596,7 @@ class PlayState extends MusicBeatState
 
 					gameUI.updateScore();
 				}
-				currentStat.updateHealth(Highscore.RATINGS[0].indexOf(rating));
+				currentStat.updateHealth(Highscore.RATINGS[0].indexOf(rating), note.isSustain);
 			}
 
 			if (!note.isSustain)
