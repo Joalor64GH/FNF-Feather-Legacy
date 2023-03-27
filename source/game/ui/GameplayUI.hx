@@ -20,7 +20,7 @@ class GameplayUI extends FlxSpriteGroup
 	/**
 	 * Time, Song, None
 	 */
-	public var infoDisplay:String = 'song';
+	public var infoDisplay:String = 'time';
 
 	public function new():Void
 	{
@@ -39,20 +39,22 @@ class GameplayUI extends FlxSpriteGroup
 		add(healthBar);
 
 		scoreText = new FlxText(0, healthBG.y + 25, Std.int(healthBG.width + 55), '');
-		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE_FAST, 0xFF000000);
+		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(scoreText);
+
+		infoDisplay = infoDisplay.toLowerCase();
 
 		if (infoDisplay != 'none')
 		{
 			infoText = new FlxText(0, 0, 0, infoDisplay == 'song' ? '- ${game.song.name.toUpperCase()} -' : '');
-			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE_FAST, 0xFF000000);
+			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 			infoText.y = game.downscroll ? FlxG.height - infoText.height - 15 : 15;
 			infoText.screenCenter(X);
 			add(infoText);
 		}
 
 		var featherText:FlxText = new FlxText(0, 0, '[FEATHER BETA v${lime.app.Application.current.meta.get("version")}]');
-		featherText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 16, 0xFFFFFFFF, RIGHT, OUTLINE_FAST, 0xFF000000);
+		featherText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
 		featherText.setPosition(FlxG.width - featherText.width - 5, FlxG.height - featherText.height - 5);
 		add(featherText);
 

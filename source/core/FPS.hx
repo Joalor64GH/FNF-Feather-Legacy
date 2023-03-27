@@ -29,18 +29,18 @@ class FPS extends TextField
 	 * along with it
 	 * @param useOutline whether to enable the fps outline border
 	**/
-	public function new(?useOutline:Bool = true):Void
+	public function new(x:Float = 10, y:Float = 5, color:Int = -1, ?useOutline:Bool = true):Void
 	{
 		super();
 
-		this.x = 10;
-		this.y = 5;
+		this.x = x;
+		this.y = y;
 
 		autoSize = LEFT;
 		selectable = false;
 		visible = true;
 
-		defaultTextFormat = new TextFormat(Paths.font('vcr'), 16, -1);
+		defaultTextFormat = new TextFormat(Paths.font('vcr'), 16, color);
 		text = "";
 
 		width = FlxG.width;
