@@ -1,10 +1,10 @@
 package rhythm;
 
-class LevelManager
+class Levels
 {
-	public static var defaultDiffs:Array<String> = ["easy", "normal", "hard"];
+	public static final DEFAULT_DIFFICULTIES:Array<String> = ["easy", "normal", "hard"];
 
-	public static var gameWeeks:Array<GameWeek> = [
+	public static var GAME_LEVELS:Array<GameWeek> = [
 		{
 			songs: [{name: "Tutorial", opponent: "gf", color: 0xFF9271FD}],
 			chars: ["", "bf", "gf"],

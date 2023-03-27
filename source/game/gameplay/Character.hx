@@ -135,7 +135,6 @@ class Character extends FNFSprite
 		}
 
 		checkQuickDancer();
-
 		dance();
 
 		return this;
@@ -180,14 +179,14 @@ class Character extends FNFSprite
 	{
 		var animName:String = 'idle${suffix}';
 		var direction:String = (danced ? 'Right' : 'Left');
-		// danced = !danced;
 
-		switch (danceStyle)
+		if (animation.curAnim != null && animation.curAnim.finished)
+			danced = !danced;
+
+		animName = switch (danceStyle)
 		{
-			case QUICK:
-				animName = 'dance${direction}${suffix}';
-			case NORMAL:
-				animName = 'idle${suffix}';
+			case QUICK: 'dance${direction}${suffix}';
+			case NORMAL: 'idle${suffix}';
 		};
 
 		playAnim(animName, forced, false, startFrame);

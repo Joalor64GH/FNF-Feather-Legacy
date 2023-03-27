@@ -25,7 +25,7 @@ class Highscore
 
 	// name, score, health, accuracy
 	public static var RATINGS:Array<Dynamic> = [
-		[SICK, GOOD, BAD, SHIT, MISS], // ratings
+		[SICK, GOOD, BAD, SHIT, MISS], // names
 		[350, 250, -50, -100, -250], // score
 		[100, 30, -25, -35, -40], // health
 		[100, 85, 60, -30, -50] // accuracy

@@ -1,7 +1,7 @@
 package game.menus;
 
 import game.ui.Alphabet;
-import rhythm.LevelManager;
+import rhythm.Levels;
 import rhythm.chart.ChartLoader;
 
 using StringTools;
@@ -26,9 +26,9 @@ class FreeplayMenu extends MenuBase
 		add(optionsGroup);
 
 		// get week songs and add them
-		for (i in 0...LevelManager.gameWeeks.length)
+		for (i in 0...Levels.GAME_LEVELS.length)
 		{
-			var week:GameWeek = LevelManager.gameWeeks[i];
+			var week:GameWeek = Levels.GAME_LEVELS[i];
 			for (i in 0...week.songs.length)
 				songList.push(week.songs[i]);
 		}
@@ -62,7 +62,7 @@ class FreeplayMenu extends MenuBase
 		{
 			FlxG.switchState(new PlayState({
 				songName: Utils.removeForbidden(songList[curSelection].name),
-				difficulty: LevelManager.defaultDiffs[currentDifficulty],
+				difficulty: Levels.DEFAULT_DIFFICULTIES[currentDifficulty],
 				gamemode: FREEPLAY
 			}));
 		}
@@ -82,7 +82,7 @@ class FreeplayMenu extends MenuBase
 
 	function updateDifficulty(newDifficulty:Int = 0):Void
 	{
-		currentDifficulty = FlxMath.wrap(currentDifficulty + newDifficulty, 0, LevelManager.defaultDiffs.length - 1);
-		trace(LevelManager.defaultDiffs[currentDifficulty]);
+		currentDifficulty = FlxMath.wrap(currentDifficulty + newDifficulty, 0, Levels.DEFAULT_DIFFICULTIES.length - 1);
+		trace(Levels.DEFAULT_DIFFICULTIES[currentDifficulty]);
 	}
 }

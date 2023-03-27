@@ -21,7 +21,11 @@ class GameplayUI extends FlxSpriteGroup
 	{
 		super();
 
-		healthBG = new FlxSprite(0, FlxG.height * 0.11 /*0.90*/).loadGraphic(FtrAssets.getUIAsset('healthBar'));
+		var barY:Float = FlxG.height * 0.90;
+		if (game.downscroll)
+			barY = FlxG.height * 0.11;
+
+		healthBG = new FlxSprite(0, barY).loadGraphic(FtrAssets.getUIAsset('healthBar'));
 		healthBG.screenCenter(X);
 		add(healthBG);
 
@@ -59,7 +63,7 @@ class GameplayUI extends FlxSpriteGroup
 			var length:Float = Math.floor(game.music.inst.length / 1000);
 
 			timeText.text = '- ${FlxStringUtil.formatTime(time)} / ${FlxStringUtil.formatTime(length)} -';
-			timeText.y = FlxG.height - timeText.height - 15;
+			timeText.y = game.downscroll ? FlxG.height - timeText.height - 15 : 15;
 			timeText.screenCenter(X);
 		}
 	}

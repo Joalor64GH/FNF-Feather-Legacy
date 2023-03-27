@@ -11,7 +11,6 @@ using StringTools;
 
 typedef NoteGroup = FlxTypedGroup<Note>;
 
-// class Note extends FlxSpriteGroup
 class Note extends FNFSprite
 {
 	final game:PlayState = PlayState.self;
@@ -20,11 +19,13 @@ class Note extends FNFSprite
 
 	public var index:Int = 0;
 
-	public var type:String = 'default';
+	public var type:String = "default";
 
 	// note type parameters
+	public var isMine:Bool = false;
 	public var ignorable:Bool = false;
 	public var doSplash:Bool = true;
+	public var killDelay:Int = 200;
 
 	public var step:Float = 0.0;
 	public var sustainTime:Float = 0.0;
@@ -45,7 +46,7 @@ class Note extends FNFSprite
 	public var canHit:Bool = false;
 
 	public var isSustain:Bool = false;
-	public var downscroll:Bool = true;
+	public var downscroll:Bool = false;
 
 	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;
@@ -55,7 +56,7 @@ class Note extends FNFSprite
 
 	final originalStepCrochet:Float = Conductor.stepCrochet;
 
-	public function new(step:Float, index:Int, ?isSustain:Bool, ?type:String, ?prevNote:Note):Void
+	public function new(step:Float, index:Int, ?isSustain:Bool, ?type:String = "default", ?prevNote:Note):Void
 	{
 		super(0, -2000);
 
@@ -67,6 +68,7 @@ class Note extends FNFSprite
 		this.isSustain = isSustain;
 		this.type = type;
 		this.prevNote = prevNote;
+		this.moves = false;
 
 		frames = AssetHandler.getAsset('images/notes/${type}/note', XML);
 		addAnim('${colorArray()[index]} note', '${colorArray()[index]}0');
@@ -78,10 +80,9 @@ class Note extends FNFSprite
 		// sustains
 		if (prevNote != null && isSustain)
 		{
-			if (downscroll)
-				flipY = true;
-			alpha = 0.6;
+			flipY = downscroll;
 			hitboxEarly = 0.5;
+			alpha = 0.6;
 
 			playAnim('${colorArray()[index]} end');
 			updateHitbox();
@@ -198,8 +199,7 @@ class BabyGroup extends FlxGroup
 
 		for (i in 0...keys)
 		{
-			var babyArrow:FNFSprite = new FNFSprite(x, y);
-			babyArrow.frames = AssetHandler.getAsset('images/notes/default/note', XML);
+			var babyArrow:FNFSprite = new FNFSprite(x, y).loadFrames('images/notes/default/note');
 
 			babyArrow.addAnim('static', 'arrow static ${i}');
 			babyArrow.addAnim('pressed', '${directions[i]} press');
@@ -263,13 +263,18 @@ class BabyGroup extends FlxGroup
 
 				if (note != null && babyArrow != null)
 				{
-					var center:Float = (babyArrow.y) + spacing / 2;
+					var mustHit:Bool = note.strumline != game.playerStrumline;
+					var center:Float = babyArrow.y + spacing / 2;
+					var stepY:Float = (Conductor.songPosition - note.step) * (0.45 * FlxMath.roundDecimal(note.speed, 2));
 
 					note.x = babyArrow.x;
-					note.y = (babyArrow.y) + (Conductor.songPosition - note.step) * (0.45 * FlxMath.roundDecimal(note.speed, 2));
+					if (note.downscroll)
+						note.y = babyArrow.y + stepY;
+					else // I'm gonna throw up.
+						note.y = babyArrow.y - stepY;
 
-					note.x += note.offsetX;
-					note.y += note.offsetY;
+					// note.x += note.offsetX;
+					// note.y += note.offsetY;
 
 					if (note.isSustain)
 					{
@@ -282,26 +287,22 @@ class BabyGroup extends FlxGroup
 							}
 
 							if (note.y - note.offset.y * note.scale.y + note.height >= center
-								&& (note.strumline != game.playerStrumline
-									|| (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit))))
+								&& (mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit))))
 							{
 								var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
 								swagRect.height = (center - note.y) / note.scale.y;
 								swagRect.y = note.frameHeight - swagRect.height;
-
 								note.clipRect = swagRect;
 							}
 						}
 						else
 						{
 							if (note.y + note.offset.y * note.scale.y <= center
-								&& (note.strumline != game.playerStrumline
-									|| (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit))))
+								&& (mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit))))
 							{
 								var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
 								swagRect.y = (center - note.y) / note.scale.y;
 								swagRect.height -= swagRect.y;
-
 								note.clipRect = swagRect;
 							}
 						}

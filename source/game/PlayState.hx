@@ -74,6 +74,10 @@ class PlayState extends MusicBeatState
 	public var opponent:Character;
 	public var crowd:Character;
 
+	// testing purposes
+	public var downscroll:Bool = false;
+	public var ghostTap:Bool = false;
+
 	public function new(constructor:PlayStateStruct):Void
 	{
 		super();
@@ -150,9 +154,9 @@ class PlayState extends MusicBeatState
 		camHUD.zoom = gameStage.hudZoom;
 
 		// characters
-		crowd = new Character(400, 130).loadChar("gf");
-		opponent = new Character(100, 100).loadChar("dad");
-		player = new Character(770, 450).loadChar("bf", true);
+		crowd = new Character(400, 130).loadChar(song.metadata.crowd);
+		opponent = new Character(100, 100).loadChar(song.metadata.opponent);
+		player = new Character(770, 450).loadChar(song.metadata.player, true);
 
 		add(crowd);
 		add(opponent);
@@ -167,10 +171,12 @@ class PlayState extends MusicBeatState
 		lines = new FlxTypedGroup<BabyGroup>();
 		addOnHUD(lines);
 
-		opponentNotes = new BabyGroup(FlxG.width / 5 - FlxG.width / 7, FlxG.height - 150, true, opponent);
+		var yPos:Float = downscroll ? FlxG.height - 150 : 55;
+
+		opponentNotes = new BabyGroup(FlxG.width / 5 - FlxG.width / 7, yPos, true, opponent);
 		lines.add(opponentNotes);
 
-		playerNotes = new BabyGroup(FlxG.width / 3 + FlxG.width / 4, FlxG.height - 150, false, player);
+		playerNotes = new BabyGroup(FlxG.width / 3 + FlxG.width / 4, yPos, false, player);
 		lines.add(playerNotes);
 
 		controls.onKeyPressed.add(onKeyPress);
@@ -371,13 +377,19 @@ class PlayState extends MusicBeatState
 							goodNoteHit(note, playerNotes);
 					}
 
-					var killRangeReached:Bool = (note.downscroll ? note.y > FlxG.height : note.y < -note.height);
-					if (killRangeReached || (note.isSustain && note.wasGoodHit && note.step <= Conductor.songPosition - note.hitboxEarly))
-					{
-						if (killRangeReached && note.strumline == playerStrumline && !note.ignorable)
-							noteMiss(note.index, strum);
+					var rangeReached:Bool = note.downscroll ? note.y > FlxG.height : note.y < -note.height;
+					var sustainHit:Bool = note.isSustain && note.wasGoodHit && note.step <= Conductor.songPosition - note.hitboxEarly;
 
-						killNote(note, strum);
+					if (Conductor.songPosition > note.killDelay + note.step)
+					{
+						if (rangeReached || sustainHit)
+						{
+							if (rangeReached && !note.wasGoodHit && !note.ignorable && !note.isMine)
+								if (note.strumline == playerStrumline)
+									noteMiss(note.index, strum);
+
+							killNote(note, strum);
+						}
 					}
 				});
 			}
@@ -396,7 +408,8 @@ class PlayState extends MusicBeatState
 	{
 		if (paused)
 		{
-			music.resyncVocals();
+			if (!startingSong)
+				music.resyncVocals();
 
 			FlxTween.globalManager.forEach((twn:FlxTween) ->
 			{
@@ -514,7 +527,7 @@ class PlayState extends MusicBeatState
 			var newNote:Note = new Note(note.step, note.index, false, type);
 			newNote.sustainTime = note.sustainTime;
 			newNote.strumline = note.strumline;
-
+			newNote.downscroll = downscroll;
 			strum.noteSprites.add(newNote);
 
 			if (note.sustainTime > 0)
@@ -524,7 +537,7 @@ class PlayState extends MusicBeatState
 					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
 					var newSustain:Note = new Note(sustainStep, note.index, true, type, strum.noteSprites.members[strum.noteSprites.members.length - 1]);
 					newSustain.strumline = note.strumline;
-
+					newSustain.downscroll = downscroll;
 					strum.noteSprites.add(newSustain);
 				}
 			}
@@ -638,8 +651,8 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				// if (theSilly)
-				// noteMiss(index, playerNotes);
+				if (!ghostTap)
+					noteMiss(index, playerNotes);
 			}
 
 			if (!playerNotes.currentAnim('confirm', playerNotes.directions.indexOf(action)))

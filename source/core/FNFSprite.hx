@@ -4,10 +4,11 @@ typedef FNFAnimation =
 {
 	var name:String;
 	var prefix:String;
+	var ?frames:Array<Int>;
 	var ?animOffsets:Array<Float>;
-	var ?fps:Int;
-	var ?looped:Bool;
 	var ?indices:Array<Int>;
+	var ?framerate:Int;
+	var ?looped:Bool;
 }
 
 interface ISpriteOffset
@@ -33,17 +34,43 @@ class FNFSprite extends FlxSprite implements ISpriteOffset
 		super(x, y);
 	}
 
-	public override function loadGraphic(image:String, animated:Bool = false, width:Int = 0, height:Int = 0, unique:Bool = false, ?key:String)
+	public override function loadGraphic(image:String, animated:Bool = false, width:Int = 0, height:Int = 0, unique:Bool = false, ?key:String):FNFSprite
 	{
-		return super.loadGraphic(AssetHandler.getAsset(image, IMAGE), animated, width, height, unique, key);
+		loadGraphic(AssetHandler.getAsset(image, IMAGE), animated, width, height, unique, key);
+		return this;
 	}
 
-	public function addAnim(name:String, prefix:String, ?animOffsets:Array<Float>, fps:Int = 24, looped:Bool = false, ?indices:Array<Int>):Void
+	public function loadFrames(image:String, ?animations:Array<FNFAnimation>):FNFSprite
+	{
+		frames = AssetHandler.getAsset(image, XML);
+		if (animations != null)
+			for (i in animations)
+				addAnim(i.name, i.prefix, i.animOffsets, i.framerate, i.looped, i.indices);
+
+		return this;
+	}
+
+	public function copyFrom(copySprite:FNFSprite):FNFSprite
+	{
+		if (copySprite != null && copySprite.exists)
+		{
+			var animated:Bool = copySprite.frameWidth > 0 && copySprite.frameHeight > 0;
+
+			if (copySprite.frames != null)
+				frames = copySprite.frames;
+			else
+				loadGraphic(copySprite.graphic.key, animated, copySprite.frameWidth, copySprite.frameHeight);
+			animation.copyFrom(copySprite.animation);
+		}
+		return this;
+	}
+
+	public function addAnim(name:String, prefix:String, ?animOffsets:Array<Float>, framerate:Int = 24, looped:Bool = false, ?indices:Array<Int>):Void
 	{
 		if (indices != null && indices.length > 0)
-			animation.addByIndices(name, prefix, indices, '', fps, looped);
+			animation.addByIndices(name, prefix, indices, '', framerate, looped);
 		else
-			animation.addByPrefix(name, prefix, fps, looped);
+			animation.addByPrefix(name, prefix, framerate, looped);
 
 		if (!offsets.exists(name) && animOffsets != null)
 			addOffset(name, animOffsets);
