@@ -47,7 +47,7 @@ class FPS extends TextField
 
 		if (useOutline)
 		{
-			textBorder = new BorderField(this, 2, 0xFF000000);
+			textBorder = new BorderField(this, 1.5, 0xFF000000);
 			textBorder.addChildren();
 		}
 
@@ -102,7 +102,7 @@ class BorderField extends TextField
 	public var parentField:TextField;
 	public var children:Array<TextField> = [];
 
-	public var size:Int = 2;
+	public var size:Float = 1.5;
 
 	/**
 	 * Creates a new instance of a Border for a parent `TextField`
@@ -110,7 +110,7 @@ class BorderField extends TextField
 	 * @param size [OPTIONAL] the border's size, defaults to 2
 	 * @param borderColor [OPTIONAL] the border's color, defaults to black
 	**/
-	public function new(parentField:TextField, size:Int = 2, borderColor:Int = 0):Void
+	public function new(parentField:TextField, size:Float = 1.5, borderColor:Int = 0):Void
 	{
 		super();
 

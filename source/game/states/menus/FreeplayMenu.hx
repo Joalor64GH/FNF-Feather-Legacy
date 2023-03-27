@@ -8,6 +8,8 @@ using StringTools;
 
 class FreeplayMenu extends MenuBase
 {
+	static var lastSelection:Int = -1;
+
 	var currentDifficulty:Int = 0;
 
 	public var songList:Array<ListableSong> = [];
@@ -41,6 +43,13 @@ class FreeplayMenu extends MenuBase
 			optionsGroup.add(newSong);
 		}
 
+		if (lastSelection > 0 && lastSelection < songList.length)
+		{
+			curSelection = lastSelection;
+			// reset
+			lastSelection = -1;
+		}
+
 		updateSelection();
 		updateDifficulty();
 	}
@@ -51,9 +60,11 @@ class FreeplayMenu extends MenuBase
 
 		if (controls.justPressed("accept"))
 		{
-			ChartLoader.tempLoad(songList[curSelection].name.replace('.', ''));
-			var name:String = ChartLoader.getSongRawName(songList[curSelection].name);
-			FlxG.switchState(new PlayState({songName: name, difficulty: LevelManager.defaultDiffs[currentDifficulty], gamemode: FREEPLAY}));
+			FlxG.switchState(new PlayState({
+				songName: Utils.removeForbidden(songList[curSelection].name),
+				difficulty: LevelManager.defaultDiffs[currentDifficulty],
+				gamemode: FREEPLAY
+			}));
 		}
 
 		if (controls.anyJustPressed(["left", "right"]))
@@ -61,6 +72,12 @@ class FreeplayMenu extends MenuBase
 
 		if (controls.justPressed("back"))
 			FlxG.switchState(new MainMenu());
+	}
+
+	public override function updateSelection(newSelection:Int = 0):Void
+	{
+		super.updateSelection(newSelection);
+		lastSelection = curSelection;
 	}
 
 	function updateDifficulty(newDifficulty:Int = 0):Void

@@ -56,6 +56,19 @@ class Utils
 		}
 	}
 
+	/**
+	 * removes characters from the specified EReg on any string
+	 * @param string the string that we should remove the characters from
+	 * @return String
+	 */
+	@:keep public static inline function removeForbidden(string:String):String
+	{
+		var invalidChars:EReg = ~/[~&\\;:<>#]/;
+		var hideChars:EReg = ~/[.,'"%?!]/;
+
+		return hideChars.split(invalidChars.split(string.replace(' ', '-')).join("-")).join("").toLowerCase();
+	}
+
 	static var _file:FileReference;
 
 	@:keep public static inline function saveData(fileName:String, data:String):Void

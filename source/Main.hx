@@ -41,8 +41,8 @@ class Main extends Sprite
 
 		FlxG.signals.preStateSwitch.add(function():Void
 		{
-			// CacheHandler.purgeStored();
-			@:privateAccess CacheHandler._purgeUnused();
+			CacheHandler.purgeStored();
+			// @:privateAccess CacheHandler._purgeUnused();
 		});
 	}
 }

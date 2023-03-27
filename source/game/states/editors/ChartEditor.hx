@@ -47,6 +47,6 @@ class ChartEditor extends MusicBeatState
 		};
 
 		var data:String = Json.stringify(json, '\t');
-		Utils.saveData('${_song.rawName.toLowerCase()}.json', data);
+		Utils.saveData('${_song.name.toLowerCase()}.json', data);
 	}
 }

@@ -3,7 +3,6 @@ package rhythm.chart;
 typedef ChartFormat =
 {
 	var name:String;
-	var rawName:String;
 	var metadata:ChartMeta;
 	var sections:Array<ChartSection>;
 	var generatedFrom:String;
@@ -30,6 +29,7 @@ typedef ChartNote =
 
 typedef ChartSection =
 {
+	var camPoint:Int;
 	var notes:Array<ChartNote>;
 	var ?animation:String; // e.g: "singLEFT-alt"
 	var ?length:Int; // in steps

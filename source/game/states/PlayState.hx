@@ -135,7 +135,7 @@ class PlayState extends MusicBeatState
 		gameStage = switch (song.metadata.stage)
 		{
 			/*
-				case 'tank', 'warzone': new Warzone();
+				case 'tank', 'military-zone': new military-zone();
 				case 'schoolEvil', 'school-glitch': new SchoolGlitch();
 				case 'school': new School();
 				case 'mallEvil', 'red-mall': new RedMall();
@@ -350,9 +350,8 @@ class PlayState extends MusicBeatState
 		if (song != null && !paused)
 		{
 			spawnNotes();
-
 			parseEvents(ChartLoader.eventList);
-			parseEvents(ChartLoader.cameraRoutine);
+			moveCamera();
 
 			for (strum in lines)
 			{
@@ -477,18 +476,23 @@ class PlayState extends MusicBeatState
 	{
 		switch (event.name)
 		{
-			case "Change Camera Position":
-				var mustHit:Bool = event.args[0];
-				var crowdHit:Bool = event.args[1];
-				var char:Character = opponent;
+			default:
+		}
+	}
 
-				if (!crowdHit && crowd != null)
-					char = mustHit ? player : opponent;
-				else
-					char = crowd;
+	public function moveCamera():Void
+	{
+		var char:Character = opponent;
 
-				if (camFollow.x != char.getMidpoint().x - 100)
-					camFollow.setPosition(char.getMidpoint().x - 100 + char.cameraOffset[0], char.getMidpoint().y - 100 + char.cameraOffset[1]);
+		if (song.sections[curSec] != null)
+		{
+			if (song.sections[curSec].camPoint == 2 && crowd != null)
+				char = crowd;
+			else
+				char = (song.sections[curSec].camPoint == 1) ? player : opponent;
+
+			if (camFollow.x != char.getMidpoint().x - 100)
+				camFollow.setPosition(char.getMidpoint().x - 100 + char.cameraOffset[0], char.getMidpoint().y - 100 + char.cameraOffset[1]);
 		}
 	}
 

@@ -11,8 +11,6 @@ import rhythm.chart.ChartEvents;
 
 using StringTools;
 
-typedef StringVoid = (String) -> String;
-
 /**
  * Class for parsing and loading song charts
  */
@@ -22,12 +20,8 @@ class ChartLoader
 
 	public static var noteList:Array<ChartNote> = [];
 	public static var eventList:Array<EventLine> = [];
-	public static var cameraRoutine:Array<EventLine> = [];
 
-	public static var getSongName:StringVoid;
-	public static var getSongRawName:StringVoid;
-
-	public static function loadSong(songName:String, difficulty:String = 'normal'):ChartFormat
+	public static function loadSong(songName:String, difficulty:String = ''):ChartFormat
 	{
 		noteList = [];
 		eventList = [];
@@ -46,35 +40,25 @@ class ChartLoader
 		if (loadedData.sections != null)
 			Conductor.getBPMChanges(loadedData);
 
-		// load camera routines if existing
-		var songPath:String = 'data/songs/chart/${songName.toLowerCase()}';
-		if (Assets.exists(AssetHandler.getPath('${songPath}/events/cameraRoutine-${difficulty}', JSON)))
-		{
-			var route:Array<EventLine> = Json.parse(Assets.getText(AssetHandler.getPath('${songPath}/events/cameraRoutine-${difficulty}', JSON)));
-
-			for (i in 0...route.length)
-				cameraRoutine.push({name: route[i].name, args: route[i].args, type: route[i].type});
-		}
-
-		var sorteableLists:Array<Dynamic> = [noteList, eventList, cameraRoutine];
+		var sorteableLists:Array<Dynamic> = [noteList, eventList];
 		for (i in sorteableLists)
 			i.sort((a, b) -> FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
 
 		return loadedData;
 	}
 
-	public static function loadChart(songName:String, difficulty:String = 'normal', temporary:Bool = false):ChartFormat
+	public static function loadChart(songName:String, difficulty:String = 'normal'):ChartFormat
 	{
 		var tempSong:ChartFormat = null;
 		var parsedType:String = 'Feather';
+
 		songName = songName.toLowerCase();
 
 		difficulty = '-${difficulty}';
-		var path:String = 'data/songs/chart/${songName}/${songName}${difficulty}';
-		if (!Assets.exists(AssetHandler.getPath(path, JSON)))
+		if (!Assets.exists(AssetHandler.getPath('data/songs/chart/${songName}/${songName}${difficulty}', JSON)))
 			difficulty = '';
 
-		var jsonPath:String = AssetHandler.getAsset(path, JSON);
+		var jsonPath:String = AssetHandler.getAsset('data/songs/chart/${songName}/${songName}${difficulty}', JSON);
 		var fnfSong:FNFSong = cast Json.parse(jsonPath).song;
 
 		if (fnfSong == null)
@@ -83,12 +67,42 @@ class ChartLoader
 		{
 			parsedType = 'FNF LEGACY/HYBRID';
 
+			// retrocompatibility
+			if (fnfSong.stage == null)
+			{
+				fnfSong.stage = switch (fnfSong.song)
+				{
+					case 'ugh', 'guns', 'stress': 'military-zone';
+					case 'thorns': 'school-glitch';
+					case 'senpai', 'roses': 'school';
+					case 'winter-horrorland': 'red-mall';
+					case 'cocoa', 'eggnog': 'mall';
+					case 'satin-panties', 'high', 'milf': 'highway';
+					case 'pico', 'philly', 'blammed': 'philly-city';
+					case 'spookeez', 'south', 'mounster': 'haunted-house';
+					default: 'stage';
+				}
+			}
+
+			if (fnfSong.gfVersion == null)
+			{
+				fnfSong.gfVersion = switch (fnfSong.stage)
+				{
+					case 'tank', 'military-zone': 'gf-tankmen';
+					case 'school', 'schoolEvil', 'school-glitch': 'gf-pixel';
+					case 'mall', 'mallEvil', 'red-mall': 'gf-christmas';
+					case 'highway', 'limo': 'gf-car';
+					default: 'gf';
+				}
+			}
+
 			tempSong = {
 				name: fnfSong.song,
-				rawName: songName,
 				metadata: {
 					player: fnfSong.player1,
 					opponent: fnfSong.player2,
+					crowd: fnfSong.gfVersion,
+					stage: fnfSong.stage,
 					speed: fnfSong.speed,
 					bpm: fnfSong.bpm
 				},
@@ -96,104 +110,68 @@ class ChartLoader
 				generatedFrom: parsedType,
 			};
 
-			loadFuncs(tempSong);
-
-			if (!temporary)
+			for (i in 0...fnfSong.notes.length)
 			{
-				var stage:String = fnfSong.gfVersion != null ? fnfSong.gfVersion : 'stage';
-				var gfVer:String = fnfSong.stage != null ? fnfSong.stage : 'gf';
+				var convertedBeats:Float = fnfSong.notes[i].sectionBeats;
+				tempSong.sections.push({
+					notes: [],
+					camPoint: fnfSong.notes[i].mustHitSection ? 1 : fnfSong.notes[i].gfSection ? 2 : 0,
+					length: 16
+				});
 
-				tempSong.metadata.stage = stage;
-				tempSong.metadata.crowd = gfVer;
-
-				for (i in 0...fnfSong.notes.length)
+				// notes
+				for (note in fnfSong.notes[i].sectionNotes)
 				{
-					var convertedBeats:Float = fnfSong.notes[i].sectionBeats;
-					tempSong.sections.push({notes: [], length: 16});
+					var stepTime:Float = note[0];
+					var noteIndex:Int = Std.int(note[1] % 4);
+					var noteType:String = "default";
+					var noteSustain:Float = note[2];
 
-					cameraRoutine.push({
-						name: "Change Camera Position",
-						args: [fnfSong.notes[i].mustHitSection, fnfSong.notes[i].gfSection],
-						type: EventType.Section
-					});
+					var shouldHit:Bool = fnfSong.notes[i].mustHitSection;
 
-					// notes
-					for (note in fnfSong.notes[i].sectionNotes)
+					if (note[3] is String && note[3] != null)
 					{
-						var stepTime:Float = note[0];
-						var noteIndex:Int = Std.int(note[1] % 4);
-						var noteType:String = "default";
-						var noteSustain:Float = note[2];
-
-						var shouldHit:Bool = fnfSong.notes[i].mustHitSection;
-
-						if (note[3] is String && note[3] != null)
+						noteType = switch (note[3])
 						{
-							noteType = switch (note[3])
-							{
-								case "Hurt Note": "mine";
-								default: "default";
-							}
+							case "Hurt Note": "mine";
+							default: "default";
 						}
-
-						if (note[1] > 3)
-							shouldHit = !fnfSong.notes[i].mustHitSection;
-
-						var chartNote:ChartNote = {
-							step: stepTime,
-							index: noteIndex,
-							sustainTime: noteSustain
-						};
-
-						if (shouldHit)
-							chartNote.strumline = 1;
-						if (noteType != 'default')
-							chartNote.type = noteType;
-
-						tempSong.sections[i].notes.push(chartNote);
 					}
 
-					// change bpm events
-					/*
-						if (fnfSong.notes[i].changeBPM)
-						{
-							tempSong.sections[i].bpm = fnfSong.notes[i].bpm;
-						}
-					 */
+					if (note[1] > 3)
+						shouldHit = !fnfSong.notes[i].mustHitSection;
 
-					// psych engine events
-					if (fnfSong.events != null)
+					var chartNote:ChartNote = {
+						step: stepTime,
+						index: noteIndex,
+						sustainTime: noteSustain
+					};
+
+					if (shouldHit)
+						chartNote.strumline = 1;
+					if (noteType != 'default')
+						chartNote.type = noteType;
+
+					tempSong.sections[i].notes.push(chartNote);
+				}
+
+				// change bpm events
+				/*
+					if (fnfSong.notes[i].changeBPM)
 					{
-						for (event in fnfSong.events) {}
+						tempSong.sections[i].bpm = fnfSong.notes[i].bpm;
 					}
+				 */
+
+				// psych engine events
+				if (fnfSong.events != null)
+				{
+					for (event in fnfSong.events) {}
 				}
 			}
 		}
 
 		return tempSong;
-	}
-
-	public static function tempLoad(songName:String, difficulty:String = 'normal'):Void
-	{
-		var tempSong:ChartFormat = loadChart(songName, difficulty, true);
-		loadFuncs(tempSong);
-	}
-
-	public static function loadFuncs(chart:ChartFormat):Void
-	{
-		getSongName = function(name:String):String
-		{
-			if (name == chart.name || name == chart.rawName)
-				return chart.name;
-			return 'Test';
-		}
-
-		getSongRawName = function(name:String):String
-		{
-			if (name == chart.name || name == chart.rawName)
-				return chart.rawName;
-			return 'test';
-		}
 	}
 }
 
