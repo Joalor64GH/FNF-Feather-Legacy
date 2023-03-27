@@ -20,6 +20,7 @@ class MenuBase extends MusicBeatState
 	public var optionsGroup:AlphabetGroup;
 
 	var holdTimer:Float = 0;
+	var chagingConst:Bool = false;
 
 	public override function update(elapsed:Float):Void
 	{
@@ -44,7 +45,10 @@ class MenuBase extends MusicBeatState
 
 			if (holdTimer > 0.5)
 				updateSelection((timerCalc - timerCalcPost) * (controls.pressed("down") ? -1 : 1));
+			chagingConst = true;
 		}
+		else
+			chagingConst = false;
 	}
 
 	public function updateSelection(newSelection:Int = 0):Void

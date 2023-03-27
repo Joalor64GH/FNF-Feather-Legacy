@@ -130,7 +130,7 @@ class Character extends FNFSprite
 				addAnim("singRIGHT", isPlayer ? "Left" : "Right", isPlayer ? [-61, -14] : [50, -348]);
 
 				if (!isPlayer)
-					cameraOffset = [20, 300];
+					cameraOffset = [180, 300];
 
 				flipX = isPlayer;
 		}

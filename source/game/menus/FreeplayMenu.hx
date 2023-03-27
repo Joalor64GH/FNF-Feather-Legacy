@@ -56,8 +56,7 @@ class FreeplayMenu extends MenuBase
 
 		songList.push({name: 'test', opponent: 'bf', color: 0xFFFFFFFF});
 
-		bg = new FlxSprite();
-		bg.loadGraphic(Paths.image('menus/shared/menuDesat'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menus/shared/menuDesat'));
 		bg.color = 0xFFFFFFFF;
 		bg.screenCenter();
 		add(bg);
@@ -122,7 +121,10 @@ class FreeplayMenu extends MenuBase
 			updateDifficulty(controls.justPressed("left") ? -1 : 1);
 
 		if (controls.justPressed("back"))
+		{
+			stopMusic();
 			FlxG.switchState(new MainMenu());
+		}
 	}
 
 	public override function stepHit():Void
@@ -147,7 +149,9 @@ class FreeplayMenu extends MenuBase
 			colorTween.cancel();
 
 		colorTween = FlxTween.color(bg, 0.8, bg.color, songList[curSelection].color);
-		updateSongPlayback();
+
+		if (!chagingConst)
+			updateSongPlayback();
 
 		lastSelection = curSelection;
 	}

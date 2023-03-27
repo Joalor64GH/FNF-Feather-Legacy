@@ -1,6 +1,7 @@
 package core.assets;
 
 import flixel.graphics.FlxGraphic;
+import openfl.display.BitmapData;
 import openfl.media.Sound;
 import openfl.utils.Assets as OpenFLAssets;
 
@@ -15,8 +16,9 @@ class CacheHandler
 	{
 		if (!cachedGraphics.exists(path))
 		{
-			var newGraphic:FlxGraphic = FlxGraphic.fromAssetKey(path, false, path);
-			// newGraphic.persist = true;
+			var newGraphic:FlxGraphic = #if sys FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false,
+				path) #else FlxGraphic.fromAssetKey(path, false, path) #end;
+			newGraphic.persist = true;
 			cachedGraphics.set(path, newGraphic);
 			trackedIDs.push(path);
 			return newGraphic;
