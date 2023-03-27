@@ -1,0 +1,35 @@
+{
+   "texture": "BOYFRIEND_DEAD",
+   "animations": [
+      {
+         "name": "firstDeath",
+         "prefix": "BF dies",
+         "offset": {
+            "x": -10,
+            "y": 0
+         },
+         "loops": false,
+         "framerate": 24
+      },
+      {
+         "name": "deathLoop",
+         "prefix": "BF Dead Loop",
+         "offset": {
+            "x": -10,
+            "y": 0
+         },
+         "loops": true,
+         "framerate": 24
+      },
+      {
+         "name": "deathConfirm",
+         "prefix": "BF Dead confirm",
+         "offset": {
+            "x": -10,
+            "y": 0
+         },
+         "loops": false,
+         "framerate": 24
+      }
+   ]
+}
