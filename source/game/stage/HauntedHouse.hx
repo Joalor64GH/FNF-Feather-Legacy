@@ -1,4 +1,4 @@
-package game.gameplay.stage;
+package game.stage;
 
 /**
  * Week 2: Spookeez, South, Monster

@@ -1,4 +1,4 @@
-package game.gameplay.stage;
+package game.stage;
 
 /**
  * Week 1: Tutorial, Bopeebo, Fresh, Dadbattle

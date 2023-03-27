@@ -1,4 +1,4 @@
-package game.gameplay.stage.objects;
+package game.stage.objects;
 
 import core.FNFSprite;
 

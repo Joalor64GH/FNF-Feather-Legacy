@@ -1,4 +1,4 @@
-package game.gameplay.stage;
+package game.stage;
 
 import flixel.group.FlxGroup;
 import game.PlayState;
