@@ -143,7 +143,7 @@ class Highscore
 		else if (noteDiff > Conductor.safeZone * 0.2)
 			rate = GOOD;
 
-		updateRatings(RATINGS.indexOf(rate));
+		updateRatings(RATINGS[0].indexOf(rate));
 		return rate;
 	}
 
