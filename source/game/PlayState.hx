@@ -575,18 +575,19 @@ class PlayState extends MusicBeatState
 			strum.character.holdTimer = 0;
 
 			var rating:String = 'sick';
-			if (!note.isSustain)
+
+			if (!strum.cpuControlled)
 			{
-				if (!strum.cpuControlled)
+				if (!note.isSustain)
 				{
+					rating = currentStat.judgeNote(note.step);
+					currentStat.gottenRatings.set(rating, currentStat.gottenRatings.get(rating) + 1);
+					ratingUI.popRating(rating);
+
 					currentStat.notesHit++;
 					if (currentStat.combo < 0)
 						currentStat.combo = 0;
 					currentStat.combo++;
-
-					rating = currentStat.judgeNote(note.step);
-					currentStat.gottenRatings.set(rating, currentStat.gottenRatings.get(rating) + 1);
-					ratingUI.popRating(rating);
 
 					/*
 						if (rating == 'sick' || note.doSplash)
@@ -594,9 +595,9 @@ class PlayState extends MusicBeatState
 					 */
 
 					gameUI.updateScore();
+					killNote(note, strum);
 				}
-
-				killNote(note, strum);
+				currentStat.updateHealth(Highscore.RATINGS[0].indexOf(rating));
 			}
 		}
 	}
@@ -658,7 +659,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function noteMiss(direction:Int = 0, ?strum:BabyGroup):Void
+	public function noteMiss(direction:Int = 0, ?strum:BabyGroup, ?showMiss:Bool = true):Void
 	{
 		if (currentStat.combo < 0)
 			currentStat.combo = 0;
@@ -685,8 +686,11 @@ class PlayState extends MusicBeatState
 		}
 		strum.character.playAnim(animName, true);
 
+		if (showMiss)
+			ratingUI.popRating('miss');
+
 		currentStat.updateRatings(4);
-		ratingUI.popRating('miss');
+		currentStat.updateHealth(4);
 		gameUI.updateScore();
 	}
 

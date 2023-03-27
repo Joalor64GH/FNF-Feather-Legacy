@@ -230,6 +230,7 @@ class Letter extends FNFSprite
 			case "#": "hashtag ";
 			default: symbol;
 		}
+
 		y += switch (symbol)
 		{
 			case ".": 50;

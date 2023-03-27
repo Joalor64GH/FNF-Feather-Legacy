@@ -134,27 +134,16 @@ class Highscore
 	public function judgeNote(stepTime:Float):String
 	{
 		var noteDiff:Float = Math.abs(stepTime - Conductor.songPosition);
-
-		var rate:String = 'sick';
-		var rateNum:Int = 0;
+		var rate:String = SICK;
 
 		if (noteDiff > Conductor.safeZone * 0.9)
-		{
-			rate = 'shit';
-			rateNum = 3;
-		}
+			rate = SHIT;
 		else if (noteDiff > Conductor.safeZone * 0.75)
-		{
-			rate = 'bad';
-			rateNum = 2;
-		}
+			rate = BAD;
 		else if (noteDiff > Conductor.safeZone * 0.2)
-		{
-			rate = 'good';
-			rateNum = 1;
-		}
+			rate = GOOD;
 
-		updateRatings(rateNum);
+		updateRatings(RATINGS.indexOf(rate));
 		return rate;
 	}
 
@@ -162,7 +151,11 @@ class Highscore
 	{
 		score += Std.int(RATINGS[1][rate]);
 		notesAccuracy += Math.max(0, RATINGS[3][rate]);
+		updateGrade();
+	}
 
+	public function updateHealth(rate:Int):Void
+	{
 		var mult:Float = switch (rate)
 		{
 			case 3, 4: 0.10;
@@ -175,8 +168,6 @@ class Highscore
 			health = 2;
 		if (health < 0)
 			health = 0;
-
-		updateGrade();
 	}
 
 	public function updateGrade():Void
