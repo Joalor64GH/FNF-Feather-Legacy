@@ -162,7 +162,14 @@ class Highscore
 	{
 		score += Std.int(RATINGS[1][rate]);
 		notesAccuracy += Math.max(0, RATINGS[3][rate]);
-		health += 0.05 * (RATINGS[2][rate]) / 100;
+
+		var mult:Float = switch (rate)
+		{
+			case 3, 4: 0.10;
+			default: 0.05;
+		}
+
+		health += mult * (RATINGS[2][rate]) / 100;
 
 		if (health > 2)
 			health = 2;

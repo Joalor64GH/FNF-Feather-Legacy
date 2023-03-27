@@ -99,17 +99,11 @@ class FreeplayMenu extends MenuBase
 	{
 		super.update(elapsed);
 
-		#if sys
-		if (inst != null)
-			Conductor.songPosition = inst.time;
-		#end
-
 		scoreText.text = "PERSONAL BEST:" + Math.round(scoreLerp);
 		updateScorePosition();
 
 		if (controls.justPressed("accept"))
 		{
-			stopMusic();
 			FlxG.switchState(new PlayState({
 				songName: Utils.removeForbidden(songList[curSelection].name),
 				difficulty: Levels.DEFAULT_DIFFICULTIES[curDifficulty],
@@ -122,21 +116,12 @@ class FreeplayMenu extends MenuBase
 
 		if (controls.justPressed("back"))
 		{
-			stopMusic();
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
+
+			FlxG.sound.play(Paths.sound("cancelMenu"));
 			FlxG.switchState(new MainMenu());
 		}
-	}
-
-	public override function stepHit():Void
-	{
-		super.stepHit();
-		#if sys
-		if (Math.abs(inst.time - (Conductor.songPosition)) > 20
-			|| (voices != null && Math.abs(voices.time - (Conductor.songPosition)) > 20))
-		{
-			resyncVocals();
-		}
-		#end
 	}
 
 	public var colorTween:FlxTween;
@@ -160,54 +145,22 @@ class FreeplayMenu extends MenuBase
 	{
 		curDifficulty = FlxMath.wrap(curDifficulty + newDifficulty, 0, Levels.DEFAULT_DIFFICULTIES.length - 1);
 		FlxG.sound.play(Paths.sound('scrollMenu'));
-
 		updateInfoText();
 	}
 
 	function updateSongPlayback():Void
 	{
 		#if sys
-		Thread.create(function():Void
-		{
-			stopMusic();
-			mutex.acquire();
-
-			inst.loadEmbedded(Paths.inst(Utils.removeForbidden(songList[curSelection].name)));
-			voices.loadEmbedded(Paths.vocals(Utils.removeForbidden(songList[curSelection].name)));
-
-			inst.fadeIn(0.8);
-			resyncVocals();
-
-			mutex.release();
-		});
-		#end
-	}
-
-	public function resyncVocals():Void
-	{
-		#if sys
-		if (inst != null)
-		{
-			if (voices != null)
-			{
-				voices.pause();
-				voices.time = inst.time;
-				voices.fadeIn(0.8);
-			}
-		}
-		#end
-	}
-
-	public function stopMusic():Void
-	{
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		#if sys
-		if (inst.playing)
-			inst.stop();
-		if (voices.playing)
-			voices.stop();
+		Thread.create(function():Void
+		{
+			mutex.acquire();
+			FlxG.sound.playMusic(Paths.inst(Utils.removeForbidden(songList[curSelection].name)));
+			FlxG.sound.music.fadeIn(0.8);
+			mutex.release();
+		});
 		#end
 	}
 
