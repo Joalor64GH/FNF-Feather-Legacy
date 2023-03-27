@@ -595,10 +595,12 @@ class PlayState extends MusicBeatState
 					 */
 
 					gameUI.updateScore();
-					killNote(note, strum);
 				}
 				currentStat.updateHealth(Highscore.RATINGS[0].indexOf(rating));
 			}
+
+			if (!note.isSustain)
+				killNote(note, strum);
 		}
 	}
 
