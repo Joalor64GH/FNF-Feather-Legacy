@@ -5,7 +5,6 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import game.menus.MenuBase.MenuOption;
 import lime.app.Application;
-import openfl.utils.Assets;
 
 class MainMenu extends MusicBeatState
 {
@@ -17,7 +16,7 @@ class MainMenu extends MusicBeatState
 		{name: 'story mode', callback: /*function():Void FlxG.switchState(new StoryMenu())*/ null},
 		{name: 'freeplay', callback: function():Void FlxG.switchState(new FreeplayMenu())},
 		{name: 'credits', callback: /*function():Void FlxG.switchState(new CreditsMenu())*/ null},
-		{name: 'options', callback: /*function():Void FlxG.switchState(new OptionsMenu())*/ null}
+		{name: 'options', callback: function():Void FlxG.switchState(new OptionsMenu())}
 	];
 
 	var bg:FlxSprite;

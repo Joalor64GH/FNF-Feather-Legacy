@@ -1,6 +1,6 @@
-package game.system;
+package game.system.music;
 
-import game.system.Conductor.ChangeBPMEvent;
+import game.system.music.Conductor.ChangeBPMEvent;
 
 /**
  * Manages Updates for song variables, Beats, Steps, and Sections

@@ -106,9 +106,9 @@ class BorderField extends TextField
 
 	/**
 	 * Creates a new instance of a Border for a parent `TextField`
-	 * @param parentField the attached field to this border
-	 * @param size [OPTIONAL] the border's size, defaults to 2
-	 * @param borderColor [OPTIONAL] the border's color, defaults to black
+	 * @param parentField              the attached field to this border
+	 * @param size [OPTIONAL]          the border's size, defaults to 2
+	 * @param borderColor [OPTIONAL]   the border's color, defaults to black
 	 */
 	public function new(parentField:TextField, size:Float = 1.5, borderColor:Int = 0):Void
 	{

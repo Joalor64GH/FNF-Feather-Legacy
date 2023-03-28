@@ -2,11 +2,11 @@ package game.menus;
 
 import flixel.text.FlxText;
 import game.system.Levels;
-import game.system.chart.ChartLoader;
+import game.system.charting.ChartLoader;
 import game.ui.Alphabet;
 #if sys
 import flixel.system.FlxSound;
-import game.system.Conductor;
+import game.system.music.Conductor;
 import sys.thread.Mutex;
 import sys.thread.Thread;
 #end

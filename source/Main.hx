@@ -41,6 +41,8 @@ class Main extends Sprite
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 
+		game.system.Settings.load();
+
 		FlxG.signals.preStateCreate.add(function(state:FlxState):Void
 		{
 			// if (state != FlxG.state)

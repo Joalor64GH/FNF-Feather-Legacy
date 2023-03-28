@@ -38,7 +38,7 @@ class AssetHandler
 		return #if sys sys.io.File.getContent(path) #else OpenFLAssets.getText(path) #end;
 }
 
-@:enum abstract AssetType(String) to String from String
+enum abstract AssetType(String) to String from String
 {
 	var FONT:AssetType = 'font';
 	var IMAGE:AssetType = 'image';

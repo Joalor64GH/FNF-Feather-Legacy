@@ -5,7 +5,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.util.FlxStringUtil;
 import game.PlayState;
-import game.system.Conductor;
+import game.system.music.Conductor;
 
 class GameplayUI extends FlxSpriteGroup
 {
@@ -17,17 +17,12 @@ class GameplayUI extends FlxSpriteGroup
 	public var scoreText:FlxText;
 	public var infoText:FlxText;
 
-	/**
-	 * Time, Song, None
-	 */
-	public var infoDisplay:String = 'time';
-
 	public function new():Void
 	{
 		super();
 
 		var barY:Float = FlxG.height * 0.90;
-		if (game.downscroll)
+		if (Settings.get("downScroll"))
 			barY = FlxG.height * 0.11;
 
 		healthBG = new FlxSprite(0, barY).loadGraphic(FtrAssets.getUIAsset('healthBar'));
@@ -42,13 +37,11 @@ class GameplayUI extends FlxSpriteGroup
 		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(scoreText);
 
-		infoDisplay = infoDisplay.toLowerCase();
-
-		if (infoDisplay != 'none')
+		if (Settings.get("infoText") != 'none')
 		{
-			infoText = new FlxText(0, 0, 0, infoDisplay == 'song' ? '- ${game.song.name.toUpperCase()} -' : '');
+			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'song' ? '- ${game.song.name.toUpperCase()} -' : '');
 			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
-			infoText.y = game.downscroll ? FlxG.height - infoText.height - 15 : 15;
+			infoText.y = Settings.get("downScroll") ? FlxG.height - infoText.height - 15 : 15;
 			infoText.screenCenter(X);
 			add(infoText);
 		}
@@ -69,7 +62,7 @@ class GameplayUI extends FlxSpriteGroup
 
 		healthBar.percent = game.currentStat.health * 50;
 
-		if (infoDisplay == 'time')
+		if (Settings.get("infoText") == 'time')
 		{
 			if (game != null && infoText != null && Conductor.songPosition > 0)
 			{
@@ -77,7 +70,7 @@ class GameplayUI extends FlxSpriteGroup
 				var length:Float = Math.floor(game.music.inst.length / 1000);
 
 				infoText.text = '- ${FlxStringUtil.formatTime(time)} / ${FlxStringUtil.formatTime(length)} -';
-				infoText.y = game.downscroll ? FlxG.height - infoText.height - 15 : 15;
+				infoText.y = Settings.get("downScroll") ? FlxG.height - infoText.height - 15 : 15;
 				infoText.screenCenter(X);
 			}
 		}

@@ -1,7 +1,8 @@
 package core;
 
 import flixel.system.FlxSound;
-import game.system.Conductor;
+import flixel.util.FlxSave;
+import game.system.music.Conductor;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.net.FileReference;
@@ -9,12 +10,42 @@ import openfl.net.FileReference;
 class Utils
 {
 	/**
+	 * Binds the `FlxG.save` variable
+	 *
+	 * @param name          the new save name
+	 * @param folder        the save's folder name,
+	 *
+	 * if on flixel 5.0.0 or greater, it will be formatted `COMPANY/EXECUTABLE_NAME/FOLDER`
+	 * - so `BeastlyGhost/FunkinFeather/FOLDER` by default
+	 */
+	@:keep public static inline function bindSave(name:String, ?folder:String):Void
+	{
+		@:privateAccess
+		var saveFolder:String = #if (flixel < "5.0.0") folder #else '${FlxG.stage.application.meta.get('company')}/${FlxSave.validate(FlxG.stage.application.meta.get('file'))}'
+			+ folder != null ? '/${folder}' : '' #end;
+		FlxG.save.bind(name, saveFolder);
+	}
+
+	/**
+	 * Launches the user's Web Browser with the specified URL
+	 * @param url          the URL to open
+	 */
+	@:keep public static inline function openURL(url:String):Void
+	{
+		#if linux
+		Sys.command('/usr/bin/xdg-open', [url]);
+		#else
+		FlxG.openURL(url);
+		#end
+	}
+
+	/**
 	 * Generates a Arrow Sprite for use with the game menus
-	 * @param xPos the X position for the created arrow
-	 * @param yPos the Y position for the created arrow
-	 * @param dir the arrow direction, may be left, or right
+	 * @param xPos        the X position for the created arrow
+	 * @param yPos        the Y position for the created arrow
+	 * @param dir         the arrow direction, may be left, or right
 	 * @return FlxSprite
-	**/
+	 */
 	@:keep public static inline function generateArrow(xPos:Float, yPos:Float, dir:String)
 	{
 		var newArrow = new FlxSprite(xPos, yPos);
@@ -27,9 +58,9 @@ class Utils
 
 	/**
 	 * Resets the menu music
-	 * @param newMusic [OPTIONAL] the music name on the files, defaults to "freakyMenu"
-	 * @param fadeIn [OPTIONAL] whether to fade in the music when it begins (defaults to false)]
-	**/
+	 * @param newMusic [OPTIONAL]         the music name on the files, defaults to "freakyMenu"
+	 * @param fadeIn [OPTIONAL]           whether to fade in the music when it begins (defaults to false)]
+	 */
 	@:keep public static inline function resetMusic(newMusic:String = 'freakyMenu', fadeIn:Bool = false):Void
 	{
 		if (((FlxG.sound.music != null) && (!FlxG.sound.music.playing)) || (FlxG.sound.music == null))
@@ -43,7 +74,7 @@ class Utils
 
 	/**
 	 * Stops and Destroys all audio tracks that were specified
-	 * @param audioTracks array with sounds to destroy
+	 * @param audioTracks         array with sounds to destroy
 	 */
 	@:keep public static inline function killMusic(audioTracks:Array<FlxSound>):Void
 	{
@@ -56,7 +87,7 @@ class Utils
 
 	/**
 	 * removes characters from the specified EReg on any string
-	 * @param string the string that we should remove the characters from
+	 * @param string           the string that we should remove the characters from
 	 * @return String
 	 */
 	@:keep public static inline function removeForbidden(string:String):String

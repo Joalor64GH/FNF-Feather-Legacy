@@ -2,8 +2,8 @@ package game.editors;
 
 import game.PlayState;
 import game.gameplay.NoteHandler;
-import game.system.chart.ChartDefs.ChartFormat;
-import game.system.chart.ChartLoader;
+import game.system.charting.ChartDefs.ChartFormat;
+import game.system.charting.ChartLoader;
 import haxe.Json;
 
 /**

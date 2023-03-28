@@ -1,6 +1,6 @@
 package game.gameplay;
 
-import game.system.Conductor;
+import game.system.music.Conductor;
 
 typedef GradeStatus =
 {
@@ -8,7 +8,7 @@ typedef GradeStatus =
 	var percent:Int;
 }
 
-@:enum abstract Rating(String) to String
+enum abstract Rating(String) to String
 {
 	var SICK:Rating = 'sick';
 	var GOOD:Rating = 'good';

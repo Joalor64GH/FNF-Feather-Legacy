@@ -2,7 +2,7 @@ package game.gameplay;
 
 import core.FNFSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
-import game.system.Conductor;
+import game.system.music.Conductor;
 
 enum DanceType
 {

@@ -1,4 +1,4 @@
-package game.system.chart;
+package game.system.charting;
 
 typedef ChartFormat =
 {

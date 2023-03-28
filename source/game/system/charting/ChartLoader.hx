@@ -1,9 +1,10 @@
-package game.system.chart;
+package game.system.charting;
 
 import flixel.system.FlxSound;
 import flixel.util.FlxSort;
-import game.system.chart.ChartDefs;
-import game.system.chart.ChartEvents;
+import game.system.charting.ChartDefs;
+import game.system.charting.ChartEvents;
+import game.system.music.Conductor;
 import haxe.Json;
 import openfl.media.Sound;
 import openfl.net.FileReference;
@@ -113,7 +114,7 @@ class ChartLoader
 				tempSong.sections.push({
 					notes: [],
 					camPoint: fnfSong.notes[i].mustHitSection ? 1 : fnfSong.notes[i].gfSection ? 2 : 0,
-					length: 16
+					length: fnfSong.notes[i].lengthInSteps
 				});
 
 				// notes

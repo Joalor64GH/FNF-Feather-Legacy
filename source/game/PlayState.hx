@@ -9,10 +9,10 @@ import game.gameplay.Highscore;
 import game.gameplay.NoteHandler;
 import game.stage.*;
 import game.subStates.*;
-import game.system.Conductor;
-import game.system.chart.ChartDefs.ChartFormat;
-import game.system.chart.ChartEvents;
-import game.system.chart.ChartLoader;
+import game.system.charting.ChartDefs.ChartFormat;
+import game.system.charting.ChartEvents;
+import game.system.charting.ChartLoader;
+import game.system.music.Conductor;
 import game.ui.GameplayUI;
 import game.ui.RatingPopup;
 
@@ -71,10 +71,6 @@ class PlayState extends MusicBeatState
 	public var player:Character;
 	public var opponent:Character;
 	public var crowd:Character;
-
-	// testing purposes
-	public var downscroll:Bool = false;
-	public var ghostTap:Bool = false;
 
 	public function new(constructor:PlayStateStruct):Void
 	{
@@ -180,7 +176,7 @@ class PlayState extends MusicBeatState
 		lines = new FlxTypedGroup<BabyGroup>();
 		addOnHUD(lines);
 
-		var yPos:Float = downscroll ? FlxG.height - 150 : 55;
+		var yPos:Float = Settings.get("downScroll") ? FlxG.height - 150 : 55;
 
 		opponentNotes = new BabyGroup(FlxG.width / 5 - FlxG.width / 7, yPos, true, opponent);
 		lines.add(opponentNotes);
@@ -536,7 +532,7 @@ class PlayState extends MusicBeatState
 			var newNote:Note = new Note(note.step, note.index, false, type);
 			newNote.sustainTime = note.sustainTime;
 			newNote.strumline = note.strumline;
-			newNote.downscroll = downscroll;
+			newNote.downscroll = Settings.get("downScroll");
 			strum.noteSprites.add(newNote);
 
 			if (note.sustainTime > 0)
@@ -546,7 +542,7 @@ class PlayState extends MusicBeatState
 					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
 					var newSustain:Note = new Note(sustainStep, note.index, true, type, strum.noteSprites.members[strum.noteSprites.members.length - 1]);
 					newSustain.strumline = note.strumline;
-					newSustain.downscroll = downscroll;
+					newSustain.downscroll = Settings.get("downScroll");
 					strum.noteSprites.add(newSustain);
 				}
 			}
@@ -663,7 +659,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				if (!ghostTap)
+				if (!Settings.get("ghostTapping"))
 					noteMiss(index, playerNotes);
 			}
 

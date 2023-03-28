@@ -46,8 +46,8 @@ class BaseStage extends FlxGroup
 
 	/**
 	 * Helper function for getting a stage's object, uses `pathBase`
-	 * @param objName the path for the object
-	 * @param objType the type of the object, e.g: IMAGE, XML, TXT, SOUND...
+	 * @param objName             the path for the object
+	 * @param objType             the type of the object, e.g: IMAGE, XML, TXT, SOUND...
 	 * @return Dynamic
 	 */
 	public function getObject(objName:String, objType:AssetType = IMAGE):Dynamic
