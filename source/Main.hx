@@ -24,11 +24,6 @@ class Main extends Sprite
 		super();
 
 		self = this;
-		Controls.self = new Controls();
-
-		#if cpp
-		cpp.vm.Gc.enable(true);
-		#end
 
 		var baseGame:CustomGame = new CustomGame(1280, 720, game.menus.MainMenu, 60, 60, true, false);
 		addChild(baseGame);
@@ -36,19 +31,22 @@ class Main extends Sprite
 		fpsCounter = new FPS();
 		addChild(fpsCounter);
 
+		Controls.self = new Controls();
+		game.system.Settings.load();
+
+		#if cpp
+		cpp.vm.Gc.enable(true);
+		#end
+
 		FlxG.autoPause = false;
 		FlxG.fixedTimestep = true;
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 
-		game.system.Settings.load();
-
-		FlxG.signals.preStateCreate.add(function(state:FlxState):Void
+		openfl.Lib.current.stage.application.onExit.add(function(code:Int):Void
 		{
-			// if (state != FlxG.state)
-			// @:privateAccess SysGC.run(true);
+			Controls.destroy();
 		});
-		// FlxG.signals.postStateSwitch.add(function():Void @:privateAccess CacheHandler._purgeUnused());
 	}
 }
 
