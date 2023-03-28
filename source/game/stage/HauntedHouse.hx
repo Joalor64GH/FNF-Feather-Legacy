@@ -31,6 +31,8 @@ class HauntedHouse extends BaseStage
 			game.player.playAnim('scared', true);
 			game.crowd.playAnim('scared', true);
 
+			FlxG.sound.play(getObject("spooky/sounds/thunder_" + FlxG.random.int(1, 2), SOUND));
+
 			strikeBeat = curBeat;
 			strikeOffset = FlxG.random.int(8, 24);
 		}
