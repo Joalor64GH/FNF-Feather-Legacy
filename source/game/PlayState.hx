@@ -598,14 +598,14 @@ class PlayState extends MusicBeatState
 			{
 				if (!note.isSustain)
 				{
-					rating = currentStat.judgeNote(note.step);
-					currentStat.gottenRatings.set(rating, currentStat.gottenRatings.get(rating) + 1);
-					ratingUI.popRating(rating);
-
 					currentStat.notesHit++;
 					if (currentStat.combo < 0)
 						currentStat.combo = 0;
 					currentStat.combo++;
+
+					rating = currentStat.judgeNote(note.step);
+					currentStat.gottenRatings.set(rating, currentStat.gottenRatings.get(rating) + 1);
+					ratingUI.popRating(rating);
 
 					/*
 						if (rating == 'sick' || note.doSplash)
@@ -709,8 +709,8 @@ class PlayState extends MusicBeatState
 		if (showMiss)
 			ratingUI.popRating('miss');
 
-		currentStat.updateRatings(4);
 		currentStat.updateHealth(4);
+		currentStat.updateRatings(4);
 		gameUI.updateScore();
 	}
 

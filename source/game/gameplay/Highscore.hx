@@ -50,24 +50,19 @@ class Highscore
 	}
 
 	public var notesHit:Int = 0;
-	public var notesAccuracy:Float = 0.00;
+	public var notesAccuracy:Float = 0.0001;
 
-	public var accuracy(get, default):Float = 0.00;
+	public var accuracy(get, default):Float = 0;
 
 	function get_accuracy():Float
-	{
-		if (notesAccuracy < 0)
-			notesAccuracy = 0;
-
 		return notesAccuracy / notesHit;
-	}
 
 	public var gradeType:String = "N/A";
 
 	public var grades:Map<String, Int> = [
-		"SS" => 100, "S" => 95, "AA" => 90,
-		  "A" => 80, "B" => 70, "SX" => 69,
-		  "C" => 60, "D" => 50,   "F" => 0
+		"SS" => 100,  "S" => 90, "A" => 80,
+		  "B" => 70, "SX" => 69, "C" => 60,
+		  "D" => 50,  "E" => 30,  "F" => 0
 	];
 
 	public var clearType(get, default):String = "";
@@ -172,12 +167,12 @@ class Highscore
 
 	public function updateGrade():Void
 	{
-		var accLast:Int = 0;
+		var biggestAcc:Int = 0;
 		for (grade => acc in grades)
 		{
-			if (acc <= accuracy && acc >= accLast)
+			if ((acc <= accuracy) && acc >= biggestAcc)
 			{
-				accLast = acc;
+				biggestAcc = acc;
 				gradeType = grade;
 			}
 		}
