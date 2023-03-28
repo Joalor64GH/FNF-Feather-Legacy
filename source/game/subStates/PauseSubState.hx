@@ -1,6 +1,10 @@
 package game.subStates;
 
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
+import flixel.text.FlxText;
+import game.system.Levels;
+import game.system.music.Conductor;
 import game.ui.Alphabet;
 
 class PauseSubState extends MusicBeatSubState
@@ -37,27 +41,73 @@ class PauseSubState extends MusicBeatSubState
 
 	var activeList:Array<{name:String, callback:Void->Void}>;
 
+	var pauseTexts:FlxTypedGroup<FlxText>;
+
 	public function new():Void
 	{
 		super();
 
-		activeList = options.main;
+		if (Levels.DEFAULT_DIFFICULTIES.length > 1)
+		{
+			options.difficulties = [];
+
+			for (i in 0...Levels.DEFAULT_DIFFICULTIES.length)
+			{
+				options.difficulties.push({
+					name: Levels.DEFAULT_DIFFICULTIES[i].toUpperCase(),
+					callback: function():Void
+					{
+						var oldConstructor = PlayState.self.constructor;
+						FlxG.switchState(new PlayState({
+							songName: oldConstructor.songName,
+							difficulty: Levels.DEFAULT_DIFFICULTIES[i],
+							gamemode: oldConstructor.gamemode
+						}));
+					}
+				});
+			}
+
+			options.difficulties.push({name: "BACK", callback: function():Void loadList(options.main)});
+			options.main.insert(2, {name: "Difficulty", callback: function():Void loadList(options.difficulties)});
+		}
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 		bg.alpha = 0;
 		add(bg);
 
+		pauseTexts = new FlxTypedGroup<FlxText>();
+		add(pauseTexts);
+
 		optionsGroup = new AlphabetGroup();
 		add(optionsGroup);
 
-		FlxTween.tween(bg, {alpha: 0.8}, 0.6, {ease: FlxEase.cubeOut});
+		var textContents:Array<String> = [
+			'-----------------',
+			'Song: ${PlayState.self.song.name}',
+			'Difficulty: ${PlayState.self.constructor.difficulty.toUpperCase()}',
+			'-----------------',
+		];
 
-		loadList();
-		updateSelection();
+		for (i in 0...textContents.length)
+		{
+			var txt:FlxText = new FlxText(0, 0, 0, textContents[i]);
+			txt.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 32, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
+			txt.x = FlxG.width - txt.width - 5;
+			pauseTexts.add(txt);
+
+			txt.alpha = 0;
+			FlxTween.tween(txt, {y: (26 * i) + 5, alpha: 1}, 0.6, {ease: FlxEase.circOut, startDelay: (0.3 * i)});
+		}
+
+		FlxTween.tween(bg, {alpha: 0.6}, 0.8, {ease: FlxEase.cubeOut});
+
+		loadList(options.main);
 	}
 
-	public function loadList():Void
+	public function loadList(list:Dynamic):Void
 	{
+		activeList = list;
+
 		if (optionsGroup.length > 0)
 			optionsGroup.clear();
 
@@ -68,6 +118,9 @@ class PauseSubState extends MusicBeatSubState
 			entry.groupIndex = i;
 			optionsGroup.add(entry);
 		}
+
+		curSelection = 0;
+		updateSelection();
 	}
 
 	public override function update(elapsed:Float):Void

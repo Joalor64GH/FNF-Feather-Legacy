@@ -62,6 +62,7 @@ class PlayState extends MusicBeatState
 	// Cameras
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
+	public var camOver:FlxCamera;
 
 	public var camFollow:FlxObject;
 
@@ -109,6 +110,10 @@ class PlayState extends MusicBeatState
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 		FlxG.cameras.add(camHUD, false);
+
+		camOver = new FlxCamera();
+		camOver.bgColor.alpha = 0;
+		FlxG.cameras.add(camOver, false);
 
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
@@ -349,8 +354,14 @@ class PlayState extends MusicBeatState
 			});
 
 			var pauseSubState = new PauseSubState();
-			pauseSubState.camera = camHUD;
+			pauseSubState.camera = camOver;
 			openSubState(pauseSubState);
+		}
+
+		if (FlxG.keys.justPressed.SIX)
+		{
+			playerNotes.cpuControlled = !playerNotes.cpuControlled;
+			gameUI.cpuText.visible = playerNotes.cpuControlled;
 		}
 
 		if (FlxG.keys.justPressed.SEVEN)

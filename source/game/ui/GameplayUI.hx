@@ -16,6 +16,7 @@ class GameplayUI extends FlxSpriteGroup
 
 	public var scoreText:FlxText;
 	public var infoText:FlxText;
+	public var cpuText:FlxText;
 
 	public function new():Void
 	{
@@ -33,7 +34,7 @@ class GameplayUI extends FlxSpriteGroup
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		add(healthBar);
 
-		scoreText = new FlxText(0, healthBG.y + 25, Std.int(healthBG.width + 55), '');
+		scoreText = new FlxText(0, healthBG.y + 25, Std.int(healthBG.width + 55));
 		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(scoreText);
 
@@ -46,7 +47,15 @@ class GameplayUI extends FlxSpriteGroup
 			add(infoText);
 		}
 
-		var featherText:FlxText = new FlxText(0, 0, '[FEATHER BETA v${lime.app.Application.current.meta.get("version")}]');
+		cpuText = new FlxText(0, 0, 0, '[CPU]');
+		cpuText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 32, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
+		cpuText.y = Settings.get("downScroll") ? FlxG.height - cpuText.height - 85 : 85;
+		cpuText.visible = false;
+		cpuText.screenCenter(X);
+		cpuText.alpha = 0.6;
+		add(cpuText);
+
+		var featherText:FlxText = new FlxText(0, 0, 0, '[FEATHER BETA v${lime.app.Application.current.meta.get("version")}]');
 		featherText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
 		featherText.setPosition(FlxG.width - featherText.width - 5, FlxG.height - featherText.height - 5);
 		add(featherText);
