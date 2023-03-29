@@ -1,6 +1,8 @@
 package core;
 
+import flixel.FlxObject;
 import flixel.system.FlxSound;
+import flixel.util.FlxAxes;
 import flixel.util.FlxSave;
 import game.system.music.Conductor;
 import openfl.events.Event;
@@ -9,6 +11,29 @@ import openfl.net.FileReference;
 
 class Utils
 {
+	/**
+	 * Centers the specified object to the bounds of another object
+	 * @author SwickTheGreat
+	 *
+	 * @param object         the child object that should be centered
+	 * @param base           the base object, used for the center calculations
+	 * @param axes           in which axes should the child object be centered? (default: XY)
+	 * @return               child object, now centered according to the base object
+	 */
+	public static function centerOverlay(object:FlxObject, base:FlxObject, axes:FlxAxes = XY):FlxObject
+	{
+		if (object == null || base == null)
+			return object;
+
+		if (axes.x)
+			object.x = base.x + (base.width / 2) - (object.width / 2);
+
+		if (axes.y)
+			object.y = base.y + (base.height / 2) - (object.height / 2);
+
+		return object;
+	}
+
 	/**
 	 * Binds the `FlxG.save` variable
 	 *

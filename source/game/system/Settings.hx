@@ -6,11 +6,11 @@ class Settings
 	 * TODO: refactor this?
 	 */
 	public static final defaultSettings:Array<Dynamic> = [
-		// ['key', value]
-		['scrollType', "up"],
-		['ghostTapping', true],
-		['infoText', 'time'], // time, song, none
-		['uiStyle', 'classic'] // classic (FNF Styled), modern
+		// ["key", value]
+		["scrollType", "UP"],
+		["ghostTapping", true],
+		["infoText", "time"], // time, song, none
+		["uiStyle", "classic"] // classic (FNF Styled), modern
 	];
 
 	public static var mySettings:Array<Dynamic> = [];
@@ -18,8 +18,15 @@ class Settings
 	public static function get(name:String):Dynamic
 	{
 		for (i in 0...mySettings.length)
+		{
 			if (name == mySettings[i][0])
-				return mySettings[i][1];
+			{
+				var value:Dynamic = mySettings[i][1];
+				if (Std.isOfType(value, String))
+					value = value.toLowerCase();
+				return value;
+			}
+		}
 		return null;
 	}
 

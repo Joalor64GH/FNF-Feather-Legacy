@@ -52,8 +52,6 @@ class Note extends FNFSprite
 	public var hitboxEarly:Float = 1;
 	public var hitboxLate:Float = 1;
 
-	final originalStepCrochet:Float = Conductor.stepCrochet;
-
 	public function new(step:Float, index:Int, ?isSustain:Bool, ?type:String = "default", ?prevNote:Note):Void
 	{
 		super(0, -2000);
@@ -75,23 +73,7 @@ class Note extends FNFSprite
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
 
-		// sustains
-		if (prevNote != null && isSustain)
-		{
-			flipY = downscroll;
-			hitboxEarly = 0.5;
-			alpha = 0.6;
-
-			playAnim('${colorArray()[index]} end');
-			updateHitbox();
-
-			if (prevNote.isSustain)
-			{
-				prevNote.playAnim('${colorArray()[index]} hold');
-				prevNote.updateHitbox();
-			}
-		}
-		else if (!isSustain)
+		if (!isSustain)
 		{
 			hitboxEarly = 1;
 			playAnim('${colorArray()[index]} note');
@@ -103,20 +85,35 @@ class Note extends FNFSprite
 		return ['purple', 'blue', 'green', 'red'];
 	}
 
+	/**
+	 * Don't break on bpm changes Don't break on bpm changes Don't break on bpm changes Don't break on bpm changes
+	 */
+	final noteStepCrochet:Float = Conductor.stepCrochet;
+
 	public function updateSustain():Void
 	{
 		if (isSustain)
 		{
+			flipY = downscroll;
+			hitboxEarly = 0.5;
+			alpha = 0.6;
+
+			playAnim('${colorArray()[index]} end');
+			updateHitbox();
+
+			offsetX += ((width / 2) - (width / 2)) + 25;
+
+			if (downscroll)
+				offsetY += ((height / 2) - (height / 2)) + 25;
+
 			if (prevNote != null && prevNote.exists)
 			{
 				if (prevNote.isSustain)
 				{
 					prevNote.playAnim('${colorArray()[index]} hold');
-					prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((originalStepCrochet / 50) * 2 * speed);
+					prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((noteStepCrochet / 100) * 1.5 * speed);
 					prevNote.updateHitbox();
 				}
-				else
-					offsetX = ((width / 2) - (width / 2)) + 50;
 			}
 		}
 	}
@@ -271,8 +268,8 @@ class BabyGroup extends FlxGroup
 					else // I'm gonna throw up.
 						note.y = babyArrow.y - stepY;
 
-					// note.x += note.offsetX;
-					// note.y += note.offsetY;
+					note.x += note.offsetX;
+					note.y += note.offsetY;
 
 					if (note.isSustain)
 					{

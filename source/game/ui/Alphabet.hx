@@ -33,7 +33,7 @@ class Alphabet extends FlxSpriteGroup
 	override function set_color(color:Int):Int
 	{
 		for (object in this.members)
-			if (object is Letter)
+			if (Std.isOfType(object, Letter))
 				cast(object, Letter).setColor(color, bold);
 
 		return super.set_color(color);

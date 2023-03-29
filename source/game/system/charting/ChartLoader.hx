@@ -127,7 +127,7 @@ class ChartLoader
 
 					var shouldHit:Bool = fnfSong.notes[i].mustHitSection;
 
-					if (note[3] is String && note[3] != null)
+					if (note[3] != null && Std.isOfType(note[3], String))
 					{
 						noteType = switch (note[3])
 						{
