@@ -2,9 +2,12 @@ package game.system;
 
 class Settings
 {
+	/**
+	 * TODO: refactor this?
+	 */
 	public static final defaultSettings:Array<Dynamic> = [
 		// ['key', value]
-		['downScroll', false],
+		['scrollType', "up"],
 		['ghostTapping', true],
 		['infoText', 'time'], // time, song, none
 		['uiStyle', 'classic'] // classic (FNF Styled), modern

@@ -77,7 +77,8 @@ class PlayState extends MusicBeatState
 	{
 		super();
 
-		Utils.killMusic([FlxG.sound.music]);
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
 
 		self = this;
 
@@ -181,7 +182,7 @@ class PlayState extends MusicBeatState
 		lines = new FlxTypedGroup<BabyGroup>();
 		addOnHUD(lines);
 
-		var yPos:Float = Settings.get("downScroll") ? FlxG.height - 150 : 55;
+		var yPos:Float = Settings.get("scrollType") == "down" ? FlxG.height - 150 : 55;
 
 		opponentNotes = new BabyGroup(FlxG.width / 5 - FlxG.width / 7, yPos, true, opponent);
 		lines.add(opponentNotes);
@@ -543,7 +544,7 @@ class PlayState extends MusicBeatState
 			var newNote:Note = new Note(note.step, note.index, false, type);
 			newNote.sustainTime = note.sustainTime;
 			newNote.strumline = note.strumline;
-			newNote.downscroll = Settings.get("downScroll");
+			newNote.downscroll = Settings.get("scrollType") == "down";
 			strum.noteSprites.add(newNote);
 
 			if (note.sustainTime > 0)
@@ -553,7 +554,7 @@ class PlayState extends MusicBeatState
 					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
 					var newSustain:Note = new Note(sustainStep, note.index, true, type, strum.noteSprites.members[strum.noteSprites.members.length - 1]);
 					newSustain.strumline = note.strumline;
-					newSustain.downscroll = Settings.get("downScroll");
+					newSustain.downscroll = Settings.get("scrollType") == "down";
 					strum.noteSprites.add(newSustain);
 				}
 			}

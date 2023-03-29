@@ -23,7 +23,7 @@ class GameplayUI extends FlxSpriteGroup
 		super();
 
 		var barY:Float = FlxG.height * 0.90;
-		if (Settings.get("downScroll"))
+		if (Settings.get("scrollType") == "down")
 			barY = FlxG.height * 0.11;
 
 		healthBG = new FlxSprite(0, barY).loadGraphic(FtrAssets.getUIAsset('healthBar'));
@@ -42,14 +42,14 @@ class GameplayUI extends FlxSpriteGroup
 		{
 			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'song' ? '- ${game.song.name.toUpperCase()} -' : '');
 			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
-			infoText.y = Settings.get("downScroll") ? FlxG.height - infoText.height - 15 : 15;
+			infoText.y = Settings.get("scrollType") == "down" ? FlxG.height - infoText.height - 15 : 15;
 			infoText.screenCenter(X);
 			add(infoText);
 		}
 
 		cpuText = new FlxText(0, 0, 0, '[CPU]');
 		cpuText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 32, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
-		cpuText.y = Settings.get("downScroll") ? FlxG.height - cpuText.height - 85 : 85;
+		cpuText.y = Settings.get("scrollType") == "down" ? FlxG.height - cpuText.height - 85 : 85;
 		cpuText.visible = false;
 		cpuText.screenCenter(X);
 		cpuText.alpha = 0.6;
@@ -79,7 +79,7 @@ class GameplayUI extends FlxSpriteGroup
 				var length:Float = Math.floor(game.music.inst.length / 1000);
 
 				infoText.text = '- ${FlxStringUtil.formatTime(time)} / ${FlxStringUtil.formatTime(length)} -';
-				infoText.y = Settings.get("downScroll") ? FlxG.height - infoText.height - 15 : 15;
+				infoText.y = Settings.get("scrollType") == "down" ? FlxG.height - infoText.height - 15 : 15;
 				infoText.screenCenter(X);
 			}
 		}

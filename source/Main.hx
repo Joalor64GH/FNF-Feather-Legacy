@@ -43,6 +43,9 @@ class Main extends Sprite
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 
+		FlxG.game.soundTray.volumeUpSound = Paths.getPath("sounds/scrollMenu", SOUND);
+		FlxG.game.soundTray.volumeDownSound = Paths.getPath("sounds/scrollMenu", SOUND);
+
 		openfl.Lib.current.stage.application.onExit.add(function(code:Int):Void
 		{
 			Controls.destroy();
