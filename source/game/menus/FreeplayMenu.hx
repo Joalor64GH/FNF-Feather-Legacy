@@ -4,6 +4,7 @@ import flixel.text.FlxText;
 import game.system.Levels;
 import game.system.charting.ChartLoader;
 import game.ui.Alphabet;
+import game.ui.HealthIcon;
 #if sys
 import flixel.system.FlxSound;
 import game.system.music.Conductor;
@@ -14,6 +15,8 @@ import sys.thread.Thread;
 class FreeplayMenu extends MenuBase
 {
 	static var lastSelection:Int = -1;
+
+	var iconList:Array<HealthIcon> = [];
 
 	var bg:FlxSprite;
 	var curDifficulty:Int = 1;
@@ -69,6 +72,13 @@ class FreeplayMenu extends MenuBase
 			newSong.menuItem = true;
 			newSong.groupIndex = i;
 			optionsGroup.add(newSong);
+
+			var songIcon:HealthIcon = new HealthIcon("bf");
+			songIcon.sprTracker = newSong;
+			songIcon.ID = i;
+
+			iconList.push(songIcon);
+			add(songIcon);
 		}
 		add(optionsGroup);
 
@@ -137,6 +147,13 @@ class FreeplayMenu extends MenuBase
 
 		if (!chagingConst)
 			updateSongPlayback();
+
+		for (i in 0...iconList.length)
+		{
+			iconList[i].alpha = 0.6;
+			if (iconList[i].ID == curSelection)
+				iconList[i].alpha = 1;
+		}
 
 		lastSelection = curSelection;
 	}

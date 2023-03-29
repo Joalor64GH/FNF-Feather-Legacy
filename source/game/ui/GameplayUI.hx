@@ -14,6 +14,9 @@ class GameplayUI extends FlxSpriteGroup
 	public var healthBG:FlxSprite;
 	public var healthBar:FlxBar;
 
+	public var iconP1:HealthIcon;
+	public var iconOPP:HealthIcon;
+
 	public var scoreText:FlxText;
 	public var infoText:FlxText;
 	public var cpuText:FlxText;
@@ -33,6 +36,16 @@ class GameplayUI extends FlxSpriteGroup
 		healthBar = new FlxBar(healthBG.x + 4, healthBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBG.width - 8), Std.int(healthBG.height - 8));
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		add(healthBar);
+
+		iconP1 = new HealthIcon("bf", true);
+		iconP1.y = healthBar.y - (iconP1.height / 2);
+		iconP1.scrollFactor.set();
+		add(iconP1);
+
+		iconOPP = new HealthIcon("dad", false);
+		iconOPP.y = healthBar.y - (iconOPP.height / 2);
+		iconOPP.scrollFactor.set();
+		add(iconOPP);
 
 		scoreText = new FlxText(0, healthBG.y + 25, Std.int(healthBG.width + 55));
 		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
@@ -71,6 +84,13 @@ class GameplayUI extends FlxSpriteGroup
 
 		healthBar.percent = game.currentStat.health * 50;
 
+		var iconOffset:Int = 26;
+		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
+		iconOPP.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconOPP.width - iconOffset);
+
+		iconP1.updateAnim(healthBar.percent);
+		iconOPP.updateAnim(100 - healthBar.percent);
+
 		if (Settings.get("infoText") == 'time')
 		{
 			if (game != null && infoText != null && Conductor.songPosition > 0)
@@ -95,5 +115,11 @@ class GameplayUI extends FlxSpriteGroup
 		scoreText.text = newScore;
 
 		scoreText.screenCenter(X);
+	}
+
+	public function beatHit(curBeat:Int):Void
+	{
+		iconP1.beatHit(curBeat);
+		iconOPP.beatHit(curBeat);
 	}
 }

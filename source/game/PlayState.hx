@@ -175,6 +175,8 @@ class PlayState extends MusicBeatState
 		camGame.follow(camFollow, LOCKON, 0.04);
 		camGame.focusOn(camFollow.getPosition());
 
+		moveCamera();
+
 		// ui
 		gameUI = new GameplayUI();
 		addOnHUD(gameUI);
@@ -239,7 +241,7 @@ class PlayState extends MusicBeatState
 				strum.babyArrows.members[i].alpha = 0;
 				strum.babyArrows.members[i].y -= 32;
 
-				FlxTween.tween(strum.babyArrows.members[i], {y: startY, alpha: 0.8}, (Conductor.beatCrochet * 4) / 1000,
+				FlxTween.tween(strum.babyArrows.members[i], {y: startY, alpha: 1}, (Conductor.beatCrochet * 4) / 1000,
 					{ease: FlxEase.circOut, startDelay: (Conductor.beatCrochet / 1000) + ((Conductor.stepCrochet / 1000) * i)});
 			}
 		}
@@ -318,7 +320,8 @@ class PlayState extends MusicBeatState
 	}
 
 	var paused:Bool = false;
-	var canPause:Bool = true;
+
+	public var canPause:Bool = true;
 
 	public override function update(elapsed:Float):Void
 	{
@@ -372,7 +375,8 @@ class PlayState extends MusicBeatState
 		{
 			spawnNotes();
 			parseEvents(ChartLoader.eventList);
-			moveCamera();
+
+			bumpCamera(elapsed);
 
 			for (strum in lines)
 			{
@@ -445,12 +449,24 @@ class PlayState extends MusicBeatState
 		super.closeSubState();
 	}
 
+	public var zoomBeat:Int = 4;
+
 	public override function beatHit():Void
 	{
 		super.beatHit();
 
 		charactersDance(curBeat);
 		gameStage.onBeat(curBeat);
+		gameUI.beatHit(curBeat);
+
+		if (camZooming)
+		{
+			if (camGame.zoom < 1.35 && curBeat % zoomBeat == 0)
+			{
+				camGame.zoom += 0.015;
+				camHUD.zoom += 0.05;
+			}
+		}
 
 		// gameStage.onEventDispatch(event, args);
 	}
@@ -467,6 +483,7 @@ class PlayState extends MusicBeatState
 	{
 		super.secHit();
 		gameStage.onSec(curSec);
+		moveCamera();
 	}
 
 	public function charactersDance(curBeat:Int):Void
@@ -486,25 +503,17 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function parseEvents(list:Array<EventLine>, stepDelay:Float = 0):Void
+	public var camZooming:Bool = true;
+
+	public function bumpCamera(elapsed:Float):Void
 	{
-		if (list != null && list.length > 0)
+		// beat zooms
+		if (camZooming)
 		{
-			var event:EventLine = list[curSec];
-
-			if (event != null)
-				if ((event.type == Stepper && event.step >= Conductor.songPosition - stepDelay) || event.type != Stepper)
-					eventTrigger(event);
-
-			// list.shift();
-		}
-	}
-
-	public function eventTrigger(event:EventLine):Void
-	{
-		switch (event.name)
-		{
-			default:
+			// base game way
+			var lerpValue:Float = 1 - (elapsed * 1.155);
+			camGame.zoom = FlxMath.lerp(gameStage.cameraZoom, 1, lerpValue);
+			camHUD.zoom = FlxMath.lerp(gameStage.hudZoom, 1, lerpValue);
 		}
 	}
 
@@ -571,6 +580,31 @@ class PlayState extends MusicBeatState
 		note.kill();
 		note.destroy();
 		strum.noteSprites.remove(note, true);
+	}
+
+	public function parseEvents(list:Array<EventLine>, stepDelay:Float = 0):Void
+	{
+		if (list.length > 0)
+		{
+			while (list[curSec] != null)
+			{
+				var event:EventLine = list[curSec];
+
+				if (event != null)
+					if ((event.type == Stepper && event.step >= Conductor.songPosition - stepDelay) || event.type != Stepper)
+						eventTrigger(event);
+
+				list.splice(list.indexOf(list[0]), 1);
+			}
+		}
+	}
+
+	public function eventTrigger(event:EventLine):Void
+	{
+		switch (event.name)
+		{
+			default:
+		}
 	}
 
 	public function goodNoteHit(note:Note, strum:BabyGroup):Void
