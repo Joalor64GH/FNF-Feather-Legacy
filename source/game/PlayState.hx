@@ -409,7 +409,7 @@ class PlayState extends MusicBeatState
 								if (note.strumline == playerStrumline)
 									noteMiss(note.index, strum);
 
-							killNote(note, strum);
+							strum.remove(note, true);
 						}
 					}
 				});
@@ -550,12 +550,6 @@ class PlayState extends MusicBeatState
 
 			var strum:BabyGroup = lines.members[note.strumline];
 
-			var newNote:Note = new Note(note.step, note.index, false, type);
-			newNote.sustainTime = note.sustainTime;
-			newNote.strumline = note.strumline;
-			newNote.downscroll = Settings.get("scrollType") == "DOWN";
-			strum.noteSprites.add(newNote);
-
 			if (note.sustainTime > 0)
 			{
 				for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet))
@@ -564,22 +558,18 @@ class PlayState extends MusicBeatState
 					var newSustain:Note = new Note(sustainStep, note.index, true, type, strum.noteSprites.members[strum.noteSprites.members.length - 1]);
 					newSustain.strumline = note.strumline;
 					newSustain.downscroll = Settings.get("scrollType") == "DOWN";
-					strum.noteSprites.add(newSustain);
+					strum.add(newSustain);
 				}
 			}
 
+			var newNote:Note = new Note(note.step, note.index, false, type);
+			newNote.sustainTime = note.sustainTime;
+			newNote.strumline = note.strumline;
+			newNote.downscroll = Settings.get("scrollType") == "DOWN";
+			strum.add(newNote);
+
 			ChartLoader.noteList.shift();
 		}
-	}
-
-	public function killNote(note:Note, strum:BabyGroup):Void
-	{
-		if (note == null)
-			return;
-
-		note.kill();
-		note.destroy();
-		strum.noteSprites.remove(note, true);
 	}
 
 	public function parseEvents(list:Array<EventLine>, stepDelay:Float = 0):Void
@@ -653,7 +643,7 @@ class PlayState extends MusicBeatState
 			}
 
 			if (!note.isSustain)
-				killNote(note, strum);
+				strum.remove(note, true);
 		}
 	}
 
@@ -674,7 +664,7 @@ class PlayState extends MusicBeatState
 
 			playerNotes.noteSprites.forEachAlive(function(note:Note):Void
 			{
-				if (note.canHit && note.strumline == playerStrumline && !note.wasGoodHit && !note.isSustain)
+				if (note.canHit && note.strumline == playerStrumline && !note.wasGoodHit)
 				{
 					if (note.index == index)
 						possibleNotes.push(note);
@@ -691,7 +681,7 @@ class PlayState extends MusicBeatState
 					{
 						// "dumb" notes are doubles
 						if (Math.abs(note.step - dumbNote.step) < 10)
-							killNote(dumbNote, playerNotes);
+							playerNotes.remove(dumbNote, true);
 						else
 							canBeHit = false;
 					}

@@ -34,7 +34,6 @@ class FreeplayMenu extends MenuBase
 	#if sys
 	public var mutex:Mutex;
 	public var inst:FlxSound = new FlxSound();
-	public var voices:FlxSound = new FlxSound();
 	#end
 
 	public override function create():Void

@@ -1,6 +1,7 @@
 package game.gameplay;
 
 import core.FNFSprite;
+import flixel.FlxBasic;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;
@@ -101,10 +102,11 @@ class Note extends FNFSprite
 			playAnim('${colorArray()[index]} end');
 			updateHitbox();
 
-			offsetX += ((width / 2) - (width / 2)) + 25;
+			// 33 is just so it's stuck to the center
+			offsetX += ((width / 2) - (width / 2)) + 33;
 
 			if (downscroll)
-				offsetY += ((height / 2) - (height / 2)) + 25;
+				offsetY += ((height / 2) - (height / 2)) + 30;
 
 			if (prevNote != null && prevNote.exists)
 			{
@@ -154,9 +156,9 @@ class BabyGroup extends FlxGroup
 	 */
 	public var cpuControlled:Bool = false;
 
+	public var babyArrows:FlxTypedGroup<FNFSprite> = new FlxTypedGroup<FNFSprite>();
 	public var noteSprites:FlxTypedGroup<Note> = new FlxTypedGroup<Note>();
 	public var splashSprites:FlxTypedGroup<FNFSprite> = new FlxTypedGroup<FNFSprite>();
-	public var babyArrows:FlxTypedGroup<FNFSprite> = new FlxTypedGroup<FNFSprite>();
 
 	public var character:Character;
 
@@ -171,8 +173,8 @@ class BabyGroup extends FlxGroup
 		generateArrows(x, y);
 
 		add(babyArrows);
-		add(splashSprites);
 		add(noteSprites);
+		add(splashSprites);
 	}
 
 	/**
@@ -307,6 +309,28 @@ class BabyGroup extends FlxGroup
 		}
 
 		super.update(elapsed);
+	}
+
+	public override function add(Object:FlxBasic):FlxBasic
+	{
+		if (Object is Note)
+			noteSprites.add(cast(Object, Note));
+		return super.add(Object);
+	}
+
+	public override function remove(Object:FlxBasic, Splice:Bool = false):FlxBasic
+	{
+		if (Object is Note)
+		{
+			var note:Note = cast(Object, Note);
+
+			note.kill();
+			note.destroy();
+
+			noteSprites.remove(note, Splice);
+		}
+
+		return super.remove(Object, Splice);
 	}
 
 	public function currentAnim(anim:String, index:Int):Bool
