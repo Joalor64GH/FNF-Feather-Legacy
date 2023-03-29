@@ -1,8 +1,6 @@
 package game.system.charting;
 
-import game.PlayState;
 import haxe.Json;
-import openfl.Assets;
 
 typedef EventLine =
 {
@@ -21,8 +19,6 @@ enum abstract EventType(Int) to Int
 
 class ChartEvents
 {
-	static final game:PlayState = PlayState.self;
-
 	public static function loadEventChart(songName:String, ?data:Array<EventLine>):Array<EventLine>
 	{
 		var tempEvents:Array<EventLine> = [];

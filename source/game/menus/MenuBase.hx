@@ -1,6 +1,5 @@
 package game.menus;
 
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import game.ui.Alphabet;
 

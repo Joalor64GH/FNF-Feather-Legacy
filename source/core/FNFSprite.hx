@@ -84,6 +84,6 @@ class FNFSprite extends FlxSprite implements ISpriteOffset
 			offset.set(offsets[name][0], offsets[name][1]);
 	}
 
-	public function playingAnims():Bool
-		return animation != null && animation.curAnim != null;
+	public function nullAnims():Bool
+		return animation == null && animation.curAnim == null;
 }

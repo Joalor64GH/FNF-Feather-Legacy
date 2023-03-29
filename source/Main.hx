@@ -2,9 +2,10 @@ package;
 
 import core.Controls;
 import core.FPS;
-import core.assets.CacheHandler;
 import flixel.FlxGame;
-import flixel.FlxState;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.TransitionData;
+import flixel.math.FlxPoint;
 import haxe.CallStack;
 import haxe.Exception;
 import openfl.display.Sprite;
@@ -37,6 +38,9 @@ class Main extends Sprite
 		#if cpp
 		cpp.vm.Gc.enable(true);
 		#end
+
+		FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
+		FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, new FlxPoint(0, 1));
 
 		FlxG.autoPause = false;
 		FlxG.fixedTimestep = true;

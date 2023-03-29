@@ -9,7 +9,6 @@ import java.vm.Gc;
 #elseif neko
 import neko.vm.Gc;
 #end
-import openfl.system.System;
 
 /**
  * Class to Manage `cpp.vm.Gc` calls
@@ -33,7 +32,7 @@ class SysGC
 		#elseif hl
 		Gc.major();
 		#else
-		System.gc();
+		openfl.system.System.gc();
 		#end
 
 		#if cpp

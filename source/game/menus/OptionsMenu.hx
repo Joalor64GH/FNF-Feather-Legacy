@@ -18,15 +18,26 @@ class OptionsMenu extends MusicBeatSubState
 		new Option("Info Display", "Choose what to display on the info text (usually shows time)", "infoText"),
 	];
 
+	public var onPause:Bool = false;
+
+	public function new(onPause:Bool = false):Void
+	{
+		super();
+		this.onPause = onPause;
+	}
+
 	public override function create():Void
 	{
 		super.create();
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuBGBlue'));
-		bg.screenCenter(XY);
-		bg.scrollFactor.set();
-		bg.alpha = 0.8;
-		add(bg);
+		if (!onPause)
+		{
+			var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuBGBlue'));
+			bg.screenCenter(XY);
+			bg.scrollFactor.set();
+			bg.alpha = 0.8;
+			add(bg);
+		}
 
 		var pageBG:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width / 1.3), Std.int(FlxG.height / 1.1), FlxColor.BLACK);
 		pageBG.screenCenter(XY);
@@ -37,7 +48,14 @@ class OptionsMenu extends MusicBeatSubState
 
 		for (i in 0...pageOptions.length)
 		{
-			var name:FlxText = new FlxText(pageBG.x + 10, (40 * i) + pageBG.y + 10, pageBG.width, '${pageOptions[i].name}: ${pageOptions[i].getValue()}');
+			var value:String = switch (pageOptions[i].getValue())
+			{
+				case "true": "ON";
+				case "false": "OFF";
+				default: pageOptions[i].getValue();
+			}
+
+			var name:FlxText = new FlxText(pageBG.x + 10, (40 * i) + pageBG.y + 10, pageBG.width, '${pageOptions[i].name}: ${value}');
 			name.setFormat(Paths.font('vcr'), 32, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 			name.alpha = 0;
 			name.ID = i;
@@ -88,7 +106,12 @@ class OptionsMenu extends MusicBeatSubState
 			}
 
 			if (controls.justPressed("back"))
-				FlxG.switchState(new game.menus.MainMenu());
+			{
+				if (onPause)
+					close();
+				else
+					FlxG.switchState(new game.menus.MainMenu());
+			}
 		}
 	}
 

@@ -1,7 +1,6 @@
 package core.assets;
 
 import flixel.graphics.frames.FlxAtlasFrames;
-import openfl.utils.Assets as OpenFLAssets;
 
 class AssetHandler
 {
@@ -32,10 +31,10 @@ class AssetHandler
 	}
 
 	public static function exists(path:String):Bool
-		return #if sys sys.FileSystem.exists(path) #else OpenFLAssets.exists(path) #end;
+		return #if sys sys.FileSystem.exists(path) #else openfl.utils.Assets.exists(path) #end;
 
 	public static function getContent(path:String):String
-		return #if sys sys.io.File.getContent(path) #else OpenFLAssets.getText(path) #end;
+		return #if sys sys.io.File.getContent(path) #else openfl.utils.Assets.getText(path) #end;
 }
 
 enum abstract AssetType(String) to String from String

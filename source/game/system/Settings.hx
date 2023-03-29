@@ -9,8 +9,8 @@ class Settings
 		// ["key", value]
 		["scrollType", "UP"],
 		["ghostTapping", true],
-		["infoText", "time"], // time, song, none
-		["uiStyle", "classic"] // classic (FNF Styled), modern
+		["infoText", "TIME"], // time, song, none
+		["uiStyle", "CLASSIC"] // classic (FNF Styled), modern
 	];
 
 	public static var mySettings:Array<Dynamic> = [];
@@ -22,8 +22,6 @@ class Settings
 			if (name == mySettings[i][0])
 			{
 				var value:Dynamic = mySettings[i][1];
-				if (Std.isOfType(value, String))
-					value = value.toLowerCase();
 				return value;
 			}
 		}
@@ -32,6 +30,16 @@ class Settings
 
 	public static function set(name:String, value:Dynamic):Void
 	{
+		if (Std.isOfType(value, String))
+		{
+			value = switch (value)
+			{
+				case "ON": true;
+				case "OFF": false;
+				default: value;
+			}
+		}
+
 		for (i in 0...mySettings.length)
 			if (name == mySettings[i][0])
 				mySettings[i][1] = value;

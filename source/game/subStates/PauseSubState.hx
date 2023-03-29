@@ -4,7 +4,6 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import game.system.Levels;
-import game.system.music.Conductor;
 import game.ui.Alphabet;
 
 class PauseSubState extends MusicBeatSubState
@@ -46,6 +45,13 @@ class PauseSubState extends MusicBeatSubState
 	public function new():Void
 	{
 		super();
+
+		options.main[2].callback = function():Void
+		{
+			var optionsSubState = new game.menus.OptionsMenu(true);
+			optionsSubState.camera = this.camera;
+			openSubState(optionsSubState);
+		}
 
 		if (Levels.DEFAULT_DIFFICULTIES.length > 1)
 		{

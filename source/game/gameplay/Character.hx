@@ -12,6 +12,7 @@ enum DanceType
 
 /**
  * Prototype dev comment: this took me longer than it should.
+ * Beta dev comment: https://youtu.be/hIB8iAEGzYU?t=17
  */
 class Character extends FNFSprite
 {
@@ -108,6 +109,8 @@ class Character extends FNFSprite
 				addAnim("singUP", "GF Up Note", [0, 4]);
 				addAnim("singRIGHT", "GF Right Note", [0, -20]);
 
+				danceProperties.windyHair = true;
+
 			case "dad":
 				frames = getFrames("DADDY_DEAREST");
 
@@ -143,7 +146,7 @@ class Character extends FNFSprite
 
 	public override function update(elapsed:Float):Void
 	{
-		if (playingAnims())
+		if (!nullAnims())
 		{
 			if (isSinging())
 				holdTimer += elapsed;
@@ -161,8 +164,9 @@ class Character extends FNFSprite
 		if (danceProperties.windyHair)
 		{
 			// looping hair anims after idle finished
-			if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
-				playAnim('idleHair');
+			if (animation.getByName("idleHair") != null)
+				if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
+					playAnim('idleHair');
 
 			if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
 				playAnim('danceRight');
@@ -179,16 +183,17 @@ class Character extends FNFSprite
 	public function dance(forced:Bool = false, ?startFrame:Int = 0):Void
 	{
 		var animName:String = 'idle${suffix}';
-		var direction:String = (danced ? 'Right' : 'Left');
 
-		if (animation.curAnim != null && animation.curAnim.finished)
+		if (danceStyle == QUICK && animation.curAnim != null && !animation.curAnim.name.startsWith('hair'))
 			danced = !danced;
+
+		var direction:String = (danced ? 'Right' : 'Left');
 
 		animName = switch (danceStyle)
 		{
 			case QUICK: 'dance${direction}${suffix}';
 			case NORMAL: 'idle${suffix}';
-		};
+		}
 
 		playAnim(animName, forced, false, startFrame);
 	}
@@ -200,10 +205,10 @@ class Character extends FNFSprite
 
 	// Animation Helpers
 	public function isSinging():Bool
-		return playingAnims() && animation.curAnim.name.startsWith("sing");
+		return !nullAnims() && animation.curAnim.name.startsWith("sing");
 
 	public function isMissing():Bool
-		return playingAnims() && animation.curAnim.name.endsWith("miss");
+		return !nullAnims() && animation.curAnim.name.endsWith("miss");
 
 	function checkQuickDancer():Void
 	{

@@ -1,14 +1,11 @@
 package game.ui;
 
 import core.FNFSprite;
-import game.PlayState;
 import game.gameplay.Highscore;
 import game.system.music.Conductor;
 
 class RatingPopup
 {
-	final game:PlayState = PlayState.self;
-
 	public function new():Void
 	{
 		popRating('sick', true);

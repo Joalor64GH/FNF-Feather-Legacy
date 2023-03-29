@@ -184,7 +184,7 @@ class PlayState extends MusicBeatState
 		lines = new FlxTypedGroup<BabyGroup>();
 		addOnHUD(lines);
 
-		var yPos:Float = Settings.get("scrollType") == "down" ? FlxG.height - 150 : 55;
+		var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 55;
 
 		opponentNotes = new BabyGroup(FlxG.width / 5 - FlxG.width / 7, yPos, true, opponent);
 		lines.add(opponentNotes);
@@ -553,7 +553,7 @@ class PlayState extends MusicBeatState
 			var newNote:Note = new Note(note.step, note.index, false, type);
 			newNote.sustainTime = note.sustainTime;
 			newNote.strumline = note.strumline;
-			newNote.downscroll = Settings.get("scrollType") == "down";
+			newNote.downscroll = Settings.get("scrollType") == "DOWN";
 			strum.noteSprites.add(newNote);
 
 			if (note.sustainTime > 0)
@@ -563,7 +563,7 @@ class PlayState extends MusicBeatState
 					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
 					var newSustain:Note = new Note(sustainStep, note.index, true, type, strum.noteSprites.members[strum.noteSprites.members.length - 1]);
 					newSustain.strumline = note.strumline;
-					newSustain.downscroll = Settings.get("scrollType") == "down";
+					newSustain.downscroll = Settings.get("scrollType") == "DOWN";
 					strum.noteSprites.add(newSustain);
 				}
 			}
