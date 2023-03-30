@@ -742,7 +742,7 @@ class PlayState extends MusicBeatState
 
 		currentStat.updateHealth(4);
 		currentStat.updateRatings(4);
-		gameUI.updateScore();
+		gameUI.updateScore(true);
 	}
 
 	public function onKeyRelease(key:Int, action:String):Void

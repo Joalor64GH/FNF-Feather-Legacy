@@ -80,8 +80,7 @@ class GameplayUI extends FlxSpriteGroup
 		add(featherText);
 
 		forEachOfType(FlxText, function(text:FlxText):Void text.borderSize = 1.5);
-
-		updateScore();
+		updateScore(true);
 	}
 
 	public override function update(elapsed:Float):Void
@@ -115,7 +114,7 @@ class GameplayUI extends FlxSpriteGroup
 
 	var scoreTween:FlxTween;
 
-	public function updateScore():Void
+	public function updateScore(miss:Bool = false):Void
 	{
 		var newScore:String = '[ SCORE: ${game.currentStat.score}';
 		newScore += separator + 'MISSES: ${game.currentStat.misses}${game.currentStat.clearType}';
@@ -124,13 +123,16 @@ class GameplayUI extends FlxSpriteGroup
 
 		scoreText.screenCenter(X);
 
-		scoreText.scale.set(1.1, 1.1);
+		if (!miss)
+		{
+			scoreText.scale.set(1.1, 1.1);
 
-		if (scoreTween != null)
-			scoreTween.cancel();
+			if (scoreTween != null)
+				scoreTween.cancel();
 
-		scoreTween = FlxTween.tween(scoreText, {"scale.x": 1, "scale.y": 1}, 0.6,
-			{ease: FlxEase.cubeOut, onComplete: function(twn:FlxTween):Void scoreTween = null});
+			scoreTween = FlxTween.tween(scoreText, {"scale.x": 1, "scale.y": 1}, 0.6,
+				{ease: FlxEase.cubeOut, onComplete: function(twn:FlxTween):Void scoreTween = null});
+		}
 	}
 
 	public function beatHit(curBeat:Int):Void
