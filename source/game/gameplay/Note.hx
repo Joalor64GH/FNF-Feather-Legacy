@@ -137,15 +137,10 @@ class Splash extends FNFSprite
 	public function new(type:String = "default"):Void
 	{
 		super(0, 0);
-
 		this.loadFrames('images/notes/${type}/NOTE_splashes');
-
-		for (i in 0...NoteGroup.colors.length)
-		{
-			this.addAnim('impact ${NoteGroup.colors[i]}0', '${NoteGroup.colors[i]} splash 0', null, 24);
-			this.addAnim('impact ${NoteGroup.colors[i]}1', '${NoteGroup.colors[i]} splash 1', null, 24);
-		}
-
+		for (n in 0...2)
+			for (i in 0...NoteGroup.colors.length)
+				this.addAnim('impact ${NoteGroup.colors[i]}${n}', '${NoteGroup.colors[i]} splash ${n}', null, 24);
 		this.moves = false;
 	}
 

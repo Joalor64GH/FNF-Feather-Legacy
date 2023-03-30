@@ -14,6 +14,9 @@ typedef CharacterFormat =
 {
 	var image:String;
 	var animations:Array<FNFAnimation>;
+	var singDuration:Null<Float>;
+	var characterOffset:Array<Float>;
+	var cameraOffset:Array<Float>;
 }
 
 /**
@@ -73,7 +76,7 @@ class Character extends FNFSprite
 
 		switch (name)
 		{
-			case "chop": // I hate this.
+			case "__chop": // I hate this.
 				frames = getFrames("chop");
 
 				addAnim("danceLeft", "idleanim", [0, 0], 24, false, [0, 1, 2, 3, 4, 5, 6, 7]);
@@ -87,65 +90,8 @@ class Character extends FNFSprite
 				characterOffset = [-100, 220];
 				cameraOffset = [250, 20];
 
-			case "bf":
-				frames = getFrames("BOYFRIEND");
-
-				addAnim("idle", "BF idle dance", [5, 0]);
-				addAnim("hey", "BF HEY!!", [7, 5]);
-				addAnim("scared", "BF idle shaking", [4, 1]);
-
-				// sing poses
-				addAnim("singLEFT", "BF NOTE LEFT0", [4, -7]);
-				addAnim("singDOWN", "BF NOTE DOWN0", [-22, -51]);
-				addAnim("singUP", "BF NOTE UP0", [-47, 28]);
-				addAnim("singRIGHT", "BF NOTE RIGHT0", [-48, -5]);
-
-				// miss poses
-				addAnim("singLEFTmiss", "BF NOTE LEFT MISS", [4, 19]);
-				addAnim("singDOWNmiss", "BF NOTE DOWN MISS", [-22, -21]);
-				addAnim("singUPmiss", "BF NOTE UP MISS", [-43, 28]);
-				addAnim("singRIGHTmiss", "BF NOTE RIGHT MISS", [-42, 23]);
-
-			case "bf-dead":
-				frames = getFrames("bf-dead");
-
-				addAnim("firstDeath", "BF dies", [-10, 0]);
-				addAnim("deathLoop", "BF Dead Loop", [-10, 0]);
-				addAnim("deathConfirm", "BF Dead confirm", [-10, 0]);
-
-			case "gf":
-				frames = getFrames("GF_assets");
-
-				addAnim("danceLeft", "GF Dancing Beat", [0, -9], 24, false, [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
-				addAnim("danceRight", "GF Dancing Beat", [0, -9], 24, false, [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]);
-				addAnim("hairBlow", "GF Dancing Beat Hair blowing", [0, 0], 24, false, [0, 1, 2, 3]);
-				addAnim("hairFall", "GF Dancing Beat Hair Landing", [0, 0], 24, false, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
-				addAnim("sad", "gf sad", [-2, -2], 24, false, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-
-				addAnim("scared", "GF FEAR", [-2, 17]);
-				addAnim("cheer", "GF Cheer");
-
-				addAnim("singLEFT", "GF left note", [0, -19]);
-				addAnim("singDOWN", "GF Down Note", [0, -20]);
-				addAnim("singUP", "GF Up Note", [0, 4]);
-				addAnim("singRIGHT", "GF Right Note", [0, -20]);
-
-				danceProperties.windyHair = true;
-
-			case "dad":
-				frames = getFrames("DADDY_DEAREST");
-
-				addAnim("idle", "Dad idle dance");
-				addAnim("singLEFT", "Dad Sing Note LEFT", [-10, 10]);
-				addAnim("singDOWN", "Dad Sing Note DOWN", [0, -30]);
-				addAnim("singUP", "Dad Sing Note UP", [-6, 50]);
-				addAnim("singRIGHT", "Dad Sing Note RIGHT", [0, 27]);
-
-				cameraOffset = [250, 20];
-				singDuration = 6.1;
-
-			default:
-				frames = AssetHandler.getAsset('images/characters/face/face', XML);
+			case "face":
+				frames = getFrames("face");
 
 				addAnim("idle", "Idle", isPlayer ? [0, -10] : [0, -350]);
 				addAnim("singLEFT", isPlayer ? "Right" : "Left", isPlayer ? [33, -6] : [22, -353]);
@@ -157,6 +103,31 @@ class Character extends FNFSprite
 					cameraOffset = [180, 300];
 
 				flipX = isPlayer;
+			default:
+				try
+				{
+					var file:CharacterFormat = cast haxe.Json.parse(AssetHandler.getAsset('images/characters/${name}/${name}', JSON));
+					if (file != null)
+					{
+						if (file.characterOffset != null)
+							characterOffset = file.characterOffset;
+						if (file.cameraOffset != null)
+							cameraOffset = file.cameraOffset;
+						if (file.singDuration != null)
+							singDuration = file.singDuration;
+
+						if (file.image != null)
+							frames = getFrames(file.image);
+						else
+							frames = getFrames(name);
+
+						// todo: per-player animations
+						for (anim in file.animations)
+							addAnim(anim.name, anim.prefix, anim.animOffsets, anim.framerate, anim.looped, anim.indices);
+					}
+				}
+				catch (e:haxe.Exception)
+					loadChar("face", isPlayer);
 		}
 
 		x += characterOffset[0];

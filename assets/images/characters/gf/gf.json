@@ -1,0 +1,21 @@
+{
+    "image": "GF_assets",
+    "characterOffset": [0, 0],
+    "cameraOffset": [250, 20],
+    "singDuration": 4,
+    "animations": [
+        {"name": "danceLeft", "prefix": "GF Dancing Beat", "animOffsets": [0, -9], "indices": [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]},
+        {"name": "danceRight", "prefix": "GF Dancing Beat", "animOffsets": [0, -9], "indices": [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]},
+        {"name": "hairBlow", "prefix": "GF Dancing Beat Hair blowing", "indices": [0, 1, 2, 3]},
+        {"name": "hairFall", "prefix": "GF Dancing Beat Hair Landing", "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]},
+        {"name": "sad", "prefix": "gf sad", "animOffsets": [-2, -2], "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]},
+
+        {"name": "scared", "prefix": "GF FEAR", "animOffsets": [-2, 17]},
+        {"name": "cheer", "prefix": "GF Cheer"},
+
+        {"name": "singLEFT", "prefix": "GF left note", "animOffsets": [0, -19]},
+        {"name": "singDOWN", "prefix": "GF Down Note", "animOffsets": [0, -20]},
+        {"name": "singUP", "prefix": "GF Up Note", "animOffsets": [0, 4]},
+        {"name": "singRIGHT", "prefix": "GF Right Note", "animOffsets": [0, -20]}
+    ]
+}

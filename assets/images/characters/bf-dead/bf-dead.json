@@ -1,35 +1,10 @@
 {
-   "texture": "BOYFRIEND_DEAD",
+   "image": "BOYFRIEND_DEAD",
+   "characterOffset": [0, 0],
+   "cameraOffset": [0, 0],
    "animations": [
-      {
-         "name": "firstDeath",
-         "prefix": "BF dies",
-         "offset": {
-            "x": -10,
-            "y": 0
-         },
-         "loops": false,
-         "framerate": 24
-      },
-      {
-         "name": "deathLoop",
-         "prefix": "BF Dead Loop",
-         "offset": {
-            "x": -10,
-            "y": 0
-         },
-         "loops": true,
-         "framerate": 24
-      },
-      {
-         "name": "deathConfirm",
-         "prefix": "BF Dead confirm",
-         "offset": {
-            "x": -10,
-            "y": 0
-         },
-         "loops": false,
-         "framerate": 24
-      }
+      {"name": "firstDeath", "prefix": "BF dies", "animOffsets": [-10, 0]},
+      {"name": "deathLoop", "prefix": "BF Dead Loop", "animOffsets":  [-10, 0]},
+      {"name": "deathConfirm", "prefix": "BF Dead confirm", "animOffsets": [-10, 0]}
    ]
 }
