@@ -103,6 +103,7 @@ class Character extends FNFSprite
 					cameraOffset = [180, 300];
 
 				flipX = isPlayer;
+
 			default:
 				try
 				{
