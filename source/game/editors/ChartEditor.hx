@@ -1,7 +1,7 @@
 package game.editors;
 
 import game.PlayState;
-import game.gameplay.NoteHandler;
+import game.gameplay.Note;
 import game.system.charting.ChartDefs.ChartFormat;
 import game.system.charting.ChartLoader;
 import haxe.Json;
@@ -15,8 +15,8 @@ class ChartEditor extends MusicBeatState
 
 	public var _song:ChartFormat;
 
-	public var renderedNotes:NoteGroup;
-	public var renderedHolds:NoteGroup;
+	public var renderedNotes:NoteSpriteGroup;
+	public var renderedHolds:NoteSpriteGroup;
 
 	public function new(const:PlayStateStruct):Void
 	{

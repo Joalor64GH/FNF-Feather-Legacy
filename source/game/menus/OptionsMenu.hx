@@ -13,9 +13,9 @@ class OptionsMenu extends MusicBeatSubState
 	public var descriptionHolder:FlxText;
 
 	public var pageOptions:Array<Option> = [
-		new Option("Scroll Type", "In which direction should notes spawn?", "scrollType"),
+		new Option("Scroll Type", "In which direction should notes spawn?", "scrollType", ["UP", "DOWN"]),
 		new Option("Ghost Tapping", "If mashing keys should be allowed during gameplay.", "ghostTapping"),
-		new Option("Info Display", "Choose what to display on the info text (usually shows time)", "infoText"),
+		new Option("Info Display", "Choose what to display on the info text (usually shows time)", "infoText", ["TIME", "SONG", "NONE"]),
 	];
 
 	public var onPause:Bool = false;
@@ -77,6 +77,7 @@ class OptionsMenu extends MusicBeatSubState
 
 	var holdTimer:Float = 0;
 	var lockedMovement:Bool = true;
+	var isChanging:Bool = false;
 
 	public override function update(elapsed:Float):Void
 	{
@@ -87,31 +88,87 @@ class OptionsMenu extends MusicBeatSubState
 
 		if (!lockedMovement)
 		{
-			if (controls.anyJustPressed(["up", "down"]))
+			if (!isChanging)
 			{
-				updateSelection(controls.justPressed("up") ? -1 : 1);
-				holdTimer = 0;
+				if (controls.anyJustPressed(["up", "down"]))
+				{
+					updateSelection(controls.justPressed("up") ? -1 : 1);
+					holdTimer = 0;
+				}
+
+				var timerCalc:Int = Std.int((holdTimer / 1) * 5);
+
+				if (controls.anyPressed(["up", "down"]))
+				{
+					holdTimer += elapsed;
+
+					var timerCalcPost:Int = Std.int((holdTimer / 1) * 5);
+
+					if (holdTimer > 0.5)
+						updateSelection((timerCalc - timerCalcPost) * (controls.pressed("down") ? -1 : 1));
+				}
+
+				if (controls.justPressed("back"))
+				{
+					if (onPause)
+						close();
+					else
+						FlxG.switchState(new game.menus.MainMenu());
+				}
+
+				if (controls.justPressed("accept"))
+				{
+					FlxG.sound.play(Paths.sound('scrollMenu'));
+					isChanging = !isChanging;
+				}
 			}
-
-			var timerCalc:Int = Std.int((holdTimer / 1) * 5);
-
-			if (controls.anyPressed(["up", "down"]))
+			else
 			{
-				holdTimer += elapsed;
+				if (controls.anyJustPressed(["left", "right"]))
+				{
+					switch (pageOptions[curSelection].type)
+					{
+						case Checkmark:
+							// if (!pageOptions[curSelection].mustReset)
+							pageOptions[curSelection].setValue(!Settings.get(pageOptions[curSelection].apiKey));
 
-				var timerCalcPost:Int = Std.int((holdTimer / 1) * 5);
+						case StringList:
+							var storedValue:Int = 0;
+							for (i in 0...pageOptions[curSelection].optionsList.length)
+							{
+								if (pageOptions[curSelection].optionsList[i] == getValueText())
+									storedValue = i;
 
-				if (holdTimer > 0.5)
-					updateSelection((timerCalc - timerCalcPost) * (controls.pressed("down") ? -1 : 1));
+								pageOptions[curSelection].maximum = pageOptions[curSelection].optionsList.length - 1;
+							}
+
+							var wrapValue:Int = 0;
+							var nextValue:Int = controls.justPressed("left") ? -1 : 1;
+
+							wrapValue = FlxMath.wrap(storedValue + nextValue, pageOptions[curSelection].minimum, pageOptions[curSelection].maximum);
+							pageOptions[curSelection].setValue(pageOptions[curSelection].optionsList[wrapValue]);
+					}
+
+					pageGroup.members[curSelection].text = '${pageOptions[curSelection].name}: ${getValueText()}';
+					FlxG.sound.play(Paths.sound('scrollMenu'));
+				}
+
+				if (controls.justPressed("back"))
+				{
+					FlxG.sound.play(Paths.sound('cancelMenu'));
+					isChanging = false;
+				}
 			}
+		}
+	}
 
-			if (controls.justPressed("back"))
-			{
-				if (onPause)
-					close();
-				else
-					FlxG.switchState(new game.menus.MainMenu());
-			}
+	public function getValueText():String
+	{
+		return switch (pageOptions[curSelection].getValue())
+		{
+			case "true": "ON";
+			case "false": "OFF";
+			default: pageOptions[curSelection].getValue();
 		}
 	}
 

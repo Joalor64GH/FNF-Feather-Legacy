@@ -71,13 +71,13 @@ class FPS extends TextField
 		text = "";
 		if (visible)
 		{
-			text += '[FPS]: ${curFPS}';
+			text += '[FPS: ${curFPS}';
 
 			#if cpp
 			curMEM = System.totalMemory;
-			text += separator + '[MEMORY]: ${FlxStringUtil.formatBytes(curMEM)}';
+			text += separator + 'MEMORY: ${FlxStringUtil.formatBytes(curMEM)}';
 			#end
-			text += '\n';
+			text += ']\n';
 		}
 	}
 

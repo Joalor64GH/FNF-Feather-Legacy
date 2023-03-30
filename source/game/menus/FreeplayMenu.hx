@@ -1,6 +1,7 @@
 package game.menus;
 
 import flixel.text.FlxText;
+import game.gameplay.Highscore;
 import game.system.Levels;
 import game.system.charting.ChartLoader;
 import game.ui.Alphabet;
@@ -64,7 +65,6 @@ class FreeplayMenu extends MenuBase
 		add(bg);
 
 		optionsGroup = new AlphabetGroup();
-
 		for (i in 0...songList.length)
 		{
 			var newSong:Alphabet = new Alphabet(0, (60 * i), songList[i].name);
@@ -108,11 +108,16 @@ class FreeplayMenu extends MenuBase
 	{
 		super.update(elapsed);
 
+		scoreLerp = FlxMath.lerp(scoreLerp, gottenScore, 0.4);
 		scoreText.text = "PERSONAL BEST:" + Math.round(scoreLerp);
+
 		updateScorePosition();
 
 		if (controls.justPressed("accept"))
 		{
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
+
 			FlxG.switchState(new PlayState({
 				songName: Utils.removeForbidden(songList[curSelection].name),
 				difficulty: Levels.DEFAULT_DIFFICULTIES[curDifficulty],
@@ -154,6 +159,7 @@ class FreeplayMenu extends MenuBase
 				iconList[i].alpha = 1;
 		}
 
+		gottenScore = Highscore.getScore(Utils.removeForbidden(songList[curSelection].name), Levels.DEFAULT_DIFFICULTIES[curDifficulty]);
 		lastSelection = curSelection;
 	}
 
@@ -161,6 +167,8 @@ class FreeplayMenu extends MenuBase
 	{
 		curDifficulty = FlxMath.wrap(curDifficulty + newDifficulty, 0, Levels.DEFAULT_DIFFICULTIES.length - 1);
 		FlxG.sound.play(Paths.sound('scrollMenu'));
+
+		gottenScore = Highscore.getScore(Utils.removeForbidden(songList[curSelection].name), Levels.DEFAULT_DIFFICULTIES[curDifficulty]);
 		updateInfoText();
 	}
 

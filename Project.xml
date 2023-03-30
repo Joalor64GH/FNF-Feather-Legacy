@@ -4,8 +4,7 @@
 	<!-- _______ Application _______ -->
 
 	<!-- Window Title, Executable Name (when exporting), Save Folder Name, Game Version -->
-	<app title="Friday Night Funkin': Feather" file="FunkinFeather" company="BeastlyGhost"
-		version="0.999999" />
+	<app title="Friday Night Funkin': Feather" file="FunkinFeather" company="BeastlyGhost" />
 
 	<!-- Initial Class, Package Name (Mac), Package Name (Other) -->
 	<app main="Main" package="com.BeastlyGhost.FunkinFeather"

@@ -19,6 +19,8 @@ interface ISpriteOffset
 
 class FNFSprite extends FlxSprite implements ISpriteOffset
 {
+	public var depth:Float = 0;
+
 	public var offsets:Map<String, Array<Float>> = new Map<String, Array<Float>>();
 
 	public function addOffset(anim:String, ?newOffset:Array<Float>):Void
@@ -83,7 +85,4 @@ class FNFSprite extends FlxSprite implements ISpriteOffset
 		if (offsets.exists(name))
 			offset.set(offsets[name][0], offsets[name][1]);
 	}
-
-	public function nullAnims():Bool
-		return animation == null && animation.curAnim == null;
 }

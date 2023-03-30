@@ -14,9 +14,24 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+typedef VersionScheme =
+{
+	var number:String;
+
+	/**
+	 * - Nightly: Experimental, WIP, recommended for testers
+	 * - Unstable: Experimental, bleeding-edge, WIP
+	 */
+	var branch:String;
+}
+
 class Main extends Sprite
 {
 	public static var self:Main;
+
+	// don't set "branch" as null, set it to "" instead!!!
+	public static var featherVer:VersionScheme = {number: "1.0.0", branch: "UNSTABLE"};
+	public static var fnfVer:VersionScheme = {number: "0.2.8", branch: "DEMO"};
 
 	public var fpsCounter:FPS;
 
@@ -29,7 +44,7 @@ class Main extends Sprite
 		var baseGame:CustomGame = new CustomGame(1280, 720, game.menus.MainMenu, 60, 60, true, false);
 		addChild(baseGame);
 
-		fpsCounter = new FPS();
+		fpsCounter = new FPS(10, 5, FlxColor.WHITE);
 		addChild(fpsCounter);
 
 		Controls.self = new Controls();
@@ -59,7 +74,7 @@ class Main extends Sprite
 
 class CustomGame extends FlxGame
 {
-	public static var logSavePath:String = 'logs/FF-' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt';
+	public static var logSavePath:String = 'logs/FF-${Date.now().toString().replace(' ', '-').replace(':', "'")}.txt';
 
 	override function create(_):Void
 	{

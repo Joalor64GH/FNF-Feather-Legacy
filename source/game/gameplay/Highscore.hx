@@ -20,8 +20,49 @@ enum abstract Rating(String) to String
 class Highscore
 {
 	// score maps for saving song and week scores
-	public static var songScores:Map<String, Array<Int>> = [];
-	public static var weekScores:Map<String, Array<Int>> = [];
+	public static var songScores:Map<String, Int> = [];
+
+	public static function saveScore(song:String, diff:String, score:Int):Void
+	{
+		var songName:String = '${song}-${diff}';
+		if (songScores.exists(songName))
+		{
+			if (songScores.get(songName) < score)
+				songScores.set(songName, score);
+		}
+		else
+			songScores.set(songName, score);
+	}
+
+	public static var weekScores:Map<String, Int> = [];
+
+	public static function saveWeekScore(week:String, diff:String, score:Int):Void
+	{
+		var weekName:String = '${week}-${diff}';
+		if (weekScores.exists(weekName))
+		{
+			if (weekScores.get(weekName) < score)
+				weekScores.set(weekName, score);
+		}
+		else
+			weekScores.set(weekName, score);
+	}
+
+	public static function getScore(song:String, diff:String):Int
+	{
+		var songName:String = '${song}-${diff}';
+		if (!songScores.exists(song))
+			songScores.set(songName, 0);
+		return songScores.get(song);
+	}
+
+	public static function getWeekScore(week:String, diff:String):Int
+	{
+		var weekName:String = '${week}-${diff}';
+		if (!weekScores.exists(weekName))
+			weekScores.set(weekName, 0);
+		return weekScores.get(week);
+	}
 
 	// name, score, health, accuracy
 	public static var RATINGS:Array<Dynamic> = [

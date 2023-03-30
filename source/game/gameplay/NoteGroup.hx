@@ -3,143 +3,16 @@ package game.gameplay;
 import core.FNFSprite;
 import flixel.FlxBasic;
 import flixel.group.FlxGroup;
-import flixel.math.FlxMath;
 import flixel.math.FlxRect;
-import game.PlayState;
+import game.gameplay.Note.Splash;
 import game.system.music.Conductor;
 
-typedef NoteGroup = FlxTypedGroup<Note>;
-
-class Note extends FNFSprite
+class NoteGroup extends FlxGroup
 {
 	final game:PlayState = PlayState.self;
 
-	public var prevNote:Note = null;
-
-	public var index:Int = 0;
-
-	public var type:String = "default";
-
-	// note type parameters
-	public var isMine:Bool = false;
-	public var ignorable:Bool = false;
-	public var doSplash:Bool = true;
-	public var killDelay:Int = 200;
-
-	public var step:Float = 0.0;
-	public var sustainTime:Float = 0.0;
-	public var speed(default, set):Float = 1.0;
-
-	function set_speed(newSpeed:Float):Float
-	{
-		if (speed != newSpeed)
-		{
-			speed = newSpeed;
-			updateSustain();
-		}
-		return speed;
-	}
-
-	public var strumline:Int = 0; // replaced "canBeHit", value for bf is 1
-	public var wasGoodHit:Bool = false;
-	public var canHit:Bool = false;
-
-	public var isSustain:Bool = false;
-	public var downscroll:Bool = false;
-
-	public var offsetX:Float = 0;
-	public var offsetY:Float = 0;
-
-	public var hitboxEarly:Float = 1;
-	public var hitboxLate:Float = 1;
-
-	public function new(step:Float, index:Int, ?isSustain:Bool, ?type:String = "default", ?prevNote:Note):Void
-	{
-		super(0, -2000);
-
-		if (prevNote == null)
-			prevNote = this;
-
-		this.step = step;
-		this.index = index;
-		this.isSustain = isSustain;
-		this.type = type;
-		this.prevNote = prevNote;
-		this.moves = false;
-
-		frames = AssetHandler.getAsset('images/notes/${type}/note', XML);
-		addAnim('${colorArray()[index]} note', '${colorArray()[index]}0');
-		addAnim('${colorArray()[index]} end', '${colorArray()[index]} hold end');
-		addAnim('${colorArray()[index]} hold', '${colorArray()[index]} hold piece');
-		setGraphicSize(Std.int(width * 0.7));
-		updateHitbox();
-
-		if (!isSustain)
-		{
-			hitboxEarly = 1;
-			playAnim('${colorArray()[index]} note');
-		}
-	}
-
-	public final function colorArray():Array<String>
-	{
-		return ['purple', 'blue', 'green', 'red'];
-	}
-
-	/**
-	 * Don't break on bpm changes Don't break on bpm changes Don't break on bpm changes Don't break on bpm changes
-	 */
-	final noteStepCrochet:Float = Conductor.stepCrochet;
-
-	public function updateSustain():Void
-	{
-		if (isSustain)
-		{
-			flipY = downscroll;
-			hitboxEarly = 0.5;
-			alpha = 0.6;
-
-			playAnim('${colorArray()[index]} end');
-			updateHitbox();
-
-			// 33 is just so it's stuck to the center
-			offsetX += ((width / 2) - (width / 2)) + 33;
-
-			if (downscroll)
-				offsetY += ((height / 2) - (height / 2)) + 30;
-
-			if (prevNote != null && prevNote.exists)
-			{
-				if (prevNote.isSustain)
-				{
-					prevNote.playAnim('${colorArray()[index]} hold');
-					prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((noteStepCrochet / 100) * 1.5 * speed);
-					prevNote.updateHitbox();
-				}
-			}
-		}
-	}
-
-	public override function update(elapsed:Float):Void
-	{
-		super.update(elapsed);
-
-		if (this.strumline == game.playerStrumline)
-		{
-			this.canHit = (this.step > Conductor.songPosition - (Conductor.safeZone * this.hitboxEarly)
-				&& this.step < Conductor.songPosition + (Conductor.safeZone * this.hitboxLate));
-		}
-		else
-			this.canHit = false;
-	}
-}
-
-class BabyGroup extends FlxGroup
-{
-	final game:PlayState = PlayState.self;
-
-	public var colors:Array<String> = ['purple', 'blue', 'green', 'red'];
-	public var directions:Array<String> = ['left', 'down', 'up', 'right'];
+	public static final colors:Array<String> = ['purple', 'blue', 'green', 'red'];
+	public static final directions:Array<String> = ['left', 'down', 'up', 'right'];
 
 	/**
 	 * How many notes do this instance have?
@@ -196,7 +69,7 @@ class BabyGroup extends FlxGroup
 
 		for (i in 0...keys)
 		{
-			var babyArrow:FNFSprite = new FNFSprite(x, y).loadFrames('images/notes/default/note');
+			var babyArrow:FNFSprite = new FNFSprite(x, y).loadFrames('images/notes/default/NOTE_assets');
 
 			babyArrow.addAnim('static', 'arrow static ${i}');
 			babyArrow.addAnim('pressed', '${directions[i]} press');
@@ -224,22 +97,21 @@ class BabyGroup extends FlxGroup
 
 			babyArrows.add(babyArrow);
 		}
+
+		doSplash(0, "default", true);
 	}
 
-	public function doSplash(index:Int, preload:Bool = false):Void
+	public function doSplash(index:Int, type:String = "default", preload:Bool = false):Void
 	{
-		var splash:FNFSprite = splashSprites.recycle(FNFSprite, function():FNFSprite
-		{
-			var noteSplash:FNFSprite = new FNFSprite();
-			noteSplash.frames = FtrAssets.getUIAsset('noteSplashes', XML);
-			noteSplash.addAnim('splash0', '${colors[index]} splash 0');
-			noteSplash.addAnim('splash1', '${colors[index]} splash 1');
-			return noteSplash;
-		});
+		var babyArrow:FNFSprite = babyArrows.members[index];
 
+		var splash:FNFSprite = splashSprites.recycle(FNFSprite, function():FNFSprite return new Splash(type));
 		splash.alpha = preload ? 0.000001 : 1;
 		splash.scale.set(1, 1);
-		splash.playAnim('splash' + FlxG.random.int(0, 1));
+
+		splash.depth = -Conductor.songPosition;
+		splash.setPosition(babyArrow.x - babyArrow.width, babyArrow.y - babyArrow.height);
+		splash.playAnim('impact ${colors[index]}0' /*+ FlxG.random.int(0, 1)*/);
 		if (preload)
 			splashSprites.add(splash);
 
@@ -248,6 +120,8 @@ class BabyGroup extends FlxGroup
 			if (splash.animation != null && splash.animation.curAnim.finished)
 				splash.kill();
 		}
+
+		splashSprites.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order);
 	}
 
 	public override function update(elapsed:Float):Void
@@ -277,7 +151,7 @@ class BabyGroup extends FlxGroup
 					{
 						if (note.downscroll)
 						{
-							if (note.animation.curAnim != null && note.animation.curAnim.name.endsWith('end') && note.prevNote != null)
+							if (note.isEnd && note.prevNote != null)
 							{
 								if (note.prevNote.isSustain)
 									note.y += Math.ceil(/*note.prevNote.y -*/ note.prevNote.frameHeight);

@@ -10,6 +10,12 @@ enum DanceType
 	NORMAL;
 }
 
+typedef CharacterFormat =
+{
+	var image:String;
+	var animations:Array<FNFAnimation>;
+}
+
 /**
  * Prototype dev comment: this took me longer than it should.
  * Beta dev comment: https://youtu.be/hIB8iAEGzYU?t=17
@@ -52,6 +58,7 @@ class Character extends FNFSprite
 
 	public var singDuration:Float = 4;
 
+	public var characterOffset:Array<Float> = [0, 0];
 	public var cameraOffset:Array<Float> = [0, 0];
 
 	public function new(x:Float = 0, y:Float = 0):Void
@@ -66,6 +73,20 @@ class Character extends FNFSprite
 
 		switch (name)
 		{
+			case "chop": // I hate this.
+				frames = getFrames("chop");
+
+				addAnim("danceLeft", "idleanim", [0, 0], 24, false, [0, 1, 2, 3, 4, 5, 6, 7]);
+				addAnim("danceRight", "idleanim", [0, 0], 24, false, [8, 9, 10, 11, 12, 13, 14, 15]);
+
+				addAnim("singLEFT", "leftanim", [10, 2]);
+				addAnim("singDOWN", "downanim", [-50, -5]);
+				addAnim("singUP", "upanim", [-26, 20]);
+				addAnim("singRIGHT", "rightanim", [-40, 0]);
+
+				characterOffset = [-100, 220];
+				cameraOffset = [250, 20];
+
 			case "bf":
 				frames = getFrames("BOYFRIEND");
 
@@ -138,15 +159,19 @@ class Character extends FNFSprite
 				flipX = isPlayer;
 		}
 
-		checkQuickDancer();
-		dance();
+		x += characterOffset[0];
+		y += characterOffset[1];
+
+		declareDanceStyle();
 
 		return this;
 	}
 
 	public override function update(elapsed:Float):Void
 	{
-		if (!nullAnims())
+		super.update(elapsed);
+
+		if (animation.curAnim != null)
 		{
 			if (isSinging())
 				holdTimer += elapsed;
@@ -159,43 +184,40 @@ class Character extends FNFSprite
 					holdTimer = 0;
 				}
 			}
+
+			if (danceProperties.windyHair)
+			{
+				// looping hair anims after idle finished
+				if (animation.getByName("idleHair") != null)
+					if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
+						playAnim('idleHair');
+
+				if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
+					playAnim('danceRight');
+			}
+
+			if (isMissing() && animation.finished)
+				dance();
 		}
-
-		if (danceProperties.windyHair)
-		{
-			// looping hair anims after idle finished
-			if (animation.getByName("idleHair") != null)
-				if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
-					playAnim('idleHair');
-
-			if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
-				playAnim('danceRight');
-		}
-
-		if (isMissing() && animation.finished)
-			dance();
-
-		super.update(elapsed);
 	}
 
-	var danced:Bool = true;
+	var danced:Bool = false;
 
 	public function dance(forced:Bool = false, ?startFrame:Int = 0):Void
 	{
-		var animName:String = 'idle${suffix}';
-
-		if (danceStyle == QUICK && animation.curAnim != null && !animation.curAnim.name.startsWith('hair'))
-			danced = !danced;
-
-		var direction:String = (danced ? 'Right' : 'Left');
-
-		animName = switch (danceStyle)
+		switch (danceStyle)
 		{
-			case QUICK: 'dance${direction}${suffix}';
-			case NORMAL: 'idle${suffix}';
-		}
+			case QUICK:
+				/*
+					if (animation.curAnim != null && !animation.curAnim.name.startsWith('hair'))
+						danced = !danced;
+				 */
 
-		playAnim(animName, forced, false, startFrame);
+				var direction:String = (danced ? 'Right' : 'Left');
+				playAnim('dance${direction}${suffix}', forced, false, startFrame);
+			default:
+				playAnim('idle${suffix}', forced, false, startFrame);
+		}
 	}
 
 	public function getFrames(sheetName:String):FlxAtlasFrames
@@ -205,12 +227,16 @@ class Character extends FNFSprite
 
 	// Animation Helpers
 	public function isSinging():Bool
-		return !nullAnims() && animation.curAnim.name.startsWith("sing");
+		return animation.curAnim != null && animation.curAnim.name.startsWith("sing");
 
 	public function isMissing():Bool
-		return !nullAnims() && animation.curAnim.name.endsWith("miss");
+		return animation.curAnim != null && animation.curAnim.name.endsWith("miss");
 
-	function checkQuickDancer():Void
+	/*
+	 * ...
+	 * @author Shadow_Mario_
+	 */
+	public function declareDanceStyle():Void
 	{
 		if (animation.getByName('danceLeft${suffix}') != null && animation.getByName('danceRight${suffix}') != null)
 		{

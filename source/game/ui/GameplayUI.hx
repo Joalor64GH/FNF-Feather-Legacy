@@ -21,7 +21,7 @@ class GameplayUI extends FlxSpriteGroup
 	public var infoText:FlxText;
 	public var cpuText:FlxText;
 
-	public var downscroll:Bool = false;
+	public var downscroll:Bool = Settings.get("scrollType") == "DOWN";
 
 	public function new():Void
 	{
@@ -49,13 +49,13 @@ class GameplayUI extends FlxSpriteGroup
 		iconOPP.scrollFactor.set();
 		add(iconOPP);
 
-		scoreText = new FlxText(0, healthBG.y + 25, Std.int(healthBG.width + 55));
+		scoreText = new FlxText(0, healthBG.y + 45, Std.int(healthBG.width + 55));
 		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(scoreText);
 
-		if (Settings.get("infoText") != 'none')
+		if (Settings.get("infoText") != 'NONE')
 		{
-			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'song' ? '- ${game.song.name.toUpperCase()} -' : '');
+			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'SONG' ? '- ${game.song.name.toUpperCase()} -' : '');
 			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 			infoText.y = downscroll ? FlxG.height - infoText.height - 15 : 15;
 			infoText.screenCenter(X);
@@ -70,7 +70,11 @@ class GameplayUI extends FlxSpriteGroup
 		cpuText.alpha = 0.6;
 		add(cpuText);
 
-		var featherText:FlxText = new FlxText(0, 0, 0, '[FEATHER BETA v${lime.app.Application.current.meta.get("version")}]');
+		var engineName:String = 'Feather';
+		if (Main.featherVer.branch != '' && Main.featherVer.branch != null)
+			engineName += ' ${Main.featherVer.branch}';
+
+		var featherText:FlxText = new FlxText(0, 0, 0, '[${engineName.toUpperCase()} v${Main.featherVer.number}]');
 		featherText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
 		featherText.setPosition(FlxG.width - featherText.width - 5, FlxG.height - featherText.height - 5);
 		add(featherText);
@@ -93,7 +97,7 @@ class GameplayUI extends FlxSpriteGroup
 		iconP1.updateAnim(healthBar.percent);
 		iconOPP.updateAnim(100 - healthBar.percent);
 
-		if (Settings.get("infoText") == 'time')
+		if (Settings.get("infoText") == 'TIME')
 		{
 			if (game != null && infoText != null && Conductor.songPosition > 0)
 			{
@@ -109,6 +113,8 @@ class GameplayUI extends FlxSpriteGroup
 
 	public var separator:String = ' ~ ';
 
+	var scoreTween:FlxTween;
+
 	public function updateScore():Void
 	{
 		var newScore:String = '[ SCORE: ${game.currentStat.score}';
@@ -117,6 +123,14 @@ class GameplayUI extends FlxSpriteGroup
 		scoreText.text = newScore;
 
 		scoreText.screenCenter(X);
+
+		scoreText.scale.set(1.1, 1.1);
+
+		if (scoreTween != null)
+			scoreTween.cancel();
+
+		scoreTween = FlxTween.tween(scoreText, {"scale.x": 1, "scale.y": 1}, 0.6,
+			{ease: FlxEase.cubeOut, onComplete: function(twn:FlxTween):Void scoreTween = null});
 	}
 
 	public function beatHit(curBeat:Int):Void

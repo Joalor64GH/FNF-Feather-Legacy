@@ -4,9 +4,9 @@ import game.system.Settings;
 
 enum abstract OptionType(Int) to Int
 {
-	var CHECKMARK:OptionType = 0xA;
-	var LIST:OptionType = 0xB;
-	var NUMBER:OptionType = 0xC;
+	var Checkmark:OptionType = 0xA;
+	var StringList:OptionType = 0xB;
+	var Number:OptionType = 0xC;
 }
 
 /**
@@ -23,13 +23,18 @@ class Option
 	public var apiKey:String;
 
 	/**
+	 * Whether the option should need a song reset
+	 */
+	public var mustReset:Bool = false;
+
+	/**
 	 * Defines the Option's Type
 	 *
 	 * CHECKMARK - Boolean,
 	 * LIST - String (with an array),
 	 * NUMBER - Int/Float
 	 */
-	public var type:Int = CHECKMARK;
+	public var type:Int = Checkmark;
 
 	/**
 	 * Contains Strings for Lists
@@ -39,7 +44,7 @@ class Option
 	/**
 	 * Defines the minimum value for a number option
 	 */
-	public var minimum:Float = 0;
+	public var minimum:Int = 0;
 
 	/**
 	 * Declares how many decimals a number option has
@@ -49,14 +54,15 @@ class Option
 	/**
 	 * Defines the maximum value for a number option
 	 */
-	public var maximum:Float = 1;
+	public var maximum:Int = 1;
 
-	public function new(name:String, description:String, apiKey:String, type:Int = CHECKMARK):Void
+	public function new(name:String, description:String, apiKey:String, ?optionsList:Array<String>):Void
 	{
 		this.name = name;
 		this.description = description;
+		this.optionsList = optionsList;
 		this.apiKey = apiKey;
-		type = getType();
+		this.type = getType();
 	}
 
 	public inline function getValue():Dynamic
@@ -72,10 +78,11 @@ class Option
 	@:noCompletion inline function getType():Int
 	{
 		if (Std.isOfType(Settings.get(apiKey), Int) || Std.isOfType(Settings.get(apiKey), Float))
-			return NUMBER;
-		if (Std.isOfType(Settings.get(apiKey), String))
-			return LIST;
+			return Number;
 
-		return CHECKMARK;
+		if (Std.isOfType(Settings.get(apiKey), String))
+			return StringList;
+
+		return Checkmark;
 	}
 }
