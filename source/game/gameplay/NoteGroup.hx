@@ -35,13 +35,13 @@ class NoteGroup extends FlxGroup
 
 	public var character:Character;
 
-	public function new(x:Float = 0, y:Float = 0, ?cpuControlled:Bool = true, ?character:Character, ?keys:Int = 4):Void
+	public function new(x:Float = 0, y:Float = 0, ?character:Character, ?spacing:Float = 160 * 0.7, ?keys:Int = 4):Void
 	{
 		super();
 
 		this.keys = keys;
-		this.cpuControlled = cpuControlled;
 		this.character = character;
+		this.spacing = spacing;
 
 		generateArrows(x, y);
 

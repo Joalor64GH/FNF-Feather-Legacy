@@ -55,7 +55,7 @@ class PlayState extends MusicBeatState
 	public var playerStrumline:Int = 1;
 	public var playerStrums(get, never):NoteGroup;
 
-	function get_playerStrums():NoteGroup
+	@:keep inline function get_playerStrums():NoteGroup
 		return lines.members[playerStrumline];
 
 	public var gameUI:GameplayUI;
@@ -188,16 +188,19 @@ class PlayState extends MusicBeatState
 
 		var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 55;
 
-		leftSideNotes = new NoteGroup(FlxG.width / 5 - FlxG.width / 7, yPos, true, opponent);
+		leftSideNotes = new NoteGroup(FlxG.width / 5 - FlxG.width / 7, yPos, opponent);
 		lines.add(leftSideNotes);
 
-		rightSideNotes = new NoteGroup(FlxG.width / 3 + FlxG.width / 4, yPos, false, player);
+		rightSideNotes = new NoteGroup(FlxG.width / 3 + FlxG.width / 4, yPos, player);
 		lines.add(rightSideNotes);
 
 		controls.onKeyPressed.add(onKeyPress);
 		controls.onKeyReleased.add(onKeyRelease);
 
 		songCutscene();
+
+		for (i in 0...lines.members.length)
+			lines.members[i].cpuControlled = i != playerStrumline;
 	}
 
 	public var inCutscene:Bool = true;
