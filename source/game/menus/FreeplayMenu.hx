@@ -8,12 +8,6 @@ import game.system.Levels;
 import game.system.charting.ChartLoader;
 import game.ui.Alphabet;
 import game.ui.HealthIcon;
-#if sys
-import flixel.system.FlxSound;
-import game.system.music.Conductor;
-import sys.thread.Mutex;
-import sys.thread.Thread;
-#end
 
 class FreeplayMenu extends MenuBase
 {
@@ -34,17 +28,16 @@ class FreeplayMenu extends MenuBase
 	var scoreLerp:Float = 0;
 	var gottenScore:Int = 0;
 
-	#if sys
-	public var mutex:Mutex;
-	public var inst:FlxSound = new FlxSound();
+	#if target.threaded
+	public var mutex:sys.thread.Mutex;
 	#end
 
 	public override function create():Void
 	{
 		super.create();
 
-		#if sys
-		mutex = new Mutex();
+		#if target.threaded
+		mutex = new sys.thread.Mutex();
 		#end
 
 		// get week songs and add them
@@ -181,16 +174,17 @@ class FreeplayMenu extends MenuBase
 
 	function updateSongPlayback():Void
 	{
-		#if sys
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		Thread.create(function():Void
-		{
+		#if target.threaded
+		sys.thread.Thread.create(() -> {
 			mutex.acquire();
+		#end
 			FlxG.sound.playMusic(Paths.inst(Utils.removeForbidden(songList[curSelection].name)));
 			FlxG.sound.music.fadeIn(0.8);
-			mutex.release();
+		#if target.threaded
+		mutex.release();
 		});
 		#end
 	}

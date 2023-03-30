@@ -7,7 +7,6 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import game.PlayState;
 import game.gameplay.Note;
-import game.gameplay.NoteGroup;
 import game.system.charting.ChartDefs.ChartFormat;
 import game.system.charting.ChartLoader;
 import game.system.music.Conductor;
@@ -24,7 +23,7 @@ class ChartEditor extends MusicBeatState
 	public var music:MusicPlayback;
 
 	public var renderedNotes:NoteSpriteGroup;
-	public var renderedHolds:NoteSpriteGroup;
+	public var renderedSustains:NoteSpriteGroup;
 
 	public var noteRender:FlxSprite;
 	public var noteCamera:FlxObject;
@@ -50,10 +49,18 @@ class ChartEditor extends MusicBeatState
 		background.alpha = 0.4;
 		add(background);
 
-		// create the grid
+		// initialize rendering groups
+		renderedNotes = new NoteSpriteGroup();
+		renderedSustains = new NoteSpriteGroup();
 		renderedSections = new FlxTypedGroup<FlxSprite>();
+
+		// create the grid
 		generateCheckerboard();
 		add(renderedSections);
+
+		// render sustains above notes so it doesn't look weird
+		add(renderedSustains);
+		add(renderedNotes);
 
 		// camera that objects will follow
 		noteCamera = new FlxObject(0, 0);
@@ -85,16 +92,19 @@ class ChartEditor extends MusicBeatState
 		checkerboard.height = (music.inst.length / Conductor.stepCrochet) * cellSize;
 		add(checkerboard);
 
-		generateSectionLines();
+		generateSection();
 	}
 
-	function generateSectionLines():Void
+	function generateSection():Void
 	{
 		for (i in 0...song.sections.length)
 		{
 			var sectionLine:FlxText = new FlxText(checkerboard.x + checkerboard.width, 16 * cellSize * i, 0, '${i + 1}');
 			sectionLine.setFormat(Paths.font("vcr"), 32);
 			renderedSections.add(sectionLine);
+
+			for (note in song.sections[i].notes)
+				generateNotes(note.step, note.index, note.sustainTime, note.type, note.strumline);
 		}
 	}
 
@@ -131,6 +141,73 @@ class ChartEditor extends MusicBeatState
 		music.resyncFunction();
 	}
 
+	function generateNotes(step:Float, index:Int, sustainTime:Float, ?type:String = "default", ?strumline:Int = 0):Void
+	{
+		var note:Note = new Note(step, index, false, type, null);
+		note.debugging = true;
+		note.sustainTime = sustainTime;
+		note.strumline = strumline;
+		note.setGraphicSize(cellSize, cellSize);
+		note.updateHitbox();
+
+		note.centerOverlay(checkerboard, X);
+		note.x -= (cellSize * (keys / 2) - (cellSize / 2));
+		note.x += Math.floor(getNoteSide(index, strumline == 1) * cellSize);
+		note.y = Math.floor(getYfromStrum(step));
+		renderedNotes.add(note);
+
+		if (note.sustainTime > 0)
+		{
+			for (sustain in generateSustainNote(Conductor.stepCrochet, note))
+				renderedSustains.add(sustain);
+		}
+	}
+
+	function generateSustainNote(step:Float, note:Note):Array<Note>
+	{
+		var length:Int = Math.floor(note.sustainTime / step);
+		if (length < 1)
+			length = 1;
+
+		var sustainSprites:Array<Note> = [];
+		var previous:Note = note;
+
+		for (i in 0...length + 1)
+		{
+			var sustain:Note = new Note(note.step + (step * i) + step, note.index % 4, true, note.type, previous);
+			sustain.debugging = true;
+			sustain.setPosition(note.x, previous.y + cellSize);
+			sustain.flipY = false;
+
+			// update size
+			sustain.setGraphicSize(Std.int(cellSize / 3), Std.int(cellSize / 3));
+			sustain.updateHitbox();
+			sustain.scale.y = 1;
+			previous = sustain;
+			sustainSprites.push(sustain);
+		}
+
+		for (sustain in sustainSprites)
+		{
+			if (sustain.animation.curAnim != null && sustain.animation.curAnim.name.endsWith('end'))
+			{
+				sustain.setGraphicSize(Std.int(cellSize * .35), Std.int((cellSize) / 2));
+				sustain.updateHitbox();
+				sustain.offset.x = 1;
+				sustain.offset.y = (cellSize) / 2 + 25;
+			}
+			else
+			{
+				sustain.setGraphicSize(Std.int(cellSize * .35), cellSize + 1);
+				sustain.updateHitbox();
+				sustain.offset.x = 1;
+				sustain.offset.y += 22.5;
+			}
+		}
+
+		return sustainSprites;
+	}
+
 	public function exportChart():Void
 	{
 		var json = {
@@ -157,11 +234,11 @@ class ChartEditor extends MusicBeatState
 	function getNoteStep(yPos:Float):Float
 		return FlxMath.remapToRange(yPos, 0, (music.inst.length / Conductor.stepCrochet) * cellSize, 0, music.inst.length);
 
-	function getYfromStrum(step:Float):Float
-		return FlxMath.remapToRange(step, 0, music.inst.length, 0, (music.inst.length / Conductor.stepCrochet) * cellSize);
+	function getYfromStrum(strumTime:Float):Float
+		return FlxMath.remapToRange(strumTime, 0, music.inst.length, 0, (music.inst.length / Conductor.stepCrochet) * cellSize);
 
-	function getNoteSide(index:Int, mustHit:Bool):Void
-		return (mustHit ? ((index + 4) % 8) : index);
+	function getNoteSide(index:Int, mustHit:Bool):Float
+		return mustHit ? ((index + 4) % 8) : index;
 
 	function getSectionLength():Int
 		return song.sections[curSec].length;

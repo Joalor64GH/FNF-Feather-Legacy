@@ -9,10 +9,8 @@ import flixel.math.FlxPoint;
 import haxe.CallStack;
 import haxe.Exception;
 import openfl.display.Sprite;
-#if sys
 import sys.FileSystem;
 import sys.io.File;
-#end
 
 typedef VersionScheme =
 {
@@ -144,14 +142,11 @@ class CustomGame extends FlxGame
 					caughtErrors.push('Local Function (${name})');
 			}
 
-			#if sys
 			Sys.println(item);
-			#end
 		}
 
 		final msg:String = caughtErrors.join('\n');
 
-		#if sys
 		try
 		{
 			if (!FileSystem.exists('logs'))
@@ -162,7 +157,6 @@ class CustomGame extends FlxGame
 		}
 		catch (e:Dynamic)
 			Sys.println('Error!\nCouldn\'t save crash log\nCaught: ${e}');
-		#end
 
 		return FlxG.switchState(new core.CrashState(msg, e.message, Type.getClass(FlxG.state)));
 	}

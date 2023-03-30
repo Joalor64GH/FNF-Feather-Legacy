@@ -16,8 +16,7 @@ class CacheHandler
 	{
 		if (!cachedGraphics.exists(path))
 		{
-			var newGraphic:FlxGraphic = #if sys FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false,
-				path) #else FlxGraphic.fromAssetKey(path, false, path) #end;
+			var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false, path);
 			newGraphic.persist = true;
 			cachedGraphics.set(path, newGraphic);
 			trackedIDs.push(path);

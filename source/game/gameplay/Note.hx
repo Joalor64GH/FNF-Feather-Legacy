@@ -12,6 +12,8 @@ class Note extends FNFSprite
 
 	public var prevNote:Note = null;
 
+	public var debugging:Bool = false;
+
 	public var index:Int = 0;
 
 	public var type:String = "default";
@@ -122,13 +124,16 @@ class Note extends FNFSprite
 	{
 		super.update(elapsed);
 
-		if (this.strumline == game.playerStrumline)
+		if (!debugging)
 		{
-			this.canHit = (this.step > Conductor.songPosition - (Conductor.safeZone * this.hitboxEarly)
-				&& this.step < Conductor.songPosition + (Conductor.safeZone * this.hitboxLate));
+			if (this.strumline == game.playerStrumline)
+			{
+				this.canHit = (this.step > Conductor.songPosition - (Conductor.safeZone * this.hitboxEarly)
+					&& this.step < Conductor.songPosition + (Conductor.safeZone * this.hitboxLate));
+			}
+			else
+				this.canHit = false;
 		}
-		else
-			this.canHit = false;
 	}
 }
 

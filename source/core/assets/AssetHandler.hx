@@ -31,10 +31,10 @@ class AssetHandler
 	}
 
 	public static function exists(path:String):Bool
-		return #if sys sys.FileSystem.exists(path) #else openfl.utils.Assets.exists(path) #end;
+		return sys.FileSystem.exists(path);
 
 	public static function getContent(path:String):String
-		return #if sys sys.io.File.getContent(path) #else openfl.utils.Assets.getText(path) #end;
+		return sys.io.File.getContent(path);
 }
 
 enum abstract AssetType(String) to String from String

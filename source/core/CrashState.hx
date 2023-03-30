@@ -39,9 +39,7 @@ class CrashState extends FlxUIState
 		textGroup.add(bindsText);
 
 		var finalText:String = '';
-		#if sys
 		finalText += 'Log saved at "${Main.CustomGame.logSavePath}"\n';
-		#end
 		finalText += 'Consider taking a Screenshot and reporting this error';
 		finalText += '\nThank you for your Patience';
 

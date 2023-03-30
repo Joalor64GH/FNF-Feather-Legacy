@@ -72,11 +72,15 @@ class FPS extends TextField
 		if (visible)
 		{
 			text += '[FPS: ${curFPS}';
-
 			#if cpp
 			curMEM = System.totalMemory;
 			text += separator + 'MEMORY: ${FlxStringUtil.formatBytes(curMEM)}';
+			text += ']\n';
+
+			text += '[STATE: ${Type.getClassName(Type.getClass(FlxG.state))}';
+			text += separator + 'OBJECTS: ${FlxG.state.members.length}';
 			#end
+
 			text += ']\n';
 		}
 	}
