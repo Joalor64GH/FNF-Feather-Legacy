@@ -4,14 +4,14 @@ import core.Controls;
 import flixel.FlxSubState;
 import game.system.music.BeatManager;
 
-class MusicBeatSubState extends FlxSubState
+class MusicBeatSubState extends FlxSubState implements IMusicFunctions
 {
 	public var controls(get, never):Controls;
 
 	function get_controls():Controls
 		return Controls.self;
 
-	public var beatContainer:BeatManager = new BeatManager();
+	public var beatContainer:BeatManager;
 
 	public var curBeat(get, never):Int;
 	public var curSec(get, never):Int;
@@ -26,23 +26,16 @@ class MusicBeatSubState extends FlxSubState
 	function get_curStep():Int
 		return beatContainer.step;
 
-	var tempStep:Int = -1;
+	public function new():Void
+	{
+		super();
+		beatContainer = new BeatManager(this);
+	}
 
 	public override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-
 		beatContainer.update(elapsed);
-
-		if (curStep > tempStep)
-		{
-			tempStep = curStep;
-			stepHit();
-		}
-		if (curStep % 4 == 0)
-			beatHit();
-		if (curBeat % 4 == 0)
-			secHit();
 	}
 
 	public function beatHit():Void {}

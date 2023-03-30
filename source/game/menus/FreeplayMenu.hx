@@ -1,6 +1,8 @@
 package game.menus;
 
 import flixel.text.FlxText;
+import game.PlayState.PlayStateStruct;
+import game.editors.ChartEditor;
 import game.gameplay.Highscore;
 import game.system.Levels;
 import game.system.charting.ChartLoader;
@@ -115,14 +117,19 @@ class FreeplayMenu extends MenuBase
 
 		if (controls.justPressed("accept"))
 		{
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.stop();
-
-			FlxG.switchState(new PlayState({
+			var parameters:PlayStateStruct = {
 				songName: Utils.removeForbidden(songList[curSelection].name),
 				difficulty: Levels.DEFAULT_DIFFICULTIES[curDifficulty],
 				gamemode: FREEPLAY
-			}));
+			};
+
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
+
+			if (FlxG.keys.pressed.SHIFT)
+				FlxG.switchState(new ChartEditor(parameters));
+			else
+				FlxG.switchState(new PlayState(parameters));
 		}
 
 		if (controls.anyJustPressed(["left", "right"]))

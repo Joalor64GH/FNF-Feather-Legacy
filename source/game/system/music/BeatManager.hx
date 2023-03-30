@@ -2,27 +2,32 @@ package game.system.music;
 
 import game.system.music.Conductor.ChangeBPMEvent;
 
+interface IMusicFunctions
+{
+	public function beatHit():Void;
+	public function stepHit():Void;
+	public function secHit():Void;
+}
+
 /**
  * Manages Updates for song variables, Beats, Steps, and Sections
  */
-class BeatManager implements IMusicSync
+class BeatManager
 {
+	public var boundContainer:IMusicFunctions;
+
 	public var step:Int = 0;
 	public var beat:Int = 0;
 	public var sec:Int = 0;
 
-	public function new():Void {}
+	public function new(newContainer:IMusicFunctions):Void
+		boundContainer = newContainer;
 
 	public function update(elapsed:Float):Void
 	{
 		updateStepPosition();
 		updateSectionPosition();
 		updateBeatPosition();
-
-		FlxG.watch.add(Conductor, "songPosition");
-		FlxG.watch.add(this, "beat");
-		FlxG.watch.add(this, "step");
-		FlxG.watch.add(this, "sec");
 	}
 
 	var stepTemp:Int = -1;
@@ -41,37 +46,22 @@ class BeatManager implements IMusicSync
 
 		step = registeredEvent.step + Math.floor((Conductor.songPosition - registeredEvent.time) / Conductor.stepCrochet);
 
-		if (step > stepTemp)
+		if (stepTemp != step)
 		{
-			stepTemp = step;
-			onStep();
+			if (step > stepTemp)
+				stepTemp = step;
+			boundContainer.stepHit();
 		}
+
+		if (step % 4 == 0)
+			boundContainer.beatHit();
+		if (step % 16 == 0)
+			boundContainer.secHit();
 	}
 
 	public function updateBeatPosition():Void
-	{
 		beat = Math.floor(step / 4);
-	}
 
 	public function updateSectionPosition():Void
-	{
-		sec = Math.floor(beat / 4);
-	}
-
-	public function onBeat():Void
-	{
-		if (beat % 4 == 0)
-			onSec();
-	}
-
-	public function onStep():Void
-	{
-		if (step % 4 == 0)
-			onBeat();
-	}
-
-	public function onSec():Void
-	{
-		// receive sections here
-	}
+		sec = Math.floor(step / 16);
 }

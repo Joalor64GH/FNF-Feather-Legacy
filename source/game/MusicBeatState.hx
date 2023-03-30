@@ -4,14 +4,14 @@ import core.Controls;
 import flixel.addons.ui.FlxUIState;
 import game.system.music.BeatManager;
 
-class MusicBeatState extends FlxUIState
+class MusicBeatState extends FlxUIState implements IMusicFunctions
 {
 	public var controls(get, never):Controls;
 
 	function get_controls():Controls
 		return Controls.self;
 
-	public var beatContainer:BeatManager = new BeatManager();
+	public var beatContainer:BeatManager;
 
 	public var curBeat(get, never):Int;
 	public var curSec(get, never):Int;
@@ -26,27 +26,35 @@ class MusicBeatState extends FlxUIState
 	function get_curStep():Int
 		return beatContainer.step;
 
-	var tempStep:Int = -1;
+	public function new():Void
+	{
+		super();
+		beatContainer = new BeatManager(this);
+	}
 
 	public override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-
 		beatContainer.update(elapsed);
-		if (curStep > tempStep)
-		{
-			tempStep = curStep;
-			stepHit();
-		}
-		if (curStep % 4 == 0)
-			beatHit();
-		if (curBeat % 4 == 0)
-			secHit();
+
+		FlxG.watch.add(game.system.music.Conductor, "songPosition", "Song Pos:");
+		FlxG.watch.add(beatContainer, "beat", "Song Beat:");
+		FlxG.watch.add(beatContainer, "step", "Song Step:");
+		FlxG.watch.add(beatContainer, "sec", "Song Section:");
 	}
 
-	public function beatHit():Void {}
+	public function beatHit():Void
+	{
+		// receive beats here
+	}
 
-	public function stepHit():Void {}
+	public function stepHit():Void
+	{
+		// receive steps here
+	}
 
-	public function secHit():Void {}
+	public function secHit():Void
+	{
+		// receive sections here
+	}
 }
