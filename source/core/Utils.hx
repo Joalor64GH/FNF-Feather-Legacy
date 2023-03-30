@@ -9,6 +9,8 @@ import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.net.FileReference;
 
+typedef TransitionState = flixel.addons.transition.FlxTransitionableState;
+
 class Utils
 {
 	/**

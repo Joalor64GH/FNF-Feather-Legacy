@@ -30,17 +30,25 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions
 	{
 		super();
 		beatContainer = new BeatManager(this);
+
+		if (!TransitionState.skipNextTransIn)
+			transIn = TransitionState.defaultTransIn;
+		if (!TransitionState.skipNextTransOut)
+			transOut = TransitionState.defaultTransOut;
 	}
 
 	public override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		beatContainer.update(elapsed);
 
-		FlxG.watch.add(game.system.music.Conductor, "songPosition", "Song Pos:");
-		FlxG.watch.add(beatContainer, "beat", "Song Beat:");
-		FlxG.watch.add(beatContainer, "step", "Song Step:");
-		FlxG.watch.add(beatContainer, "sec", "Song Section:");
+		if (game.system.music.Conductor.songPosition >= 0)
+		{
+			beatContainer.update(elapsed);
+			FlxG.watch.add(game.system.music.Conductor, "songPosition", "Song Pos:");
+			FlxG.watch.add(beatContainer, "beat", "Song Beat:");
+			FlxG.watch.add(beatContainer, "step", "Song Step:");
+			FlxG.watch.add(beatContainer, "sec", "Song Section:");
+		}
 	}
 
 	public function beatHit():Void

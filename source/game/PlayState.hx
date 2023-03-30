@@ -201,6 +201,8 @@ class PlayState extends MusicBeatState
 
 		for (i in 0...lines.members.length)
 			lines.members[i].cpuControlled = i != playerStrumline;
+
+		TransitionState.nextStateCamera = camOver;
 	}
 
 	public var inCutscene:Bool = true;
@@ -375,7 +377,10 @@ class PlayState extends MusicBeatState
 		}
 
 		if (FlxG.keys.justPressed.SEVEN)
+		{
+			music.cease();
 			FlxG.switchState(new ChartEditor({songName: constructor.songName, difficulty: constructor.difficulty}));
+		}
 
 		if (song != null && !paused)
 		{

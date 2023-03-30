@@ -35,7 +35,9 @@ class MusicBeatSubState extends FlxSubState implements IMusicFunctions
 	public override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		beatContainer.update(elapsed);
+
+		if (game.system.music.Conductor.songPosition >= 0)
+			beatContainer.update(elapsed);
 	}
 
 	public function beatHit():Void {}

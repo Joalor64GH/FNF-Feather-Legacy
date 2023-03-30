@@ -135,6 +135,7 @@ class Character extends FNFSprite
 		y += characterOffset[1];
 
 		declareDanceStyle();
+		dance();
 
 		return this;
 	}
