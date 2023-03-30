@@ -92,7 +92,7 @@ class ChartEditor extends MusicBeatState
 	{
 		for (i in 0...song.sections.length)
 		{
-			var sectionLine:FlxText = new FlxText(checkerboard.x + checkerboard.width, 16 * cellSize * i, 0, '${i}');
+			var sectionLine:FlxText = new FlxText(checkerboard.x + checkerboard.width, 16 * cellSize * i, 0, '${i + 1}');
 			sectionLine.setFormat(Paths.font("vcr"), 32);
 			renderedSections.add(sectionLine);
 		}
