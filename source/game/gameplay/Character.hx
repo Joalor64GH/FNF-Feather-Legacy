@@ -176,9 +176,8 @@ class Character extends FNFSprite {
 		}
 	}
 
-	public function getFrames(sheetName:String):FlxAtlasFrames {
+	public function getFrames(sheetName:String):FlxAtlasFrames
 		return AssetHandler.getAsset('images/characters/${name}/${sheetName}', XML);
-	}
 
 	// Animation Helpers
 	public function isSinging():Bool
@@ -187,10 +186,6 @@ class Character extends FNFSprite {
 	public function isMissing():Bool
 		return animation.curAnim != null && animation.curAnim.name.endsWith("miss");
 
-	/*
-	 * ...
-	 * @author Shadow_Mario_
-	 */
 	public function declareDanceStyle():Void {
 		if (animation.getByName('danceLeft${suffix}') != null && animation.getByName('danceRight${suffix}') != null) {
 			danceStyle = QUICK;
