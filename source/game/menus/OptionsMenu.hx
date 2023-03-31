@@ -3,18 +3,20 @@ package game.menus;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import game.MusicBeatState.MusicBeatSubState;
-import game.options.Option;
+import game.system.Option;
 
 class OptionsMenu extends MusicBeatSubState {
 	public var curSelection:Int = 0;
 
+	public var pageBG:FlxSprite;
 	public var pageGroup:FlxTypedGroup<FlxText>;
 	public var descriptionHolder:FlxText;
 
 	public var pageOptions:Array<Option> = [
-		new Option("Scroll Type", "In which direction should notes spawn?", "scrollType", ["UP", "DOWN"]),
+		new Option("Scroll Type", "In which direction should notes spawn?", "scrollType", ["UP", "DOWN"], true),
 		new Option("Ghost Tapping", "If mashing keys should be allowed during gameplay.", "ghostTapping"),
-		new Option("Info Display", "Choose what to display on the info text (usually shows time)", "infoText", ["TIME", "SONG", "NONE"]),
+		new Option("Note Splashes", "If the firework effect should appear when hitting \"Sick\"s on Notes.", "noteSplashes"),
+		new Option("Info Display", "Choose what to display on the info text (usually shows time)", "infoText", ["TIME", "SONG", "NONE"])
 	];
 
 	public var onPause:Bool = false;
@@ -35,7 +37,7 @@ class OptionsMenu extends MusicBeatSubState {
 			add(bg);
 		}
 
-		var pageBG:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width / 1.3), Std.int(FlxG.height / 1.1), FlxColor.BLACK);
+		pageBG = new FlxSprite().makeGraphic(Std.int(FlxG.width / 1.3), Std.int(FlxG.height / 1.1), FlxColor.BLACK);
 		pageBG.screenCenter(XY);
 		pageBG.alpha = 0;
 		add(pageBG);
@@ -43,22 +45,19 @@ class OptionsMenu extends MusicBeatSubState {
 		pageGroup = new FlxTypedGroup<FlxText>();
 
 		for (i in 0...pageOptions.length) {
-			var value:String = switch (pageOptions[i].getValue()) {
-				case "true": "ON";
-				case "false": "OFF";
-				default: pageOptions[i].getValue();
-			}
-
-			var name:FlxText = new FlxText(pageBG.x + 10, (40 * i) + pageBG.y + 10, pageBG.width, '${pageOptions[i].name}: ${value}');
-			name.setFormat(Paths.font('vcr'), 32, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+			var name:FlxText = new FlxText(pageBG.x + 10, (40 * i) + pageBG.y + 10, pageBG.width, '${pageOptions[i].name}: ${getValueText(i)}');
+			name.setFormat(Paths.font('vcr'), 32, (onPause && pageOptions[i].lockOnPause) ? 0xFFFFFF00 : 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 			name.alpha = 0;
 			name.ID = i;
 			pageGroup.add(name);
 
 			FlxTween.tween(name, {alpha: 0.6}, 0.4);
 		}
-
 		add(pageGroup);
+
+		descriptionHolder = new FlxText(pageBG.x + 10, pageBG.height, pageBG.width, '');
+		descriptionHolder.setFormat(Paths.font('vcr'), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
+		add(descriptionHolder);
 
 		FlxTween.tween(pageBG, {alpha: 0.6}, 0.6, {
 			onComplete: function(twn:FlxTween):Void {
@@ -104,6 +103,9 @@ class OptionsMenu extends MusicBeatSubState {
 				}
 
 				if (controls.justPressed("accept")) {
+					if (onPause && pageOptions[curSelection].lockOnPause)
+						return;
+
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					isChanging = !isChanging;
 				}
@@ -111,13 +113,12 @@ class OptionsMenu extends MusicBeatSubState {
 				if (controls.anyJustPressed(["left", "right"])) {
 					switch (pageOptions[curSelection].type) {
 						case Checkmark:
-							// if (!pageOptions[curSelection].mustReset)
 							pageOptions[curSelection].setValue(!Settings.get(pageOptions[curSelection].apiKey));
 
 						case StringList:
 							var storedValue:Int = 0;
 							for (i in 0...pageOptions[curSelection].optionsList.length) {
-								if (pageOptions[curSelection].optionsList[i] == getValueText())
+								if (pageOptions[curSelection].optionsList[i] == getValueText(curSelection))
 									storedValue = i;
 
 								pageOptions[curSelection].maximum = pageOptions[curSelection].optionsList.length - 1;
@@ -130,7 +131,7 @@ class OptionsMenu extends MusicBeatSubState {
 							pageOptions[curSelection].setValue(pageOptions[curSelection].optionsList[wrapValue]);
 					}
 
-					pageGroup.members[curSelection].text = '${pageOptions[curSelection].name}: ${getValueText()}';
+					pageGroup.members[curSelection].text = '${pageOptions[curSelection].name}: ${getValueText(curSelection)}';
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 				}
 
@@ -142,11 +143,11 @@ class OptionsMenu extends MusicBeatSubState {
 		}
 	}
 
-	public function getValueText():String {
-		return switch (pageOptions[curSelection].getValue()) {
+	public function getValueText(index:Int):String {
+		return switch (pageOptions[index].getValue()) {
 			case "true": "ON";
 			case "false": "OFF";
-			default: pageOptions[curSelection].getValue();
+			default: pageOptions[index].getValue();
 		}
 	}
 
@@ -156,6 +157,10 @@ class OptionsMenu extends MusicBeatSubState {
 
 		if (newSelection != 0)
 			FlxG.sound.play(Paths.sound('scrollMenu'));
+
+		var pauseLock:Bool = (onPause && pageOptions[curSelection].lockOnPause);
+		descriptionHolder.text = pauseLock ? 'This option cannot be changed while on the Pause Menu.' : pageOptions[curSelection].description;
+		descriptionHolder.color = pageGroup.members[curSelection].color;
 
 		var ascendingIndex:Int = 0;
 		for (option in pageGroup) {

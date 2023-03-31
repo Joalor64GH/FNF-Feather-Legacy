@@ -94,6 +94,9 @@ class NoteGroup extends FlxGroup {
 	}
 
 	public function doSplash(index:Int, type:String = "default", preload:Bool = false):Void {
+		if (!Settings.get("noteSplashes"))
+			return;
+
 		var babyArrow:FNFSprite = babyArrows.members[index];
 
 		var splash:FNFSprite = splashSprites.recycle(FNFSprite, function():FNFSprite return new Splash(type));

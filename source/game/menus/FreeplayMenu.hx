@@ -75,11 +75,11 @@ class FreeplayMenu extends MenuBase {
 		add(optionsGroup);
 
 		// create ui
-		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+		scoreText = new FlxText(0, 5, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
-		scoreBG = new FlxSprite(scoreText.x - 6).makeGraphic(1, 66, 0x99000000);
 
 		infoText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
+		scoreBG = new FlxSprite(scoreText.x - 6).makeGraphic(1, 66, 0x99000000);
 		infoText.font = scoreText.font;
 
 		add(scoreBG);

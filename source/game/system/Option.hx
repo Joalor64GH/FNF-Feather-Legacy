@@ -1,6 +1,4 @@
-package game.options;
-
-import game.system.Settings;
+package game.system;
 
 enum abstract OptionType(Int) to Int {
 	var Checkmark:OptionType = 0xA;
@@ -21,9 +19,9 @@ class Option {
 	public var apiKey:String;
 
 	/**
-	 * Whether the option should need a song reset
+	 * Whether the option is locked from being activated on the pause menu
 	 */
-	public var mustReset:Bool = false;
+	public var lockOnPause:Bool = false;
 
 	/**
 	 * Defines the Option's Type
@@ -54,10 +52,13 @@ class Option {
 	 */
 	public var maximum:Int = 1;
 
-	public function new(name:String, description:String, apiKey:String, ?optionsList:Array<String>):Void {
+	public function new(name:String, description:String, apiKey:String, ?optionsList:Array<String>, lockOnPause:Bool = false):Void {
 		this.name = name;
 		this.description = description;
+
 		this.optionsList = optionsList;
+		this.lockOnPause = lockOnPause;
+
 		this.apiKey = apiKey;
 		this.type = getType();
 	}

@@ -8,8 +8,8 @@ class Settings {
 		// ["key", value]
 		["scrollType", "UP"],
 		["ghostTapping", true],
+		["noteSplashes", true],
 		["infoText", "TIME"], // time, song, none
-		["uiStyle", "CLASSIC"] // classic (FNF Styled), modern
 	];
 
 	public static var mySettings:Array<Dynamic> = [];
