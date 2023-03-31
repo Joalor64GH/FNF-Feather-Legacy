@@ -27,8 +27,7 @@ import flixel.FlxState;
  * FlxG.switchState(new FooState());
  * ```
  */
-class FlxTransitionableState extends FlxState
-{
+class FlxTransitionableState extends FlxState {
 	// global default transitions for ALL states, used if transIn/transOut are null
 	public static var defaultTransIn:TransitionData = null;
 	public static var defaultTransOut:TransitionData = null;
@@ -50,38 +49,32 @@ class FlxTransitionableState extends FlxState
 	 * @param	TransIn		Plays when the state begins
 	 * @param	TransOut	Plays when the state ends
 	 */
-	public function new(?TransIn:TransitionData, ?TransOut:TransitionData)
-	{
+	public function new(?TransIn:TransitionData, ?TransOut:TransitionData) {
 		transIn = TransIn;
 		transOut = TransOut;
 
-		if (transIn == null && defaultTransIn != null)
-		{
+		if (transIn == null && defaultTransIn != null) {
 			transIn = defaultTransIn;
 		}
-		if (transOut == null && defaultTransOut != null)
-		{
+		if (transOut == null && defaultTransOut != null) {
 			transOut = defaultTransOut;
 		}
 		super();
 	}
 
-	override public function destroy():Void
-	{
+	override public function destroy():Void {
 		super.destroy();
 		transIn = null;
 		transOut = null;
 		_onExit = null;
 	}
 
-	override public function create():Void
-	{
+	override public function create():Void {
 		super.create();
 		transitionIn();
 	}
 
-	override public function switchTo(nextState:FlxState):Bool
-	{
+	override public function switchTo(nextState:FlxState):Bool {
 		if (!hasTransOut)
 			return true;
 
@@ -91,17 +84,14 @@ class FlxTransitionableState extends FlxState
 		return transOutFinished;
 	}
 
-	function transitionToState(nextState:FlxState):Void
-	{
+	function transitionToState(nextState:FlxState):Void {
 		// play the exit transition, and when it's done call FlxG.switchState
 		_exiting = true;
-		transitionOut(function()
-		{
+		transitionOut(function() {
 			FlxG.switchState(nextState);
 		});
 
-		if (skipNextTransOut)
-		{
+		if (skipNextTransOut) {
 			skipNextTransOut = false;
 			finishTransOut();
 		}
@@ -110,15 +100,11 @@ class FlxTransitionableState extends FlxState
 	/**
 	 * Starts the in-transition. Can be called manually at any time.
 	 */
-	public function transitionIn():Void
-	{
-		if (transIn != null && transIn.type != NONE)
-		{
-			if (skipNextTransIn)
-			{
+	public function transitionIn():Void {
+		if (transIn != null && transIn.type != NONE) {
+			if (skipNextTransIn) {
 				skipNextTransIn = false;
-				if (finishTransIn != null)
-				{
+				if (finishTransIn != null) {
 					finishTransIn();
 				}
 				return;
@@ -139,11 +125,9 @@ class FlxTransitionableState extends FlxState
 	/**
 	 * Starts the out-transition. Can be called manually at any time.
 	 */
-	public function transitionOut(?OnExit:Void->Void):Void
-	{
+	public function transitionOut(?OnExit:Void->Void):Void {
 		_onExit = OnExit;
-		if (hasTransOut)
-		{
+		if (hasTransOut) {
 			var _trans = createTransition(transOut);
 			if (nextStateCamera != null)
 				_trans.camera = nextStateCamera;
@@ -153,9 +137,7 @@ class FlxTransitionableState extends FlxState
 
 			_trans.finishCallback = finishTransOut;
 			_trans.start(IN);
-		}
-		else
-		{
+		} else {
 			_onExit();
 		}
 	}
@@ -165,42 +147,34 @@ class FlxTransitionableState extends FlxState
 	var _exiting:Bool = false;
 	var _onExit:Void->Void;
 
-	function get_hasTransIn():Bool
-	{
+	function get_hasTransIn():Bool {
 		return transIn != null && transIn.type != NONE;
 	}
 
-	function get_hasTransOut():Bool
-	{
+	function get_hasTransOut():Bool {
 		return transOut != null && transOut.type != NONE;
 	}
 
-	function createTransition(data:TransitionData):Transition
-	{
-		return switch (data.type)
-		{
+	function createTransition(data:TransitionData):Transition {
+		return switch (data.type) {
 			case TILES: new Transition(data);
 			case FADE: new Transition(data);
 			default: null;
 		}
 	}
 
-	function finishTransIn()
-	{
+	function finishTransIn() {
 		closeSubState();
 	}
 
-	function finishTransOut()
-	{
+	function finishTransOut() {
 		transOutFinished = true;
 
-		if (!_exiting)
-		{
+		if (!_exiting) {
 			closeSubState();
 		}
 
-		if (_onExit != null)
-		{
+		if (_onExit != null) {
 			_onExit();
 		}
 

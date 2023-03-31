@@ -1,7 +1,6 @@
 package core;
 
-typedef FNFAnimation =
-{
+typedef FNFAnimation = {
 	var name:String;
 	var prefix:String;
 	var ?frames:Array<Int>;
@@ -11,39 +10,33 @@ typedef FNFAnimation =
 	var ?looped:Bool;
 }
 
-interface ISpriteOffset
-{
+interface ISpriteOffset {
 	public var offsets:Map<String, Array<Float>>;
 	public function addOffset(anim:String, ?newOffset:Array<Float>):Void;
 }
 
-class FNFSprite extends FlxSprite implements ISpriteOffset
-{
+class FNFSprite extends FlxSprite implements ISpriteOffset {
 	public var depth:Float = 0;
 
 	public var offsets:Map<String, Array<Float>> = new Map<String, Array<Float>>();
 
-	public function addOffset(anim:String, ?newOffset:Array<Float>):Void
-	{
+	public function addOffset(anim:String, ?newOffset:Array<Float>):Void {
 		if (newOffset.length < 1)
 			newOffset[1] = 0;
 
 		offsets[anim] = newOffset;
 	}
 
-	public function new(x:Float = 0, y:Float = 0):Void
-	{
+	public function new(x:Float = 0, y:Float = 0):Void {
 		super(x, y);
 	}
 
-	public override function loadGraphic(image:String, animated:Bool = false, width:Int = 0, height:Int = 0, unique:Bool = false, ?key:String):FNFSprite
-	{
+	public override function loadGraphic(image:String, animated:Bool = false, width:Int = 0, height:Int = 0, unique:Bool = false, ?key:String):FNFSprite {
 		loadGraphic(AssetHandler.getAsset(image, IMAGE), animated, width, height, unique, key);
 		return this;
 	}
 
-	public function loadFrames(image:String, ?animations:Array<FNFAnimation>):FNFSprite
-	{
+	public function loadFrames(image:String, ?animations:Array<FNFAnimation>):FNFSprite {
 		frames = AssetHandler.getAsset(image, XML);
 		if (animations != null)
 			for (i in animations)
@@ -52,10 +45,8 @@ class FNFSprite extends FlxSprite implements ISpriteOffset
 		return this;
 	}
 
-	public function copyFrom(copySprite:FNFSprite):FNFSprite
-	{
-		if (copySprite != null && copySprite.exists)
-		{
+	public function copyFrom(copySprite:FNFSprite):FNFSprite {
+		if (copySprite != null && copySprite.exists) {
 			var animated:Bool = copySprite.frameWidth > 0 && copySprite.frameHeight > 0;
 
 			if (copySprite.frames != null)
@@ -67,8 +58,7 @@ class FNFSprite extends FlxSprite implements ISpriteOffset
 		return this;
 	}
 
-	public function addAnim(name:String, prefix:String, ?animOffsets:Array<Float>, framerate:Int = 24, looped:Bool = false, ?indices:Array<Int>):Void
-	{
+	public function addAnim(name:String, prefix:String, ?animOffsets:Array<Float>, framerate:Int = 24, looped:Bool = false, ?indices:Array<Int>):Void {
 		if (indices != null && indices.length > 0)
 			animation.addByIndices(name, prefix, indices, '', framerate, looped);
 		else
@@ -78,8 +68,7 @@ class FNFSprite extends FlxSprite implements ISpriteOffset
 			addOffset(name, animOffsets);
 	}
 
-	public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame = 0):Void
-	{
+	public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame = 0):Void {
 		animation.play(name, force, reversed, frame);
 
 		if (offsets.exists(name))

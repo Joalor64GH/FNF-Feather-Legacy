@@ -2,21 +2,17 @@ package core.assets;
 
 import flixel.graphics.frames.FlxAtlasFrames;
 
-class AssetHandler
-{
-	public static function getPath(?folder:String, ?type:AssetType):String
-	{
+class AssetHandler {
+	public static function getPath(?folder:String, ?type:AssetType):String {
 		if (folder != null)
 			folder = '/${folder}';
 		return type.cycleExtensions('assets${folder}');
 	}
 
-	public static function getAsset(folder:String, ?type:AssetType):Dynamic
-	{
+	public static function getAsset(folder:String, ?type:AssetType):Dynamic {
 		var finalPath:String = getPath(folder, type);
 
-		return switch (type)
-		{
+		return switch (type) {
 			case IMAGE: CacheHandler.getGraphicData(finalPath);
 			case SOUND: CacheHandler.getSoundData(finalPath);
 			case XML: FlxAtlasFrames.fromSparrow(getPath(folder, IMAGE), getPath(folder, XML));
@@ -30,10 +26,8 @@ class AssetHandler
 		}
 	}
 
-	public static function preload(file:String, type:AssetType = IMAGE):Void
-	{
-		return switch (type)
-		{
+	public static function preload(file:String, type:AssetType = IMAGE):Void {
+		return switch (type) {
 			case IMAGE: CacheHandler.getGraphicData(file);
 			case SOUND: CacheHandler.getSoundData(file);
 			default:
@@ -47,8 +41,7 @@ class AssetHandler
 		return sys.io.File.getContent(path);
 }
 
-enum abstract AssetType(String) to String from String
-{
+enum abstract AssetType(String) to String from String {
 	var FONT:AssetType = 'font';
 	var IMAGE:AssetType = 'image';
 	var SOUND:AssetType = 'sound';
@@ -57,10 +50,8 @@ enum abstract AssetType(String) to String from String
 	var JSON:AssetType = 'json';
 	var TXT:AssetType = 'txt';
 
-	public function cycleExtensions(path:String):String
-	{
-		if (getExtension() != null)
-		{
+	public function cycleExtensions(path:String):String {
+		if (getExtension() != null) {
 			for (i in getExtension())
 				if (AssetHandler.exists('${path}${i}'))
 					return '${path}${i}';
@@ -69,10 +60,8 @@ enum abstract AssetType(String) to String from String
 		return '${path}';
 	}
 
-	public function getExtension():Array<String>
-	{
-		return switch (this)
-		{
+	public function getExtension():Array<String> {
+		return switch (this) {
 			case IMAGE: ['.png', '.jpg', '.bmp'];
 			case SOUND: ['.mp3', '.ogg', '.wav'];
 			case FONT: ['.ttf', '.otf'];
@@ -83,10 +72,8 @@ enum abstract AssetType(String) to String from String
 		}
 	}
 
-	public function toOpenFL():openfl.utils.AssetType
-	{
-		return switch (this)
-		{
+	public function toOpenFL():openfl.utils.AssetType {
+		return switch (this) {
 			case IMAGE: openfl.utils.AssetType.IMAGE;
 			case SOUND: openfl.utils.AssetType.SOUND;
 			case TXT | XML | JSON: openfl.utils.AssetType.TEXT;

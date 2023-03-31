@@ -4,14 +4,12 @@ import core.FNFSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import game.system.music.Conductor;
 
-enum DanceType
-{
+enum DanceType {
 	QUICK;
 	NORMAL;
 }
 
-typedef CharacterFormat =
-{
+typedef CharacterFormat = {
 	var image:String;
 	var animations:Array<FNFAnimation>;
 	var singDuration:Null<Float>;
@@ -23,8 +21,7 @@ typedef CharacterFormat =
  * Prototype dev comment: this took me longer than it should.
  * Beta dev comment: https://youtu.be/hIB8iAEGzYU?t=17
  */
-class Character extends FNFSprite
-{
+class Character extends FNFSprite {
 	public var name:String = "bf";
 
 	public var isPlayer:Bool = false;
@@ -53,9 +50,10 @@ class Character extends FNFSprite
 	 * for instance: windyHair makes it so week 4's characters play an animation named
 	 * `idleHair` once their idle animation finishes
 	 */
-	public var danceProperties = {
-		windyHair: false,
-	};
+	public var danceProperties =
+		{
+			windyHair: false,
+		};
 
 	public var holdTimer:Float = 0;
 
@@ -64,18 +62,15 @@ class Character extends FNFSprite
 	public var characterOffset:Array<Float> = [0, 0];
 	public var cameraOffset:Array<Float> = [0, 0];
 
-	public function new(x:Float = 0, y:Float = 0):Void
-	{
+	public function new(x:Float = 0, y:Float = 0):Void {
 		super(x, y);
 	}
 
-	public function loadChar(name:String = "bf", isPlayer:Bool = false):Character
-	{
+	public function loadChar(name:String = "bf", isPlayer:Bool = false):Character {
 		this.name = name;
 		antialiasing = true;
 
-		switch (name)
-		{
+		switch (name) {
 			case "__chop": // I hate this.
 				frames = getFrames("chop");
 
@@ -105,11 +100,9 @@ class Character extends FNFSprite
 				flipX = isPlayer;
 
 			default:
-				try
-				{
+				try {
 					var file:CharacterFormat = cast haxe.Json.parse(AssetHandler.getAsset('images/characters/${name}/${name}', JSON));
-					if (file != null)
-					{
+					if (file != null) {
 						if (file.characterOffset != null)
 							characterOffset = file.characterOffset;
 						if (file.cameraOffset != null)
@@ -126,8 +119,7 @@ class Character extends FNFSprite
 						for (anim in file.animations)
 							addAnim(anim.name, anim.prefix, anim.animOffsets, anim.framerate, anim.looped, anim.indices);
 					}
-				}
-				catch (e:haxe.Exception)
+				} catch (e:haxe.Exception)
 					loadChar("face", isPlayer);
 		}
 
@@ -140,26 +132,21 @@ class Character extends FNFSprite
 		return this;
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (animation.curAnim != null)
-		{
+		if (animation.curAnim != null) {
 			if (isSinging())
 				holdTimer += elapsed;
 
-			if (!isPlayer)
-			{
-				if (holdTimer >= Conductor.stepCrochet * singDuration * 0.001)
-				{
+			if (!isPlayer) {
+				if (holdTimer >= Conductor.stepCrochet * singDuration * 0.001) {
 					dance();
 					holdTimer = 0;
 				}
 			}
 
-			if (danceProperties.windyHair)
-			{
+			if (danceProperties.windyHair) {
 				// looping hair anims after idle finished
 				if (animation.getByName("idleHair") != null)
 					if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
@@ -176,10 +163,8 @@ class Character extends FNFSprite
 
 	var danced:Bool = false;
 
-	public function dance(forced:Bool = false, ?startFrame:Int = 0):Void
-	{
-		switch (danceStyle)
-		{
+	public function dance(forced:Bool = false, ?startFrame:Int = 0):Void {
+		switch (danceStyle) {
 			case QUICK:
 				/*
 					if (animation.curAnim != null && !animation.curAnim.name.startsWith('hair'))
@@ -193,8 +178,7 @@ class Character extends FNFSprite
 		}
 	}
 
-	public function getFrames(sheetName:String):FlxAtlasFrames
-	{
+	public function getFrames(sheetName:String):FlxAtlasFrames {
 		return AssetHandler.getAsset('images/characters/${name}/${sheetName}', XML);
 	}
 
@@ -209,10 +193,8 @@ class Character extends FNFSprite
 	 * ...
 	 * @author Shadow_Mario_
 	 */
-	public function declareDanceStyle():Void
-	{
-		if (animation.getByName('danceLeft${suffix}') != null && animation.getByName('danceRight${suffix}') != null)
-		{
+	public function declareDanceStyle():Void {
+		if (animation.getByName('danceLeft${suffix}') != null && animation.getByName('danceRight${suffix}') != null) {
 			danceStyle = QUICK;
 			headSpeed = 1;
 		}

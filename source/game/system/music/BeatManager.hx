@@ -2,8 +2,7 @@ package game.system.music;
 
 import game.system.music.Conductor.ChangeBPMEvent;
 
-interface IMusicFunctions
-{
+interface IMusicFunctions {
 	public function beatHit():Void;
 	public function stepHit():Void;
 	public function secHit():Void;
@@ -12,8 +11,7 @@ interface IMusicFunctions
 /**
  * Manages Updates for song variables, Beats, Steps, and Sections
  */
-class BeatManager
-{
+class BeatManager {
 	public var boundContainer:IMusicFunctions;
 
 	public var step:Int = 0;
@@ -23,8 +21,7 @@ class BeatManager
 	public function new(newContainer:IMusicFunctions):Void
 		boundContainer = newContainer;
 
-	public function update(elapsed:Float):Void
-	{
+	public function update(elapsed:Float):Void {
 		updateStepPosition();
 		updateSectionPosition();
 		updateBeatPosition();
@@ -32,13 +29,13 @@ class BeatManager
 
 	var stepTemp:Int = -1;
 
-	public function updateStepPosition():Void
-	{
-		var registeredEvent:ChangeBPMEvent = {
-			step: 0,
-			time: 0,
-			bpm: 0
-		};
+	public function updateStepPosition():Void {
+		var registeredEvent:ChangeBPMEvent =
+			{
+				step: 0,
+				time: 0,
+				bpm: 0
+			};
 
 		for (event in 0...Conductor.bpmChanges.length)
 			if (Conductor.songPosition >= Conductor.bpmChanges[event].time)
@@ -46,8 +43,7 @@ class BeatManager
 
 		step = registeredEvent.step + Math.floor((Conductor.songPosition - registeredEvent.time) / Conductor.stepCrochet);
 
-		if (stepTemp != step)
-		{
+		if (stepTemp != step) {
 			if (step > stepTemp)
 				stepTemp = step;
 			boundContainer.stepHit();

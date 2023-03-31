@@ -5,8 +5,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import game.menus.MenuBase.MenuOption;
 
-class MainMenu extends MusicBeatState
-{
+class MainMenu extends MusicBeatState {
 	static var curSelection:Int = 0;
 
 	public var optionsGroup:FlxTypedGroup<MainMenuItem>;
@@ -21,8 +20,7 @@ class MainMenu extends MusicBeatState
 	var bg:FlxSprite;
 	var magenta:FlxSprite;
 
-	public override function create():Void
-	{
+	public override function create():Void {
 		super.create();
 
 		Utils.resetMusic();
@@ -40,28 +38,23 @@ class MainMenu extends MusicBeatState
 		optionsGroup = new FlxTypedGroup<MainMenuItem>();
 		add(optionsGroup);
 
-		for (i in 0...optionsList.length)
-		{
+		for (i in 0...optionsList.length) {
 			var option:MainMenuItem = new MainMenuItem(0, 60 + (i * 160), optionsList[i].name);
 			option.screenCenter(X);
 			option.ID = i;
 
-			option.deselectItem = function():Void
-			{
+			option.deselectItem = function():Void {
 				if (option.type != 'graphic')
 					option.animation.play('idle', true);
 				else
 					option.scale.set(1, 1);
 			}
 
-			option.selectItem = function():Void
-			{
-				if (option.type != 'graphic')
-				{
+			option.selectItem = function():Void {
+				if (option.type != 'graphic') {
 					option.animation.play('selected', true);
 					// camFollow.setPosition(option.getGraphicMidpoint().x, option.getGraphicMidpoint().y + 80);
-				}
-				else
+				} else
 					option.scale.set(0.9, 0.9);
 			}
 
@@ -88,25 +81,21 @@ class MainMenu extends MusicBeatState
 	var holdTimer:Float = 0;
 	var lockedMovement:Bool = false;
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		if (FlxG.sound.music != null && FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 
-		if (!lockedMovement)
-		{
-			if (controls.anyJustPressed(["up", "down"]))
-			{
+		if (!lockedMovement) {
+			if (controls.anyJustPressed(["up", "down"])) {
 				updateSelection(controls.justPressed("up") ? -1 : 1);
 				holdTimer = 0;
 			}
 
 			var timerCalc:Int = Std.int((holdTimer / 1) * 5);
 
-			if (controls.anyPressed(["up", "down"]))
-			{
+			if (controls.anyPressed(["up", "down"])) {
 				holdTimer += elapsed;
 
 				var timerCalcPost:Int = Std.int((holdTimer / 1) * 5);
@@ -115,27 +104,21 @@ class MainMenu extends MusicBeatState
 					updateSelection((timerCalc - timerCalcPost) * (controls.pressed("down") ? -1 : 1));
 			}
 
-			if (controls.justPressed("accept"))
-			{
+			if (controls.justPressed("accept")) {
 				lockedMovement = true;
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 
 				if (magenta != null)
 					FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
-				optionsGroup.forEach(function(spr:MainMenuItem):Void
-				{
-					if (curSelection != spr.ID)
-					{
+				optionsGroup.forEach(function(spr:MainMenuItem):Void {
+					if (curSelection != spr.ID) {
 						FlxTween.tween(spr, {alpha: 0}, 0.4, {
 							ease: FlxEase.quadOut,
 							onComplete: function(twn:FlxTween):Void spr.kill()
 						});
-					}
-					else
-					{
-						FlxFlicker.flicker(spr, 1, 0.10, false, false, function(flick:FlxFlicker):Void
-						{
+					} else {
+						FlxFlicker.flicker(spr, 1, 0.10, false, false, function(flick:FlxFlicker):Void {
 							if (optionsList[curSelection].callback != null)
 								optionsList[curSelection].callback();
 							else
@@ -147,20 +130,18 @@ class MainMenu extends MusicBeatState
 
 			/*
 				if (controls.justPressed("back"))
-					MusicBeatState.switchState(new TitleScreen());
+					FlxG.switchState(new TitleScreen());
 			 */
 		}
 	}
 
-	function updateSelection(newSelection:Int = 0):Void
-	{
+	function updateSelection(newSelection:Int = 0):Void {
 		curSelection = FlxMath.wrap(curSelection + newSelection, 0, optionsGroup.length - 1);
 
 		if (newSelection != 0)
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 
-		optionsGroup.forEach(function(spr:MainMenuItem):Void
-		{
+		optionsGroup.forEach(function(spr:MainMenuItem):Void {
 			if (spr.deselectItem != null)
 				spr.deselectItem();
 
@@ -171,25 +152,21 @@ class MainMenu extends MusicBeatState
 	}
 }
 
-class MainMenuItem extends FlxSprite
-{
+class MainMenuItem extends FlxSprite {
 	public var name:String;
 	public var type:String = 'frames-sparrow';
 
 	public var deselectItem:Void->Void = null;
 	public var selectItem:Void->Void = null;
 
-	public function new(x:Float = 0, y:Float = 0, name:String):Void
-	{
+	public function new(x:Float = 0, y:Float = 0, name:String):Void {
 		super(x, y);
 
 		this.name = name;
 		type = defineType();
 
-		if (type.startsWith("frames-"))
-		{
-			frames = switch (type)
-			{
+		if (type.startsWith("frames-")) {
+			frames = switch (type) {
 				case "frames-packer":
 					Paths.getPackerAtlas('menus/options/${name}');
 				default:
@@ -199,13 +176,11 @@ class MainMenuItem extends FlxSprite
 			animation.addByPrefix('idle', "basic", 24, true);
 			animation.addByPrefix('selected', "white", 24, true);
 			animation.play('idle');
-		}
-		else
+		} else
 			loadGraphic(Paths.image('menus/options/${name}'));
 	}
 
-	public function defineType():String
-	{
+	public function defineType():String {
 		if (AssetHandler.exists(AssetHandler.getPath('images/menus/options/${name}', XML)))
 			return "frames-sparrow";
 		else if (AssetHandler.exists(AssetHandler.getPath('images/menus/options/${name}', TXT)))

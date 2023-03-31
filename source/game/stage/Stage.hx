@@ -3,10 +3,8 @@ package game.stage;
 /**
  * Week 1: Tutorial, Bopeebo, Fresh, Dadbattle
  */
-class Stage extends BaseStage
-{
-	public function new():Void
-	{
+class Stage extends BaseStage {
+	public function new():Void {
 		super();
 
 		var stageBack:FlxSprite = new FlxSprite(-600, -200).loadGraphic(getObject('stage/stageback'));

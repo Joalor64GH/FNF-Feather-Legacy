@@ -7,8 +7,7 @@ import openfl.events.KeyboardEvent;
 typedef KeyMap = Map<String, Array<FlxKey>>;
 typedef KeyCall = (Int, String) -> Void; // for convenience
 
-class Controls
-{
+class Controls {
 	public static final defaultKeys:KeyMap = [
 		"left" => [D, LEFT],
 		"down" => [F, DOWN],
@@ -28,8 +27,7 @@ class Controls
 
 	var keysHeld:Array<Int> = [];
 
-	public function justPressed(action:String):Bool
-	{
+	public function justPressed(action:String):Bool {
 		var keys:Array<FlxKey> = actions.get(action);
 		for (key in keys)
 			if (FlxG.keys.checkStatus(key, JUST_PRESSED))
@@ -38,10 +36,8 @@ class Controls
 		return false;
 	}
 
-	public function anyJustPressed(actionArray:Array<String>):Bool
-	{
-		for (action in actionArray)
-		{
+	public function anyJustPressed(actionArray:Array<String>):Bool {
+		for (action in actionArray) {
 			var keys:Array<FlxKey> = actions.get(action);
 			for (key in keys)
 				if (FlxG.keys.checkStatus(key, JUST_PRESSED))
@@ -51,8 +47,7 @@ class Controls
 		return false;
 	}
 
-	public function pressed(action:String):Bool
-	{
+	public function pressed(action:String):Bool {
 		var keys:Array<FlxKey> = actions.get(action);
 		for (key in keys)
 			if (FlxG.keys.checkStatus(key, PRESSED))
@@ -61,10 +56,8 @@ class Controls
 		return false;
 	}
 
-	public function anyPressed(actionArray:Array<String>):Bool
-	{
-		for (action in actionArray)
-		{
+	public function anyPressed(actionArray:Array<String>):Bool {
+		for (action in actionArray) {
 			var keys:Array<FlxKey> = actions.get(action);
 			for (key in keys)
 				if (FlxG.keys.checkStatus(key, PRESSED))
@@ -74,8 +67,7 @@ class Controls
 		return false;
 	}
 
-	public function justReleased(action:String):Bool
-	{
+	public function justReleased(action:String):Bool {
 		var keys:Array<FlxKey> = actions.get(action);
 		for (key in keys)
 			if (FlxG.keys.checkStatus(key, JUST_RELEASED))
@@ -84,10 +76,8 @@ class Controls
 		return false;
 	}
 
-	public function anyJustReleased(actionArray:Array<String>):Bool
-	{
-		for (action in actionArray)
-		{
+	public function anyJustReleased(actionArray:Array<String>):Bool {
+		for (action in actionArray) {
 			var keys:Array<FlxKey> = actions.get(action);
 			for (key in keys)
 				if (FlxG.keys.checkStatus(key, JUST_RELEASED))
@@ -97,8 +87,7 @@ class Controls
 		return false;
 	}
 
-	public function getActionFromKey(key:Int):String
-	{
+	public function getActionFromKey(key:Int):String {
 		for (id => action in actions)
 			if (action != null && action.contains(key))
 				return id;
@@ -106,19 +95,15 @@ class Controls
 		return null;
 	}
 
-	function onKeyDown(evt:KeyboardEvent):Void
-	{
-		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && !keysHeld.contains(evt.keyCode))
-		{
+	function onKeyDown(evt:KeyboardEvent):Void {
+		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && !keysHeld.contains(evt.keyCode)) {
 			keysHeld.push(evt.keyCode);
 			onKeyPressed.dispatch(evt.keyCode, getActionFromKey(evt.keyCode));
 		}
 	}
 
-	function onKeyUp(evt:KeyboardEvent):Void
-	{
-		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && keysHeld.contains(evt.keyCode))
-		{
+	function onKeyUp(evt:KeyboardEvent):Void {
+		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && keysHeld.contains(evt.keyCode)) {
 			keysHeld.remove(evt.keyCode);
 			onKeyReleased.dispatch(evt.keyCode, getActionFromKey(evt.keyCode));
 		}
@@ -127,15 +112,13 @@ class Controls
 	// <=========== INITIALIZERS ===========> //
 	public static var self:Controls;
 
-	public function new():Void
-	{
+	public function new():Void {
 		actions = defaultKeys.copy();
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 	}
 
-	public static function destroy():Void
-	{
+	public static function destroy():Void {
 		self.actions = null;
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, self.onKeyDown);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, self.onKeyUp);

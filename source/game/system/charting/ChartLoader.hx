@@ -12,22 +12,19 @@ import openfl.net.FileReference;
 /**
  * Class for parsing and loading song charts
  */
-class ChartLoader
-{
+class ChartLoader {
 	static var _file:FileReference;
 
 	public static var noteList:Array<ChartNote> = [];
 	public static var eventList:Array<EventLine> = [];
 
-	public static function loadSong(songName:String, difficulty:String = ''):ChartFormat
-	{
+	public static function loadSong(songName:String, difficulty:String = ''):ChartFormat {
 		noteList = [];
 		eventList = [];
 
 		var loadedData:ChartFormat = loadChart(songName, difficulty);
 
-		if (loadedData != null)
-		{
+		if (loadedData != null) {
 			for (i in 0...loadedData.sections.length)
 				for (j in 0...loadedData.sections[i].notes.length)
 					noteList.push(loadedData.sections[i].notes[j]);
@@ -45,8 +42,7 @@ class ChartLoader
 		return loadedData;
 	}
 
-	public static function loadChart(songName:String, difficulty:String = 'normal'):ChartFormat
-	{
+	public static function loadChart(songName:String, difficulty:String = 'normal'):ChartFormat {
 		var tempSong:ChartFormat = null;
 		var parsedType:String = 'Feather';
 
@@ -61,15 +57,12 @@ class ChartLoader
 
 		if (fnfSong == null)
 			tempSong = cast Json.parse(jsonPath);
-		else
-		{
+		else {
 			parsedType = 'FNF LEGACY/HYBRID';
 
 			// retrocompatibility
-			if (fnfSong.stage == null)
-			{
-				fnfSong.stage = switch (fnfSong.song)
-				{
+			if (fnfSong.stage == null) {
+				fnfSong.stage = switch (fnfSong.song) {
 					case 'ugh', 'guns', 'stress': 'military-zone';
 					case 'thorns': 'school-glitch';
 					case 'senpai', 'roses': 'school';
@@ -82,10 +75,8 @@ class ChartLoader
 				}
 			}
 
-			if (fnfSong.gfVersion == null)
-			{
-				fnfSong.gfVersion = switch (fnfSong.stage)
-				{
+			if (fnfSong.gfVersion == null) {
+				fnfSong.gfVersion = switch (fnfSong.stage) {
 					case 'tank', 'military-zone': 'gf-tankmen';
 					case 'school', 'schoolEvil', 'school-glitch': 'gf-pixel';
 					case 'mall', 'mallEvil', 'red-mall': 'gf-christmas';
@@ -94,22 +85,23 @@ class ChartLoader
 				}
 			}
 
-			tempSong = {
-				name: fnfSong.song,
-				metadata: {
-					player: fnfSong.player1,
-					opponent: fnfSong.player2,
-					crowd: fnfSong.gfVersion,
-					stage: fnfSong.stage,
-					speed: fnfSong.speed,
-					bpm: fnfSong.bpm
-				},
-				sections: [],
-				generatedFrom: parsedType,
-			};
+			tempSong =
+				{
+					name: fnfSong.song,
+					metadata:
+						{
+							player: fnfSong.player1,
+							opponent: fnfSong.player2,
+							crowd: fnfSong.gfVersion,
+							stage: fnfSong.stage,
+							speed: fnfSong.speed,
+							bpm: fnfSong.bpm
+						},
+					sections: [],
+					generatedFrom: parsedType,
+				};
 
-			for (i in 0...fnfSong.notes.length)
-			{
+			for (i in 0...fnfSong.notes.length) {
 				var convertedBeats:Float = fnfSong.notes[i].sectionBeats;
 				tempSong.sections.push({
 					notes: [],
@@ -118,8 +110,7 @@ class ChartLoader
 				});
 
 				// notes
-				for (note in fnfSong.notes[i].sectionNotes)
-				{
+				for (note in fnfSong.notes[i].sectionNotes) {
 					var stepTime:Float = note[0];
 					var noteIndex:Int = Std.int(note[1] % 4);
 					var noteType:String = "default";
@@ -127,10 +118,8 @@ class ChartLoader
 
 					var shouldHit:Bool = fnfSong.notes[i].mustHitSection;
 
-					if (note[3] != null && Std.isOfType(note[3], String))
-					{
-						noteType = switch (note[3])
-						{
+					if (note[3] != null && Std.isOfType(note[3], String)) {
+						noteType = switch (note[3]) {
 							case "Hurt Note": "mine";
 							default: "default";
 						}
@@ -139,11 +128,12 @@ class ChartLoader
 					if (note[1] > 3)
 						shouldHit = !fnfSong.notes[i].mustHitSection;
 
-					var chartNote:ChartNote = {
-						step: stepTime,
-						index: noteIndex,
-						sustainTime: noteSustain
-					};
+					var chartNote:ChartNote =
+						{
+							step: stepTime,
+							index: noteIndex,
+							sustainTime: noteSustain
+						};
 
 					if (shouldHit)
 						chartNote.strumline = 1;
@@ -162,8 +152,7 @@ class ChartLoader
 				 */
 
 				// psych engine events
-				if (fnfSong.events != null)
-				{
+				if (fnfSong.events != null) {
 					for (event in fnfSong.events) {}
 				}
 			}
@@ -176,23 +165,20 @@ class ChartLoader
 /**
  * Class with helpers to manage Music Playback
  */
-class MusicPlayback
-{
+class MusicPlayback {
 	public var inst:FlxSound;
 	public var vocals:FlxSound;
 
 	public var songName:String;
 
-	public function new(songName:String, diff:String):Void
-	{
+	public function new(songName:String, diff:String):Void {
 		songName = songName.toLowerCase();
 		this.songName = songName;
 
 		inst = new FlxSound().loadEmbedded(getSoundFile("Inst"));
 		FlxG.sound.list.add(inst);
 
-		if (AssetHandler.exists(AssetHandler.getPath('data/songs/audio/${songName}/Voices', SOUND)))
-		{
+		if (AssetHandler.exists(AssetHandler.getPath('data/songs/audio/${songName}/Voices', SOUND))) {
 			vocals = new FlxSound().loadEmbedded(getSoundFile('Voices'));
 			FlxG.sound.list.add(vocals);
 		}
@@ -201,8 +187,7 @@ class MusicPlayback
 	private function getSoundFile(name:String):Sound
 		return AssetHandler.getAsset('data/songs/audio/${songName}/${name}', SOUND);
 
-	public function play(?completeFunc:Void->Void):Void
-	{
+	public function play(?completeFunc:Void->Void):Void {
 		inst.play();
 		if (completeFunc != null)
 			inst.onComplete = completeFunc;
@@ -211,40 +196,34 @@ class MusicPlayback
 			vocals.play();
 	}
 
-	public function pause():Void
-	{
+	public function pause():Void {
 		inst.pause();
 		if (vocals != null)
 			vocals.pause();
 	}
 
-	public function cease():Void
-	{
+	public function cease():Void {
 		var toKill:Array<FlxSound> = [inst];
 		if (vocals != null)
 			toKill.push(vocals);
 		Utils.killMusic(toKill);
 	}
 
-	public function resyncVocals():Void
-	{
+	public function resyncVocals():Void {
 		if (vocals != null)
 			vocals.pause();
 		inst.play();
 
 		Conductor.songPosition = inst.time;
-		if (vocals != null)
-		{
+		if (vocals != null) {
 			vocals.time = Conductor.songPosition;
 			vocals.play();
 		}
 	}
 
-	public function resyncFunction():Void
-	{
+	public function resyncFunction():Void {
 		if (Math.abs(inst.time - (Conductor.songPosition)) > 20
-			|| (vocals != null && Math.abs(vocals.time - (Conductor.songPosition)) > 20))
-		{
+			|| (vocals != null && Math.abs(vocals.time - (Conductor.songPosition)) > 20)) {
 			resyncVocals();
 		}
 	}

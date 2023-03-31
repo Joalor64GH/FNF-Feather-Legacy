@@ -6,8 +6,7 @@ import game.PlayState;
 /*
  * Extensible Class for handling the game's backgrounds, the so called "Stages"
 **/
-class BaseStage extends FlxGroup
-{
+class BaseStage extends FlxGroup {
 	/**
 	 * Helper variable, gives access to `PlayState`
 	 */
@@ -39,8 +38,7 @@ class BaseStage extends FlxGroup
 	 * Use this to create your stage objects
 	 * remember to always call `super();`
 	 */
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 	}
 
@@ -50,8 +48,7 @@ class BaseStage extends FlxGroup
 	 * @param objType             the type of the object, e.g: IMAGE, XML, TXT, SOUND...
 	 * @return Dynamic
 	 */
-	public function getObject(objName:String, objType:AssetType = IMAGE):Dynamic
-	{
+	public function getObject(objName:String, objType:AssetType = IMAGE):Dynamic {
 		return AssetHandler.getAsset('${pathBase}/${objName}', objType);
 	}
 
@@ -59,8 +56,7 @@ class BaseStage extends FlxGroup
 	 * Use this to create and manage events that will run every frame
 	 * remember to always call `super.update(elapsed);`
 	 */
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 	}
 

@@ -2,8 +2,7 @@ package game.system.charting;
 
 import haxe.Json;
 
-typedef EventLine =
-{
+typedef EventLine = {
 	var name:String;
 	var type:Int;
 	var ?step:Float;
@@ -11,22 +10,18 @@ typedef EventLine =
 	var ?color:FlxColor;
 }
 
-enum abstract EventType(Int) to Int
-{
+enum abstract EventType(Int) to Int {
 	var Stepper:EventType = 0xE0; // Function Event (trigger on a set step)
 	var Section:EventType = 0xE1; // Section Event (trigger every section)
 }
 
-class ChartEvents
-{
-	public static function loadEventChart(songName:String, ?data:Array<EventLine>):Array<EventLine>
-	{
+class ChartEvents {
+	public static function loadEventChart(songName:String, ?data:Array<EventLine>):Array<EventLine> {
 		var tempEvents:Array<EventLine> = [];
 
 		var eventsFolder:String = 'data/songs/chart/${songName.toLowerCase()}/events.json';
 
-		if (AssetHandler.exists(AssetHandler.getPath(eventsFolder, JSON)))
-		{
+		if (AssetHandler.exists(AssetHandler.getPath(eventsFolder, JSON))) {
 			var jsonPath:String = AssetHandler.getAsset(eventsFolder, JSON);
 
 			tempEvents = cast Json.parse(jsonPath);

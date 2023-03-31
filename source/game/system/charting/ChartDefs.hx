@@ -1,15 +1,13 @@
 package game.system.charting;
 
-typedef ChartFormat =
-{
+typedef ChartFormat = {
 	var name:String;
 	var metadata:ChartMeta;
 	var sections:Array<ChartSection>;
 	var generatedFrom:String;
 }
 
-typedef ChartMeta =
-{
+typedef ChartMeta = {
 	var player:String;
 	var opponent:String;
 	var ?crowd:String; // defaults to "gf"
@@ -18,8 +16,7 @@ typedef ChartMeta =
 	var bpm:Float;
 }
 
-typedef ChartNote =
-{
+typedef ChartNote = {
 	var step:Float;
 	var index:Int;
 	var ?strumline:Int; // defaults to 0 (opponent)
@@ -27,8 +24,7 @@ typedef ChartNote =
 	var ?type:String;
 }
 
-typedef ChartSection =
-{
+typedef ChartSection = {
 	var camPoint:Int;
 	var notes:Array<ChartNote>;
 	var ?animation:String; // e.g: "singLEFT-alt"
@@ -36,8 +32,7 @@ typedef ChartSection =
 	var ?bpm:Float;
 }
 
-typedef FNFSong =
-{
+typedef FNFSong = {
 	var song:String;
 	var notes:Array<FNFSection>;
 	var events:Array<Dynamic>;
@@ -54,8 +49,7 @@ typedef FNFSong =
 	var validScore:Bool;
 }
 
-typedef FNFSection =
-{
+typedef FNFSection = {
 	var sectionNotes:Array<Dynamic>;
 	var sectionBeats:Float;
 	var lengthInSteps:Int;

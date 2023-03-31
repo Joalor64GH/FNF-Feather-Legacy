@@ -4,8 +4,7 @@ import game.MusicBeatState.MusicBeatSubState;
 import game.gameplay.Character;
 import game.system.music.Conductor;
 
-typedef GameOverStruct =
-{
+typedef GameOverStruct = {
 	var name:String;
 	var musicTune:String;
 	var confirmSound:String;
@@ -13,19 +12,18 @@ typedef GameOverStruct =
 	var tuneBPM:Float;
 }
 
-class GameOverSubState extends MusicBeatSubState
-{
+class GameOverSubState extends MusicBeatSubState {
 	public var char:Character;
-	public var params:GameOverStruct = {
-		name: "bf-dead",
-		musicTune: "gameOver",
-		confirmSound: "gameOverEnd",
-		deathSound: "fnf_loss_sfx",
-		tuneBPM: 100
-	};
+	public var params:GameOverStruct =
+		{
+			name: "bf-dead",
+			musicTune: "gameOver",
+			confirmSound: "gameOverEnd",
+			deathSound: "fnf_loss_sfx",
+			tuneBPM: 100
+		};
 
-	public function new(x:Float, y:Float):Void
-	{
+	public function new(x:Float, y:Float):Void {
 		super();
 
 		Conductor.changeBPM(params.tuneBPM);
@@ -37,8 +35,7 @@ class GameOverSubState extends MusicBeatSubState
 		 */
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		if (FlxG.sound.music != null && FlxG.sound.music.playing)
@@ -52,11 +49,10 @@ class GameOverSubState extends MusicBeatSubState
 		 */
 
 		if (controls.justPressed("back"))
-			MusicBeatState.switchState(new game.menus.FreeplayMenu());
+			FlxG.switchState(new game.menus.FreeplayMenu());
 	}
 
-	public override function beatHit():Void
-	{
+	public override function beatHit():Void {
 		super.beatHit();
 	}
 }

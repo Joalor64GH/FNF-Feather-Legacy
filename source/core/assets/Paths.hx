@@ -7,8 +7,7 @@ import openfl.media.Sound;
 /**
  * Compatibility with Base Game
  */
-class Paths
-{
+class Paths {
 	public static inline function getPath(path:String, ?type:AssetType):String
 		return AssetHandler.getPath(path, type);
 
@@ -30,8 +29,7 @@ class Paths
 	public static inline function inst(song:String):Sound
 		return AssetHandler.getAsset('data/songs/audio/${song}/Inst', SOUND);
 
-	public static inline function vocals(song:String):Sound
-	{
+	public static inline function vocals(song:String):Sound {
 		if (AssetHandler.exists(AssetHandler.getPath('data/songs/audio/${song}/Voices', SOUND)))
 			return AssetHandler.getAsset('data/songs/audio/${song}/Voices', SOUND);
 		return null;

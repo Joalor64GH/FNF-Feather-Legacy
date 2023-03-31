@@ -3,12 +3,10 @@ package game.stage;
 /**
  * Week 2: Spookeez, South, Monster
  */
-class HauntedHouse extends BaseStage
-{
+class HauntedHouse extends BaseStage {
 	public var halloweenBG:FlxSprite;
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 
 		halloweenBG = new FlxSprite(-200, -100);
@@ -23,10 +21,8 @@ class HauntedHouse extends BaseStage
 	var strikeBeat:Int = 0;
 	var strikeOffset:Int = 8;
 
-	public override function onBeat(curBeat:Int):Void
-	{
-		if (FlxG.random.bool(10) && curBeat > strikeBeat + strikeOffset)
-		{
+	public override function onBeat(curBeat:Int):Void {
+		if (FlxG.random.bool(10) && curBeat > strikeBeat + strikeOffset) {
 			halloweenBG.animation.play('lightning');
 			game.player.playAnim('scared', true);
 			game.crowd.playAnim('scared', true);

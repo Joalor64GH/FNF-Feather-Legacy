@@ -12,8 +12,7 @@ import openfl.display.Sprite;
 import sys.FileSystem;
 import sys.io.File;
 
-typedef VersionScheme =
-{
+typedef VersionScheme = {
 	var number:String;
 
 	/**
@@ -23,8 +22,7 @@ typedef VersionScheme =
 	var branch:String;
 }
 
-class Main extends Sprite
-{
+class Main extends Sprite {
 	public static var self:Main;
 
 	// don't set "branch" as null, set it to "" instead!!!
@@ -33,8 +31,7 @@ class Main extends Sprite
 
 	public var fpsCounter:FPS;
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 
 		self = this;
@@ -63,78 +60,54 @@ class Main extends Sprite
 		FlxG.game.soundTray.volumeUpSound = Paths.getPath("sounds/scrollMenu", SOUND);
 		FlxG.game.soundTray.volumeDownSound = Paths.getPath("sounds/scrollMenu", SOUND);
 
-		FlxG.signals.preStateSwitch.add(function():Void
-		{
+		FlxG.signals.preStateSwitch.add(function():Void {
 			CacheHandler.purge(true);
 		});
 
-		openfl.Lib.current.stage.application.onExit.add(function(code:Int):Void
-		{
+		openfl.Lib.current.stage.application.onExit.add(function(code:Int):Void {
 			Controls.destroy();
 		});
 	}
 }
 
-class CustomGame extends FlxGame
-{
+class CustomGame extends FlxGame {
 	public static var logSavePath:String = 'logs/FF-${Date.now().toString().replace(' ', '-').replace(':', "'")}.txt';
 
-	override function create(_):Void
-	{
-		try
-			super.create(_)
-		catch (e:Exception)
+	override function create(_):Void {
+		try super.create(_) catch (e:Exception)
 			return onError(e);
 	}
 
-	override function onFocus(_):Void
-	{
-		try
-			super.onFocus(_)
-		catch (e:Exception)
+	override function onFocus(_):Void {
+		try super.onFocus(_) catch (e:Exception)
 			return onError(e);
 	}
 
-	override function onFocusLost(_):Void
-	{
-		try
-			super.onFocusLost(_)
-		catch (e:Exception)
+	override function onFocusLost(_):Void {
+		try super.onFocusLost(_) catch (e:Exception)
 			return onError(e);
 	}
 
-	override function onEnterFrame(_):Void
-	{
-		try
-			super.onEnterFrame(_)
-		catch (e:Exception)
+	override function onEnterFrame(_):Void {
+		try super.onEnterFrame(_) catch (e:Exception)
 			return onError(e);
 	}
 
-	override function update():Void
-	{
-		try
-			super.update()
-		catch (e:Exception)
+	override function update():Void {
+		try super.update() catch (e:Exception)
 			return onError(e);
 	}
 
-	override function draw():Void
-	{
-		try
-			super.draw()
-		catch (e:Exception)
+	override function draw():Void {
+		try super.draw() catch (e:Exception)
 			return onError(e);
 	}
 
-	public function onError(e:Exception):Void
-	{
+	public function onError(e:Exception):Void {
 		var caughtErrors:Array<String> = [];
 
-		for (item in CallStack.exceptionStack(true))
-		{
-			switch (item)
-			{
+		for (item in CallStack.exceptionStack(true)) {
+			switch (item) {
 				case CFunction:
 					caughtErrors.push('Non-Haxe (C) Function');
 				case Module(moduleName):
@@ -152,15 +125,13 @@ class CustomGame extends FlxGame
 
 		final msg:String = caughtErrors.join('\n');
 
-		try
-		{
+		try {
 			if (!FileSystem.exists('logs'))
 				FileSystem.createDirectory('logs');
 
 			File.saveContent(logSavePath,
 				'[Error Stack]\n-----------\n${msg}\n-----------\n[Caught: ${e.message}]\n-----------\nConsider reporting this error to our GitHub Page: https://github.com/BeastlyGabi/FNF-Feather\n');
-		}
-		catch (e:Dynamic)
+		} catch (e:Dynamic)
 			Sys.println('Error!\nCouldn\'t save crash log\nCaught: ${e}');
 
 		return FlxG.switchState(new core.CrashState(msg, e.message, Type.getClass(FlxG.state)));

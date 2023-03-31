@@ -4,13 +4,11 @@ import flixel.addons.ui.FlxUIState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 
-class CrashState extends FlxUIState
-{
+class CrashState extends FlxUIState {
 	private var textGroup:FlxTypedGroup<FlxText>;
 	private var lastState:Class<Dynamic> = null;
 
-	public function new(error:String, ?caught:String, ?lastState:Class<Dynamic>):Void
-	{
+	public function new(error:String, ?caught:String, ?lastState:Class<Dynamic>):Void {
 		super();
 
 		this.lastState = lastState;
@@ -22,8 +20,7 @@ class CrashState extends FlxUIState
 		errorText.color = 0xFFBDBDBD;
 		textGroup.add(errorText);
 
-		if (caught != null)
-		{
+		if (caught != null) {
 			var errorCatch:FlxText = new FlxText(0, errorText.y + errorText.height, Math.floor(errorText.width + 25), '[${caught}]', 32);
 			errorCatch.color = 0xFFBDBDBD;
 			textGroup.add(errorCatch);
@@ -46,16 +43,14 @@ class CrashState extends FlxUIState
 		var thxText:FlxText = new FlxText(0, bindsText.y - bindsText.height - 55, 0, finalText, 32);
 		textGroup.add(thxText);
 
-		for (text in textGroup)
-		{
+		for (text in textGroup) {
 			text.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), text.size);
 			text.alignment = CENTER;
 			text.screenCenter(X);
 		}
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		// if (FlxG.keys.justPressed.SPACE)

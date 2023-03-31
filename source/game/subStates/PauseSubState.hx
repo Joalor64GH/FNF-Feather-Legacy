@@ -7,65 +7,57 @@ import game.MusicBeatState.MusicBeatSubState;
 import game.system.Levels;
 import game.ui.Alphabet;
 
-class PauseSubState extends MusicBeatSubState
-{
+class PauseSubState extends MusicBeatSubState {
 	var curSelection:Int = 0;
 	var optionsGroup:AlphabetGroup;
 
-	var options:Dynamic = {
-		main: [
-			{name: "Resume", callback: function():Void FlxG.state.subState.close()},
-			{
-				name: "Restart",
-				callback: function():Void
+	var options:Dynamic =
+		{
+			main: [
+				{name: "Resume", callback: function():Void FlxG.state.subState.close()},
 				{
-					var oldConstructor = PlayState.self.constructor;
-					MusicBeatState.switchState(new PlayState(oldConstructor));
-				}
-			},
-			{name: "Options", callback: null},
-			{
-				name: "Exit",
-				callback: function():Void
+					name: "Restart",
+					callback: function():Void {
+						var oldConstructor = PlayState.self.constructor;
+						FlxG.switchState(new PlayState(oldConstructor));
+					}
+				},
+				{name: "Options", callback: null},
 				{
-					switch (PlayState.self.constructor.gamemode)
-					{
-						case STORY_MODE:
-						default:
-							MusicBeatState.switchState(new game.menus.FreeplayMenu());
+					name: "Exit",
+					callback: function():Void {
+						switch (PlayState.self.constructor.gamemode) {
+							case STORY_MODE:
+							default:
+								FlxG.switchState(new game.menus.FreeplayMenu());
+						}
 					}
 				}
-			}
-		]
-	};
+			]
+		};
 
 	var activeList:Array<{name:String, callback:Void->Void}>;
 
 	var pauseTexts:FlxTypedGroup<FlxText>;
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 
-		options.main[2].callback = function():Void
-		{
+		options.main[2].callback = function():Void {
 			var optionsSubState = new game.menus.OptionsMenu(true);
 			optionsSubState.camera = this.camera;
 			openSubState(optionsSubState);
 		}
 
-		if (Levels.DEFAULT_DIFFICULTIES.length > 1)
-		{
+		if (Levels.DEFAULT_DIFFICULTIES.length > 1) {
 			options.difficulties = [];
 
-			for (i in 0...Levels.DEFAULT_DIFFICULTIES.length)
-			{
+			for (i in 0...Levels.DEFAULT_DIFFICULTIES.length) {
 				options.difficulties.push({
 					name: Levels.DEFAULT_DIFFICULTIES[i].toUpperCase(),
-					callback: function():Void
-					{
+					callback: function():Void {
 						var oldConstructor = PlayState.self.constructor;
-						MusicBeatState.switchState(new PlayState({
+						FlxG.switchState(new PlayState({
 							songName: oldConstructor.songName,
 							difficulty: Levels.DEFAULT_DIFFICULTIES[i],
 							gamemode: oldConstructor.gamemode
@@ -95,8 +87,7 @@ class PauseSubState extends MusicBeatSubState
 			'-----------------',
 		];
 
-		for (i in 0...textContents.length)
-		{
+		for (i in 0...textContents.length) {
 			var txt:FlxText = new FlxText(0, 0, 0, textContents[i]);
 			txt.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 32, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
 			txt.x = FlxG.width - txt.width - 5;
@@ -111,15 +102,13 @@ class PauseSubState extends MusicBeatSubState
 		loadList(options.main);
 	}
 
-	public function loadList(list:Dynamic):Void
-	{
+	public function loadList(list:Dynamic):Void {
 		activeList = list;
 
 		if (optionsGroup.length > 0)
 			optionsGroup.clear();
 
-		for (i in 0...activeList.length)
-		{
+		for (i in 0...activeList.length) {
 			var entry:Alphabet = new Alphabet(0, (70 * i) + 30, activeList[i].name, false);
 			entry.menuItem = true;
 			entry.groupIndex = i;
@@ -130,8 +119,7 @@ class PauseSubState extends MusicBeatSubState
 		updateSelection();
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		if (controls.anyJustPressed(["up", "down"]))
@@ -142,16 +130,14 @@ class PauseSubState extends MusicBeatSubState
 				activeList[curSelection].callback();
 	}
 
-	public function updateSelection(newSelection:Int = 0):Void
-	{
+	public function updateSelection(newSelection:Int = 0):Void {
 		if (activeList != null && activeList.length > 0)
 			curSelection = FlxMath.wrap(curSelection + newSelection, 0, activeList.length - 1);
 
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 
 		var ascendingIndex:Int = 0;
-		for (letter in optionsGroup)
-		{
+		for (letter in optionsGroup) {
 			letter.groupIndex = ascendingIndex - curSelection;
 			letter.alpha = 0.6;
 			if (letter.groupIndex == 0)

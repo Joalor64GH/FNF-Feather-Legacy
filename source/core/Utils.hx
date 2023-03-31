@@ -11,8 +11,7 @@ import openfl.net.FileReference;
 
 typedef TransitionState = flixel.addons.transition.FlxTransitionableState;
 
-class Utils
-{
+class Utils {
 	/**
 	 * Centers the specified object to the bounds of another object
 	 * @author SwickTheGreat
@@ -22,8 +21,7 @@ class Utils
 	 * @param axes           in which axes should the child object be centered? (default: XY)
 	 * @return               child object, now centered according to the base object
 	 */
-	public static function centerOverlay(object:FlxObject, base:FlxObject, axes:FlxAxes = XY):FlxObject
-	{
+	public static function centerOverlay(object:FlxObject, base:FlxObject, axes:FlxAxes = XY):FlxObject {
 		if (object == null || base == null)
 			return object;
 
@@ -45,8 +43,7 @@ class Utils
 	 * if on flixel 5.0.0 or greater, it will be formatted `COMPANY/EXECUTABLE_NAME/FOLDER`
 	 * - so `BeastlyGhost/FunkinFeather/FOLDER` by default
 	 */
-	@:keep public static inline function bindSave(name:String, ?folder:String):Void
-	{
+	@:keep public static inline function bindSave(name:String, ?folder:String):Void {
 		@:privateAccess
 		var saveFolder:String = #if (flixel < "5.0.0") folder #else '${FlxG.stage.application.meta.get('company')}/${FlxSave.validate(FlxG.stage.application.meta.get('file'))}'
 			+ folder != null ? '/${folder}' : '' #end;
@@ -57,8 +54,7 @@ class Utils
 	 * Launches the user's Web Browser with the specified URL
 	 * @param url          the URL to open
 	 */
-	@:keep public static inline function openURL(url:String):Void
-	{
+	@:keep public static inline function openURL(url:String):Void {
 		#if linux
 		Sys.command('/usr/bin/xdg-open', [url]);
 		#else
@@ -73,8 +69,7 @@ class Utils
 	 * @param dir         the arrow direction, may be left, or right
 	 * @return FlxSprite
 	 */
-	@:keep public static inline function generateArrow(xPos:Float, yPos:Float, dir:String)
-	{
+	@:keep public static inline function generateArrow(xPos:Float, yPos:Float, dir:String) {
 		var newArrow = new FlxSprite(xPos, yPos);
 		newArrow.frames = Paths.getSparrowAtlas('menus/shared/menu_arrows');
 		newArrow.animation.addByPrefix('idle', "arrow " + dir);
@@ -88,10 +83,8 @@ class Utils
 	 * @param newMusic [OPTIONAL]         the music name on the files, defaults to "freakyMenu"
 	 * @param fadeIn [OPTIONAL]           whether to fade in the music when it begins (defaults to false)]
 	 */
-	@:keep public static inline function resetMusic(newMusic:String = 'freakyMenu', fadeIn:Bool = false):Void
-	{
-		if (((FlxG.sound.music != null) && (!FlxG.sound.music.playing)) || (FlxG.sound.music == null))
-		{
+	@:keep public static inline function resetMusic(newMusic:String = 'freakyMenu', fadeIn:Bool = false):Void {
+		if (((FlxG.sound.music != null) && (!FlxG.sound.music.playing)) || (FlxG.sound.music == null)) {
 			FlxG.sound.playMusic(Paths.music(newMusic), fadeIn ? 0 : 0.7);
 			if (fadeIn)
 				FlxG.sound.music.fadeIn(4, 0, 0.7);
@@ -103,10 +96,8 @@ class Utils
 	 * Stops and Destroys all audio tracks that were specified
 	 * @param audioTracks         array with sounds to destroy
 	 */
-	@:keep public static inline function killMusic(audioTracks:Array<FlxSound>):Void
-	{
-		for (i in 0...audioTracks.length)
-		{
+	@:keep public static inline function killMusic(audioTracks:Array<FlxSound>):Void {
+		for (i in 0...audioTracks.length) {
 			audioTracks[i].stop();
 			audioTracks[i].destroy();
 		}
@@ -117,8 +108,7 @@ class Utils
 	 * @param string           the string that we should remove the characters from
 	 * @return String
 	 */
-	@:keep public static inline function removeForbidden(string:String):String
-	{
+	@:keep public static inline function removeForbidden(string:String):String {
 		var invalidChars:EReg = ~/[~&\\;:<>#]/;
 		var hideChars:EReg = ~/[.,'"%?!]/;
 
@@ -127,10 +117,8 @@ class Utils
 
 	static var _file:FileReference;
 
-	@:keep public static inline function saveData(fileName:String, data:String):Void
-	{
-		if ((data != null) && (data.length > 0))
-		{
+	@:keep public static inline function saveData(fileName:String, data:String):Void {
+		if ((data != null) && (data.length > 0)) {
 			_file = new FileReference();
 			_file.addEventListener(Event.COMPLETE, onSaveComplete);
 			_file.addEventListener(Event.CANCEL, onSaveCancel);
@@ -139,8 +127,7 @@ class Utils
 		}
 	}
 
-	@:keep static inline function onSaveComplete(_):Void
-	{
+	@:keep static inline function onSaveComplete(_):Void {
 		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
 		_file.removeEventListener(Event.CANCEL, onSaveCancel);
 		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
@@ -151,8 +138,7 @@ class Utils
 	/**
 	 * Called when the save file dialog is cancelled.
 	 */
-	@:keep static inline function onSaveCancel(_):Void
-	{
+	@:keep static inline function onSaveCancel(_):Void {
 		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
 		_file.removeEventListener(Event.CANCEL, onSaveCancel);
 		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
@@ -162,8 +148,7 @@ class Utils
 	/**
 	 * Called if there is an error while saving the given data.
 	 */
-	@:keep static inline function onSaveError(_):Void
-	{
+	@:keep static inline function onSaveError(_):Void {
 		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
 		_file.removeEventListener(Event.CANCEL, onSaveCancel);
 		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);

@@ -6,8 +6,7 @@ import game.system.music.Conductor;
 
 typedef NoteSpriteGroup = flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<Note>;
 
-class Note extends FNFSprite
-{
+class Note extends FNFSprite {
 	final game:PlayState = PlayState.self;
 
 	public var prevNote:Note = null;
@@ -28,10 +27,8 @@ class Note extends FNFSprite
 	public var sustainTime:Float = 0.0;
 	public var speed(default, set):Float = 1.0;
 
-	function set_speed(newSpeed:Float):Float
-	{
-		if (speed != newSpeed)
-		{
+	function set_speed(newSpeed:Float):Float {
+		if (speed != newSpeed) {
 			speed = newSpeed;
 			updateSustain();
 		}
@@ -53,8 +50,7 @@ class Note extends FNFSprite
 	public var hitboxEarly:Float = 1;
 	public var hitboxLate:Float = 1;
 
-	public function new(step:Float, index:Int, ?isSustain:Bool, ?type:String = "default", ?prevNote:Note):Void
-	{
+	public function new(step:Float, index:Int, ?isSustain:Bool, ?type:String = "default", ?prevNote:Note):Void {
 		super(0, -2000);
 
 		if (prevNote == null)
@@ -74,13 +70,10 @@ class Note extends FNFSprite
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
 
-		if (!isSustain)
-		{
+		if (!isSustain) {
 			hitboxEarly = 1;
 			playAnim('${NoteGroup.colors[index]} note');
-		}
-		else
-		{
+		} else {
 			updateSustain();
 			if (animation.curAnim != null && animation.curAnim.name.endsWith("end"))
 				isEnd = true;
@@ -92,10 +85,8 @@ class Note extends FNFSprite
 	 */
 	final noteStepCrochet:Float = Conductor.stepCrochet;
 
-	public function updateSustain():Void
-	{
-		if (isSustain)
-		{
+	public function updateSustain():Void {
+		if (isSustain) {
 			flipY = downscroll;
 			hitboxEarly = 0.5;
 			alpha = 0.6;
@@ -108,10 +99,8 @@ class Note extends FNFSprite
 			if (downscroll)
 				offsetY += ((height / 2) - (height / 2)) + 30;
 
-			if (prevNote != null && prevNote.exists)
-			{
-				if (prevNote.isSustain)
-				{
+			if (prevNote != null && prevNote.exists) {
+				if (prevNote.isSustain) {
 					prevNote.playAnim('${NoteGroup.colors[index]} hold');
 					prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((noteStepCrochet / 100) * 1.5 * speed);
 					prevNote.updateHitbox();
@@ -120,27 +109,21 @@ class Note extends FNFSprite
 		}
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (!debugging)
-		{
-			if (this.strumline == game.playerStrumline)
-			{
+		if (!debugging) {
+			if (this.strumline == game.playerStrumline) {
 				this.canHit = (this.step > Conductor.songPosition - (Conductor.safeZone * this.hitboxEarly)
 					&& this.step < Conductor.songPosition + (Conductor.safeZone * this.hitboxLate));
-			}
-			else
+			} else
 				this.canHit = false;
 		}
 	}
 }
 
-class Splash extends FNFSprite
-{
-	public function new(type:String = "default"):Void
-	{
+class Splash extends FNFSprite {
+	public function new(type:String = "default"):Void {
 		super(0, 0);
 		this.loadFrames('images/notes/${type}/NOTE_splashes');
 		for (n in 0...2)
@@ -149,8 +132,7 @@ class Splash extends FNFSprite
 		this.moves = false;
 	}
 
-	public override function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame = 0):Void
-	{
+	public override function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame = 0):Void {
 		super.playAnim(name, force, reversed, frame);
 
 		centerOrigin();

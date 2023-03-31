@@ -4,8 +4,7 @@ import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.math.FlxMath;
 
-class HealthIcon extends FlxSprite
-{
+class HealthIcon extends FlxSprite {
 	public var sprTracker:FlxSprite;
 
 	public var initialWidth:Float = 0;
@@ -15,25 +14,21 @@ class HealthIcon extends FlxSprite
 	public var isPlayer:Bool = false;
 	public var canBounce:Bool = true;
 
-	public function new(char:String = "face", isPlayer:Bool = false, canBounce:Bool = true):Void
-	{
+	public function new(char:String = "face", isPlayer:Bool = false, canBounce:Bool = true):Void {
 		super();
 
 		var subString:String = char;
 		if (char.contains('-'))
 			subString = char.substring(0, char.indexOf('-'));
 
-		try
-		{
-			if (!AssetHandler.exists(AssetHandler.getPath('images/characters/${char}/icon', IMAGE)))
-			{
+		try {
+			if (!AssetHandler.exists(AssetHandler.getPath('images/characters/${char}/icon', IMAGE))) {
 				if (char != subString)
 					char = subString;
 				else
 					char = "face";
 			}
-		}
-		catch (e:haxe.Exception)
+		} catch (e:haxe.Exception)
 			char = "face";
 
 		this.isPlayer = isPlayer;
@@ -51,22 +46,18 @@ class HealthIcon extends FlxSprite
 		scrollFactor.set();
 	}
 
-	public function loadIcon(char:String = "face"):Void
-	{
-		if (AssetHandler.exists(Paths.getPath('images/characters/${char}/icon', XML)))
-		{
+	public function loadIcon(char:String = "face"):Void {
+		if (AssetHandler.exists(Paths.getPath('images/characters/${char}/icon', XML))) {
 			frames = Paths.getSparrowAtlas('characters/${char}/icon');
 
 			animation.addByPrefix("idle", "idle", 24, true);
 			animation.addByPrefix("losing", "losing", 24, true);
 			animation.addByPrefix("winning", "winning", 24, true);
-		}
-		else
+		} else
 			loadLegacyIcon(char);
 	}
 
-	function loadLegacyIcon(char:String = "face"):Void
-	{
+	function loadLegacyIcon(char:String = "face"):Void {
 		var icon:FlxGraphic = Paths.image('characters/${char}/icon');
 
 		var constWidth:Int = Std.int(icon.width / 150) - 1;
@@ -79,8 +70,7 @@ class HealthIcon extends FlxSprite
 		animation.add('losing', [1], 0, false);
 	}
 
-	public dynamic function updateAnim(health:Float):Void
-	{
+	public dynamic function updateAnim(health:Float):Void {
 		flipX = isPlayer;
 
 		var nextAnim:String = health < 20 ? "losing" : "idle";
@@ -88,25 +78,21 @@ class HealthIcon extends FlxSprite
 			animation.play(nextAnim);
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed / 2);
 
 		if (sprTracker != null)
 			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
 
-		if (canBounce)
-		{
+		if (canBounce) {
 			var nextBoundScale:Float = FlxMath.lerp(initialScale.x, scale.x, FlxMath.bound(initialScale.y - (elapsed * 3), 0, 1));
 			scale.set(nextBoundScale, nextBoundScale);
 			updateHitbox();
 		}
 	}
 
-	public function beatHit(curBeat:Int):Void
-	{
-		if (canBounce)
-		{
+	public function beatHit(curBeat:Int):Void {
+		if (canBounce) {
 			var originalScale:{x:Float, y:Float} = {x: initialScale.x + .10, y: initialScale.y + .10};
 			scale.set(originalScale.x, originalScale.y);
 			updateHitbox();

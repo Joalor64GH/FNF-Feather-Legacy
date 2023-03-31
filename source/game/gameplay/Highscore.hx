@@ -2,14 +2,12 @@ package game.gameplay;
 
 import game.system.music.Conductor;
 
-typedef GradeStatus =
-{
+typedef GradeStatus = {
 	var name:String;
 	var percent:Int;
 }
 
-enum abstract Rating(String) to String
-{
+enum abstract Rating(String) to String {
 	var SICK:Rating = 'sick';
 	var GOOD:Rating = 'good';
 	var BAD:Rating = 'bad';
@@ -17,47 +15,38 @@ enum abstract Rating(String) to String
 	var MISS:Rating = 'miss';
 }
 
-class Highscore
-{
+class Highscore {
 	// score maps for saving song and week scores
 	public static var songScores:Map<String, Int> = [];
 
-	public static function saveScore(song:String, diff:String, score:Int):Void
-	{
+	public static function saveScore(song:String, diff:String, score:Int):Void {
 		var songName:String = '${song}-${diff}';
-		if (songScores.exists(songName))
-		{
+		if (songScores.exists(songName)) {
 			if (songScores.get(songName) < score)
 				songScores.set(songName, score);
-		}
-		else
+		} else
 			songScores.set(songName, score);
 	}
 
 	public static var weekScores:Map<String, Int> = [];
 
-	public static function saveWeekScore(week:String, diff:String, score:Int):Void
-	{
+	public static function saveWeekScore(week:String, diff:String, score:Int):Void {
 		var weekName:String = '${week}-${diff}';
-		if (weekScores.exists(weekName))
-		{
+		if (weekScores.exists(weekName)) {
 			if (weekScores.get(weekName) < score)
 				weekScores.set(weekName, score);
-		}
-		else
+		} else
 			weekScores.set(weekName, score);
 	}
 
-	public static function getScore(song:String, diff:String):Int
-	{
+	public static function getScore(song:String, diff:String):Int {
 		var songName:String = '${song}-${diff}';
 		if (!songScores.exists(song))
 			songScores.set(songName, 0);
 		return songScores.get(song);
 	}
 
-	public static function getWeekScore(week:String, diff:String):Int
-	{
+	public static function getWeekScore(week:String, diff:String):Int {
 		var weekName:String = '${week}-${diff}';
 		if (!weekScores.exists(weekName))
 			weekScores.set(weekName, 0);
@@ -84,8 +73,7 @@ class Highscore
 	function get_misses():Int
 		return gottenRatings.get("miss");
 
-	function set_misses(missCount:Int):Int
-	{
+	function set_misses(missCount:Int):Int {
 		gottenRatings.set("miss", missCount);
 		return missCount;
 	}
@@ -108,8 +96,7 @@ class Highscore
 
 	public var clearType(get, default):String = "";
 
-	function get_clearType():String
-	{
+	function get_clearType():String {
 		var cType:String = ' (${clearType})';
 		if (clearType == '' || clearType == null)
 			cType = '';
@@ -118,14 +105,12 @@ class Highscore
 
 	public var clearFunction:Void->Void;
 
-	public function new():Void
-	{
+	public function new():Void {
 		// score container bs
 		for (i in 0...RATINGS.length)
 			gottenRatings.set(RATINGS[0][i], 0);
 
-		clearFunction = function():Void
-		{
+		clearFunction = function():Void {
 			var gottenSicks:Int = gottenRatings.get("sick");
 			var gottenGoods:Int = gottenRatings.get("good");
 			var gottenBads:Int = gottenRatings.get("bad");
@@ -133,30 +118,22 @@ class Highscore
 
 			clearType = "";
 
-			if (misses == 0)
-			{
-				if (gottenGoods == 0)
-				{
+			if (misses == 0) {
+				if (gottenGoods == 0) {
 					if (gottenSicks > 0)
 						clearType = 'SFC'; // Sick Full Combo
-				}
-				else if (gottenBads == 0 && gottenShits == 0)
-				{
+				} else if (gottenBads == 0 && gottenShits == 0) {
 					if (gottenGoods > 0 && gottenGoods < 10)
 						clearType = 'SDG'; // Single Digit Goods
 					else if (gottenGoods >= 10)
 						clearType = 'GFC'; // Good Full Combo
-				}
-				else if (gottenBads > 0 || gottenShits > 0)
-				{
+				} else if (gottenBads > 0 || gottenShits > 0) {
 					if (gottenBads > 0 && gottenBads < 10)
 						clearType = 'SDB'; // Single Digit Bads
 					else if (gottenBads >= 10 || gottenShits > 0)
 						clearType = 'FC'; // Full Combo
 				}
-			}
-			else if (misses > 0)
-			{
+			} else if (misses > 0) {
 				if (misses > 0 && misses < 10)
 					clearType = 'SDCB'; // Single Digit Combo Breaks
 				else if (misses >= 10)
@@ -167,8 +144,7 @@ class Highscore
 		clearFunction();
 	}
 
-	public function judgeNote(stepTime:Float):String
-	{
+	public function judgeNote(stepTime:Float):String {
 		var noteDiff:Float = Math.abs(stepTime - Conductor.songPosition);
 		var rate:String = SICK;
 
@@ -183,17 +159,14 @@ class Highscore
 		return rate;
 	}
 
-	public function updateRatings(rate:Int):Void
-	{
+	public function updateRatings(rate:Int):Void {
 		score += Std.int(RATINGS[1][rate]);
 		notesAccuracy += Math.max(0, RATINGS[3][rate]);
 		updateGrade();
 	}
 
-	public function updateHealth(rate:Int, isSustain:Bool = false):Void
-	{
-		var mult:Float = switch (rate)
-		{
+	public function updateHealth(rate:Int, isSustain:Bool = false):Void {
+		var mult:Float = switch (rate) {
 			case 3, 4: 0.10;
 			default: isSustain ? 0.01 : 0.05;
 		}
@@ -206,13 +179,10 @@ class Highscore
 			health = 0;
 	}
 
-	public function updateGrade():Void
-	{
+	public function updateGrade():Void {
 		var biggestAcc:Int = 0;
-		for (grade => acc in grades)
-		{
-			if ((acc <= accuracy) && acc >= biggestAcc)
-			{
+		for (grade => acc in grades) {
+			if ((acc <= accuracy) && acc >= biggestAcc) {
 				biggestAcc = acc;
 				gradeType = grade;
 			}
@@ -221,8 +191,7 @@ class Highscore
 		clearFunction();
 	}
 
-	public function getPercent():Float
-	{
+	public function getPercent():Float {
 		if (notesHit > 0)
 			return FlxMath.roundDecimal((accuracy * 100) / 100, 2);
 		return 0.00;

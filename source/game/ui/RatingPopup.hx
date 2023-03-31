@@ -4,15 +4,12 @@ import core.FNFSprite;
 import game.gameplay.Highscore;
 import game.system.music.Conductor;
 
-class RatingPopup
-{
-	public function new():Void
-	{
+class RatingPopup {
+	public function new():Void {
 		popRating('sick', true);
 	}
 
-	public function popRating(name:String, preload:Bool = false):Void
-	{
+	public function popRating(name:String, preload:Bool = false):Void {
 		var rating:FNFSprite = new FNFSprite(0, 0);
 		rating.frames = FtrAssets.getUIAsset('ratingSheet', XML);
 

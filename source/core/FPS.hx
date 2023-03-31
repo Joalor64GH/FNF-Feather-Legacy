@@ -14,8 +14,7 @@ import openfl.ui.Keyboard;
 	Debug Info class for displaying Framerate and Memory information on screen,
 	based on this tutorial https://keyreal-code.github.io/haxecoder-tutorials/17_displaying_fps_and_memory_usage_using_openfl.html
 **/
-class FPS extends TextField
-{
+class FPS extends TextField {
 	public var times:Array<Float> = [];
 
 	public var curFPS:Float = 0;
@@ -29,8 +28,7 @@ class FPS extends TextField
 	 * along with it
 	 * @param useOutline whether to enable the fps outline border
 	**/
-	public function new(x:Float = 10, y:Float = 5, color:Int = -1, ?useOutline:Bool = true):Void
-	{
+	public function new(x:Float = 10, y:Float = 5, color:Int = -1, ?useOutline:Bool = true):Void {
 		super();
 
 		this.x = x;
@@ -45,8 +43,7 @@ class FPS extends TextField
 
 		width = FlxG.width;
 
-		if (useOutline)
-		{
+		if (useOutline) {
 			textBorder = new BorderField(this, 1.5, 0xFF000000);
 			textBorder.addChildren();
 		}
@@ -57,8 +54,7 @@ class FPS extends TextField
 
 	public var separator:String = ' | ';
 
-	public function update(_:Event):Void
-	{
+	public function update(_:Event):Void {
 		var now:Float = Timer.stamp();
 		times.push(now);
 		while (times[0] < now - 1)
@@ -69,8 +65,7 @@ class FPS extends TextField
 			curFPS = FlxG.updateFramerate;
 
 		text = "";
-		if (visible)
-		{
+		if (visible) {
 			text += '[FPS: ${curFPS}';
 			#if cpp
 			curMEM = System.totalMemory;
@@ -85,10 +80,8 @@ class FPS extends TextField
 		}
 	}
 
-	public function debugKeys(e:KeyboardEvent):Void
-	{
-		switch (e.keyCode)
-		{
+	public function debugKeys(e:KeyboardEvent):Void {
+		switch (e.keyCode) {
 			case Keyboard.F3:
 				visible = !visible;
 		}
@@ -101,8 +94,7 @@ class FPS extends TextField
  *
  * changed for ease of use and more reliability
  */
-class BorderField extends TextField
-{
+class BorderField extends TextField {
 	public var parentField:TextField;
 	public var children:Array<TextField> = [];
 
@@ -114,15 +106,13 @@ class BorderField extends TextField
 	 * @param size [OPTIONAL]          the border's size, defaults to 2
 	 * @param borderColor [OPTIONAL]   the border's color, defaults to black
 	 */
-	public function new(parentField:TextField, size:Float = 1.5, borderColor:Int = 0):Void
-	{
+	public function new(parentField:TextField, size:Float = 1.5, borderColor:Int = 0):Void {
 		super();
 
 		this.parentField = parentField;
 		this.size = size;
 
-		for (i in 0...8)
-		{
+		for (i in 0...8) {
 			children.push(new TextField());
 
 			copyParent(children[i]);
@@ -132,15 +122,12 @@ class BorderField extends TextField
 		addEventListener(Event.ENTER_FRAME, update);
 	}
 
-	public function update(_:Event):Void
-	{
-		if (parentField != null)
-		{
+	public function update(_:Event):Void {
+		if (parentField != null) {
 			this.x = parentField.x;
 			this.y = parentField.y;
 
-			for (i in 0...children.length)
-			{
+			for (i in 0...children.length) {
 				var border:TextField = children[i];
 				border.text = parentField.text;
 				border.visible = parentField.visible;
@@ -162,10 +149,8 @@ class BorderField extends TextField
 		}
 	}
 
-	public function copyParent(field:TextField):Void
-	{
-		if (parentField != null)
-		{
+	public function copyParent(field:TextField):Void {
+		if (parentField != null) {
 			field.x = parentField.x;
 			field.y = parentField.y;
 
@@ -183,8 +168,7 @@ class BorderField extends TextField
 	/**
 	 * Adds the created border instances below the parent field on `Main.hx`
 	 */
-	public function addChildren():Void
-	{
+	public function addChildren():Void {
 		for (i in 0...children.length)
 			Main.self.addChild(children[i]);
 	}
@@ -192,8 +176,7 @@ class BorderField extends TextField
 	/**
 	 * Removes all the created border instances below the parent field on `Main.hx`
 	 */
-	public function killChildren():Void
-	{
+	public function killChildren():Void {
 		for (i in 0...children.length)
 			Main.self.removeChild(children[i]);
 	}

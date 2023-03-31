@@ -7,8 +7,7 @@ import flixel.util.FlxStringUtil;
 import game.PlayState;
 import game.system.music.Conductor;
 
-class GameplayUI extends FlxSpriteGroup
-{
+class GameplayUI extends FlxSpriteGroup {
 	final game:PlayState = PlayState.self;
 
 	public var healthBG:FlxSprite;
@@ -23,8 +22,7 @@ class GameplayUI extends FlxSpriteGroup
 
 	public var downscroll:Bool = Settings.get("scrollType") == "DOWN";
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 
 		var barY:Float = FlxG.height * 0.90;
@@ -53,8 +51,7 @@ class GameplayUI extends FlxSpriteGroup
 		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(scoreText);
 
-		if (Settings.get("infoText") != 'NONE')
-		{
+		if (Settings.get("infoText") != 'NONE') {
 			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'SONG' ? '- ${game.song.name.toUpperCase()} -' : '');
 			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 			infoText.y = downscroll ? FlxG.height - infoText.height - 15 : 15;
@@ -83,8 +80,7 @@ class GameplayUI extends FlxSpriteGroup
 		updateScore(true);
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		healthBar.percent = game.currentStat.health * 50;
@@ -96,10 +92,8 @@ class GameplayUI extends FlxSpriteGroup
 		iconP1.updateAnim(healthBar.percent);
 		iconOPP.updateAnim(100 - healthBar.percent);
 
-		if (Settings.get("infoText") == 'TIME')
-		{
-			if (game != null && infoText != null && Conductor.songPosition > 0)
-			{
+		if (Settings.get("infoText") == 'TIME') {
+			if (game != null && infoText != null && Conductor.songPosition > 0) {
 				var time:Float = Math.floor(Conductor.songPosition / 1000);
 				var length:Float = Math.floor(game.music.inst.length / 1000);
 
@@ -114,8 +108,7 @@ class GameplayUI extends FlxSpriteGroup
 
 	var scoreTween:FlxTween;
 
-	public function updateScore(miss:Bool = false):Void
-	{
+	public function updateScore(miss:Bool = false):Void {
 		var newScore:String = '[ SCORE: ${game.currentStat.score}';
 		newScore += separator + 'MISSES: ${game.currentStat.misses}${game.currentStat.clearType}';
 		newScore += separator + 'GRADE: ${game.currentStat.gradeType} [${game.currentStat.getPercent()}%] ]';
@@ -123,8 +116,7 @@ class GameplayUI extends FlxSpriteGroup
 
 		scoreText.screenCenter(X);
 
-		if (!miss)
-		{
+		if (!miss) {
 			scoreText.scale.set(1.1, 1.1);
 
 			if (scoreTween != null)
@@ -135,8 +127,7 @@ class GameplayUI extends FlxSpriteGroup
 		}
 	}
 
-	public function beatHit(curBeat:Int):Void
-	{
+	public function beatHit(curBeat:Int):Void {
 		iconP1.beatHit(curBeat);
 		iconOPP.beatHit(curBeat);
 	}

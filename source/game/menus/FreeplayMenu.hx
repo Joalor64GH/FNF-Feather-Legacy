@@ -8,9 +8,11 @@ import game.system.Levels;
 import game.system.charting.ChartLoader;
 import game.ui.Alphabet;
 import game.ui.HealthIcon;
+#if target.threaded
+import sys.thread.Thread;
+#end
 
-class FreeplayMenu extends MenuBase
-{
+class FreeplayMenu extends MenuBase {
 	static var lastSelection:Int = -1;
 
 	var iconList:Array<HealthIcon> = [];
@@ -32,8 +34,7 @@ class FreeplayMenu extends MenuBase
 	public var mutex:sys.thread.Mutex;
 	#end
 
-	public override function create():Void
-	{
+	public override function create():Void {
 		super.create();
 
 		#if target.threaded
@@ -41,11 +42,9 @@ class FreeplayMenu extends MenuBase
 		#end
 
 		// get week songs and add them
-		for (i in 0...Levels.GAME_LEVELS.length)
-		{
+		for (i in 0...Levels.GAME_LEVELS.length) {
 			var week:GameWeek = Levels.GAME_LEVELS[i];
-			for (i in 0...week.songs.length)
-			{
+			for (i in 0...week.songs.length) {
 				if (week.songs[i].color == null)
 					week.songs[i].color = 0xFFFFFFFF;
 				songList.push(week.songs[i]);
@@ -60,8 +59,7 @@ class FreeplayMenu extends MenuBase
 		add(bg);
 
 		optionsGroup = new AlphabetGroup();
-		for (i in 0...songList.length)
-		{
+		for (i in 0...songList.length) {
 			var newSong:Alphabet = new Alphabet(0, (60 * i), songList[i].name);
 			newSong.menuItem = true;
 			newSong.groupIndex = i;
@@ -88,8 +86,7 @@ class FreeplayMenu extends MenuBase
 		add(scoreText);
 		add(infoText);
 
-		if (lastSelection > 0 && lastSelection < songList.length)
-		{
+		if (lastSelection > 0 && lastSelection < songList.length) {
 			curSelection = lastSelection;
 			// reset
 			lastSelection = -1;
@@ -99,8 +96,7 @@ class FreeplayMenu extends MenuBase
 		updateDifficulty();
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		scoreLerp = FlxMath.lerp(scoreLerp, gottenScore, 0.4);
@@ -108,40 +104,40 @@ class FreeplayMenu extends MenuBase
 
 		updateScorePosition();
 
-		if (controls.justPressed("accept"))
-		{
-			var parameters:PlayStateStruct = {
-				songName: Utils.removeForbidden(songList[curSelection].name),
-				difficulty: Levels.DEFAULT_DIFFICULTIES[curDifficulty],
-				gamemode: FREEPLAY
-			};
+		if (controls.justPressed("accept")) {
+			var parameters:PlayStateStruct =
+				{
+					songName: Utils.removeForbidden(songList[curSelection].name),
+					difficulty: Levels.DEFAULT_DIFFICULTIES[curDifficulty],
+					gamemode: FREEPLAY
+				};
 
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
+			playbackActive = false;
 
 			if (FlxG.keys.pressed.SHIFT)
-				MusicBeatState.switchState(new ChartEditor(parameters));
+				FlxG.switchState(new ChartEditor(parameters));
 			else
-				MusicBeatState.switchState(new PlayState(parameters));
+				FlxG.switchState(new PlayState(parameters));
 		}
 
 		if (controls.anyJustPressed(["left", "right"]))
 			updateDifficulty(controls.justPressed("left") ? -1 : 1);
 
-		if (controls.justPressed("back"))
-		{
+		if (controls.justPressed("back")) {
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
+			playbackActive = false;
 
 			FlxG.sound.play(Paths.sound("cancelMenu"));
-			MusicBeatState.switchState(new MainMenu());
+			FlxG.switchState(new MainMenu());
 		}
 	}
 
 	public var colorTween:FlxTween;
 
-	public override function updateSelection(newSelection:Int = 0):Void
-	{
+	public override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		if (colorTween != null)
@@ -152,8 +148,7 @@ class FreeplayMenu extends MenuBase
 		if (!chagingConst)
 			updateSongPlayback();
 
-		for (i in 0...iconList.length)
-		{
+		for (i in 0...iconList.length) {
 			iconList[i].alpha = 0.6;
 			if (iconList[i].ID == curSelection)
 				iconList[i].alpha = 1;
@@ -163,8 +158,7 @@ class FreeplayMenu extends MenuBase
 		lastSelection = curSelection;
 	}
 
-	public function updateDifficulty(newDifficulty:Int = 0):Void
-	{
+	public function updateDifficulty(newDifficulty:Int = 0):Void {
 		curDifficulty = FlxMath.wrap(curDifficulty + newDifficulty, 0, Levels.DEFAULT_DIFFICULTIES.length - 1);
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 
@@ -172,25 +166,7 @@ class FreeplayMenu extends MenuBase
 		updateInfoText();
 	}
 
-	function updateSongPlayback():Void
-	{
-		if (FlxG.sound.music != null)
-			FlxG.sound.music.stop();
-
-		#if target.threaded
-		sys.thread.Thread.create(() -> {
-			mutex.acquire();
-		#end
-			FlxG.sound.playMusic(Paths.inst(Utils.removeForbidden(songList[curSelection].name)));
-			FlxG.sound.music.fadeIn(0.8);
-		#if target.threaded
-		mutex.release();
-		});
-		#end
-	}
-
-	function updateScorePosition():Void
-	{
+	function updateScorePosition():Void {
 		scoreText.x = FlxG.width - scoreText.width - 6;
 		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
 		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
@@ -199,11 +175,36 @@ class FreeplayMenu extends MenuBase
 		infoText.x -= (infoText.width / 2);
 	}
 
-	function updateInfoText():Void
-	{
+	function updateInfoText():Void {
 		var diffText:String = Levels.DEFAULT_DIFFICULTIES[curDifficulty].toUpperCase();
 
 		if (infoText != null)
 			infoText.text = '< ${diffText} >';
+	}
+
+	var playbackActive:Bool = true;
+	var playbackThread:Thread;
+
+	function updateSongPlayback():Void {
+		#if target.threaded // you won't be able to hear a different song if you can't use threads
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
+		playbackThread = Thread.create(() -> {
+			while (playbackActive) {
+				var curThread:Null<Int> = Thread.readMessage(false);
+				if (curThread != null) {
+					if (curThread == curSelection && playbackActive) {
+						mutex.acquire();
+						FlxG.sound.playMusic(Paths.inst(Utils.removeForbidden(songList[curSelection].name)));
+						FlxG.sound.music.fadeIn(0.8);
+						mutex.release();
+					}
+				}
+			}
+		});
+
+		playbackThread.sendMessage(curSelection);
+		#end
 	}
 }

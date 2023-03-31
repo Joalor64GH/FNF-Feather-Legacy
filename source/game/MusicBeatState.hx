@@ -5,8 +5,7 @@ import flixel.FlxSubState;
 import flixel.addons.ui.FlxUIState;
 import game.system.music.BeatManager;
 
-class MusicBeatState extends FlxUIState implements IMusicFunctions
-{
+class MusicBeatState extends FlxUIState implements IMusicFunctions {
 	public var controls(get, never):Controls;
 
 	function get_controls():Controls
@@ -27,8 +26,7 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions
 	function get_curStep():Int
 		return beatContainer.step;
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 		beatContainer = new BeatManager(this);
 
@@ -38,12 +36,10 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions
 			transOut = TransitionState.defaultTransOut;
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (game.system.music.Conductor.songPosition >= 0)
-		{
+		if (game.system.music.Conductor.songPosition >= 0) {
 			beatContainer.update(elapsed);
 			FlxG.watch.add(game.system.music.Conductor, "songPosition", "Song Pos:");
 			FlxG.watch.add(beatContainer, "beat", "Song Beat:");
@@ -52,36 +48,30 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions
 		}
 	}
 
-	public static function switchState(newState:flixel.FlxState, ?assetStack:Array<String>, ?assetType:AssetType = IMAGE):Void
-	{
+	public static function switchState(newState:flixel.FlxState, ?assetStack:Array<String>, ?assetType:AssetType = IMAGE):Void {
 		if (assetStack == null || assetStack.length < 1)
 			FlxG.switchState(newState);
-		else
-		{
+		else {
 			for (i in assetStack)
 				AssetHandler.preload(i, assetType);
 			FlxG.switchState(newState);
 		}
 	}
 
-	public function beatHit():Void
-	{
+	public function beatHit():Void {
 		// receive beats here
 	}
 
-	public function stepHit():Void
-	{
+	public function stepHit():Void {
 		// receive steps here
 	}
 
-	public function secHit():Void
-	{
+	public function secHit():Void {
 		// receive sections here
 	}
 }
 
-class MusicBeatSubState extends FlxSubState implements IMusicFunctions
-{
+class MusicBeatSubState extends FlxSubState implements IMusicFunctions {
 	public var controls(get, never):Controls;
 
 	function get_controls():Controls
@@ -102,14 +92,12 @@ class MusicBeatSubState extends FlxSubState implements IMusicFunctions
 	function get_curStep():Int
 		return beatContainer.step;
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 		beatContainer = new BeatManager(this);
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		if (game.system.music.Conductor.songPosition >= 0)

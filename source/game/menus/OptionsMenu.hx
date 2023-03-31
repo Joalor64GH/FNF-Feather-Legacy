@@ -5,8 +5,7 @@ import flixel.text.FlxText;
 import game.MusicBeatState.MusicBeatSubState;
 import game.options.Option;
 
-class OptionsMenu extends MusicBeatSubState
-{
+class OptionsMenu extends MusicBeatSubState {
 	public var curSelection:Int = 0;
 
 	public var pageGroup:FlxTypedGroup<FlxText>;
@@ -20,18 +19,15 @@ class OptionsMenu extends MusicBeatSubState
 
 	public var onPause:Bool = false;
 
-	public function new(onPause:Bool = false):Void
-	{
+	public function new(onPause:Bool = false):Void {
 		super();
 		this.onPause = onPause;
 	}
 
-	public override function create():Void
-	{
+	public override function create():Void {
 		super.create();
 
-		if (!onPause)
-		{
+		if (!onPause) {
 			var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuBGBlue'));
 			bg.screenCenter(XY);
 			bg.scrollFactor.set();
@@ -46,10 +42,8 @@ class OptionsMenu extends MusicBeatSubState
 
 		pageGroup = new FlxTypedGroup<FlxText>();
 
-		for (i in 0...pageOptions.length)
-		{
-			var value:String = switch (pageOptions[i].getValue())
-			{
+		for (i in 0...pageOptions.length) {
+			var value:String = switch (pageOptions[i].getValue()) {
 				case "true": "ON";
 				case "false": "OFF";
 				default: pageOptions[i].getValue();
@@ -67,8 +61,7 @@ class OptionsMenu extends MusicBeatSubState
 		add(pageGroup);
 
 		FlxTween.tween(pageBG, {alpha: 0.6}, 0.6, {
-			onComplete: function(twn:FlxTween):Void
-			{
+			onComplete: function(twn:FlxTween):Void {
 				lockedMovement = false;
 				updateSelection();
 			}
@@ -79,27 +72,22 @@ class OptionsMenu extends MusicBeatSubState
 	var lockedMovement:Bool = true;
 	var isChanging:Bool = false;
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		if (FlxG.sound.music != null && FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 
-		if (!lockedMovement)
-		{
-			if (!isChanging)
-			{
-				if (controls.anyJustPressed(["up", "down"]))
-				{
+		if (!lockedMovement) {
+			if (!isChanging) {
+				if (controls.anyJustPressed(["up", "down"])) {
 					updateSelection(controls.justPressed("up") ? -1 : 1);
 					holdTimer = 0;
 				}
 
 				var timerCalc:Int = Std.int((holdTimer / 1) * 5);
 
-				if (controls.anyPressed(["up", "down"]))
-				{
+				if (controls.anyPressed(["up", "down"])) {
 					holdTimer += elapsed;
 
 					var timerCalcPost:Int = Std.int((holdTimer / 1) * 5);
@@ -108,34 +96,27 @@ class OptionsMenu extends MusicBeatSubState
 						updateSelection((timerCalc - timerCalcPost) * (controls.pressed("down") ? -1 : 1));
 				}
 
-				if (controls.justPressed("back"))
-				{
+				if (controls.justPressed("back")) {
 					if (onPause)
 						close();
 					else
-						MusicBeatState.switchState(new game.menus.MainMenu());
+						FlxG.switchState(new game.menus.MainMenu());
 				}
 
-				if (controls.justPressed("accept"))
-				{
+				if (controls.justPressed("accept")) {
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					isChanging = !isChanging;
 				}
-			}
-			else
-			{
-				if (controls.anyJustPressed(["left", "right"]))
-				{
-					switch (pageOptions[curSelection].type)
-					{
+			} else {
+				if (controls.anyJustPressed(["left", "right"])) {
+					switch (pageOptions[curSelection].type) {
 						case Checkmark:
 							// if (!pageOptions[curSelection].mustReset)
 							pageOptions[curSelection].setValue(!Settings.get(pageOptions[curSelection].apiKey));
 
 						case StringList:
 							var storedValue:Int = 0;
-							for (i in 0...pageOptions[curSelection].optionsList.length)
-							{
+							for (i in 0...pageOptions[curSelection].optionsList.length) {
 								if (pageOptions[curSelection].optionsList[i] == getValueText())
 									storedValue = i;
 
@@ -153,8 +134,7 @@ class OptionsMenu extends MusicBeatSubState
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 				}
 
-				if (controls.justPressed("back"))
-				{
+				if (controls.justPressed("back")) {
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 					isChanging = false;
 				}
@@ -162,18 +142,15 @@ class OptionsMenu extends MusicBeatSubState
 		}
 	}
 
-	public function getValueText():String
-	{
-		return switch (pageOptions[curSelection].getValue())
-		{
+	public function getValueText():String {
+		return switch (pageOptions[curSelection].getValue()) {
 			case "true": "ON";
 			case "false": "OFF";
 			default: pageOptions[curSelection].getValue();
 		}
 	}
 
-	public function updateSelection(newSelection:Int = 0):Void
-	{
+	public function updateSelection(newSelection:Int = 0):Void {
 		if (pageGroup.members != null && pageGroup.members.length > 0)
 			curSelection = FlxMath.wrap(curSelection + newSelection, 0, Std.int(pageGroup.members.length - 1));
 
@@ -181,8 +158,7 @@ class OptionsMenu extends MusicBeatSubState
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 
 		var ascendingIndex:Int = 0;
-		for (option in pageGroup)
-		{
+		for (option in pageGroup) {
 			option.ID = ascendingIndex - curSelection;
 			option.alpha = option.ID == 0 ? 1 : 0.6;
 			++ascendingIndex;

@@ -1,7 +1,6 @@
 package game.system;
 
-class Settings
-{
+class Settings {
 	/**
 	 * TODO: refactor this?
 	 */
@@ -15,12 +14,9 @@ class Settings
 
 	public static var mySettings:Array<Dynamic> = [];
 
-	public static function get(name:String):Dynamic
-	{
-		for (i in 0...mySettings.length)
-		{
-			if (name == mySettings[i][0])
-			{
+	public static function get(name:String):Dynamic {
+		for (i in 0...mySettings.length) {
+			if (name == mySettings[i][0]) {
 				var value:Dynamic = mySettings[i][1];
 				return value;
 			}
@@ -28,12 +24,9 @@ class Settings
 		return null;
 	}
 
-	public static function set(name:String, value:Dynamic):Void
-	{
-		if (Std.isOfType(value, String))
-		{
-			value = switch (value)
-			{
+	public static function set(name:String, value:Dynamic):Void {
+		if (Std.isOfType(value, String)) {
+			value = switch (value) {
 				case "ON": true;
 				case "OFF": false;
 				default: value;
@@ -45,8 +38,7 @@ class Settings
 				mySettings[i][1] = value;
 	}
 
-	public static function save():Void
-	{
+	public static function save():Void {
 		Utils.bindSave("Settings");
 
 		FlxG.save.data.mySettings = mySettings;
@@ -54,12 +46,10 @@ class Settings
 		FlxG.save.data.muted = FlxG.sound.muted;
 	}
 
-	public static function load():Void
-	{
+	public static function load():Void {
 		mySettings = defaultSettings;
 
-		if (FlxG.save.data.mySettings != null)
-		{
+		if (FlxG.save.data.mySettings != null) {
 			for (i in 0...FlxG.save.data.mySettings)
 				if (FlxG.save.data.mySettings[i] != mySettings[i])
 					mySettings[i] = FlxG.save.data.mySettings[i];

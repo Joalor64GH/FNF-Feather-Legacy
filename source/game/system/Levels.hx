@@ -1,7 +1,6 @@
 package game.system;
 
-class Levels
-{
+class Levels {
 	public static final DEFAULT_DIFFICULTIES:Array<String> = ["easy", "normal", "hard"];
 
 	public static var GAME_LEVELS:Array<GameWeek> = [
@@ -76,16 +75,14 @@ class Levels
 	];
 }
 
-typedef GameWeek =
-{
+typedef GameWeek = {
 	var songs:Array<ListableSong>;
 	var chars:Array<String>;
 	var ?diffs:Array<String>;
 	var label:String;
 }
 
-typedef ListableSong =
-{
+typedef ListableSong = {
 	var name:String;
 	var opponent:String;
 	var ?color:Int;

@@ -2,8 +2,7 @@ package game.options;
 
 import game.system.Settings;
 
-enum abstract OptionType(Int) to Int
-{
+enum abstract OptionType(Int) to Int {
 	var Checkmark:OptionType = 0xA;
 	var StringList:OptionType = 0xB;
 	var Number:OptionType = 0xC;
@@ -12,8 +11,7 @@ enum abstract OptionType(Int) to Int
 /**
  * Object that represents an Option
  */
-class Option
-{
+class Option {
 	public var name:String;
 	public var description:String;
 
@@ -56,8 +54,7 @@ class Option
 	 */
 	public var maximum:Int = 1;
 
-	public function new(name:String, description:String, apiKey:String, ?optionsList:Array<String>):Void
-	{
+	public function new(name:String, description:String, apiKey:String, ?optionsList:Array<String>):Void {
 		this.name = name;
 		this.description = description;
 		this.optionsList = optionsList;
@@ -65,18 +62,15 @@ class Option
 		this.type = getType();
 	}
 
-	public inline function getValue():Dynamic
-	{
+	public inline function getValue():Dynamic {
 		return Settings.get(apiKey);
 	}
 
-	public inline function setValue(Value:Dynamic):Void
-	{
+	public inline function setValue(Value:Dynamic):Void {
 		Settings.set(apiKey, Value);
 	}
 
-	@:noCompletion inline function getType():Int
-	{
+	@:noCompletion inline function getType():Int {
 		if (Std.isOfType(Settings.get(apiKey), Int) || Std.isOfType(Settings.get(apiKey), Float))
 			return Number;
 
