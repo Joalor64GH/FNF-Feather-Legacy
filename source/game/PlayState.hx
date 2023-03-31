@@ -11,7 +11,7 @@ import game.subStates.*;
 import game.system.charting.ChartDefs.ChartFormat;
 import game.system.charting.ChartEvents;
 import game.system.charting.ChartLoader;
-import game.system.music.Conductor;
+import game.system.Conductor;
 import game.ui.GameplayUI;
 import game.ui.RatingPopup;
 

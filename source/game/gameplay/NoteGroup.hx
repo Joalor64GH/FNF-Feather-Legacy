@@ -5,7 +5,7 @@ import flixel.FlxBasic;
 import flixel.group.FlxGroup;
 import flixel.math.FlxRect;
 import game.gameplay.Note.Splash;
-import game.system.music.Conductor;
+import game.system.Conductor;
 
 class NoteGroup extends FlxGroup {
 	final game:PlayState = PlayState.self;

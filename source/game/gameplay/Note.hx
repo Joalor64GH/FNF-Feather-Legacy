@@ -2,7 +2,7 @@ package game.gameplay;
 
 import core.FNFSprite;
 import game.PlayState;
-import game.system.music.Conductor;
+import game.system.Conductor;
 
 typedef NoteSpriteGroup = flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<Note>;
 

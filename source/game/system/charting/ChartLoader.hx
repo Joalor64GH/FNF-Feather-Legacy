@@ -4,7 +4,7 @@ import flixel.system.FlxSound;
 import flixel.util.FlxSort;
 import game.system.charting.ChartDefs;
 import game.system.charting.ChartEvents;
-import game.system.music.Conductor;
+import game.system.Conductor;
 import haxe.Json;
 import openfl.media.Sound;
 import openfl.net.FileReference;

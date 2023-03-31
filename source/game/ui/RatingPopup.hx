@@ -2,7 +2,7 @@ package game.ui;
 
 import core.FNFSprite;
 import game.gameplay.Highscore;
-import game.system.music.Conductor;
+import game.system.Conductor;
 
 class RatingPopup {
 	public function new():Void {

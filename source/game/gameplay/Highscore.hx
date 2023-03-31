@@ -1,6 +1,6 @@
 package game.gameplay;
 
-import game.system.music.Conductor;
+import game.system.Conductor;
 
 typedef GradeStatus = {
 	var name:String;

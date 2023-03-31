@@ -6,7 +6,7 @@ import flixel.group.FlxGroup;
 import flixel.system.FlxSound;
 import flixel.util.FlxAxes;
 import flixel.util.FlxSave;
-import game.system.music.Conductor;
+import game.system.Conductor;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;

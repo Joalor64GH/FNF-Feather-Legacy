@@ -2,7 +2,7 @@ package game.subStates;
 
 import game.MusicBeatState.MusicBeatSubState;
 import game.gameplay.Character;
-import game.system.music.Conductor;
+import game.system.Conductor;
 
 typedef GameOverStruct = {
 	var name:String;

@@ -9,7 +9,7 @@ import game.PlayState;
 import game.gameplay.Note;
 import game.system.charting.ChartDefs.ChartFormat;
 import game.system.charting.ChartLoader;
-import game.system.music.Conductor;
+import game.system.Conductor;
 import haxe.Json;
 
 /**

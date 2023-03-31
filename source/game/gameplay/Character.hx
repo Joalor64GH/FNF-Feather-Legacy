@@ -2,7 +2,7 @@ package game.gameplay;
 
 import core.FNFSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
-import game.system.music.Conductor;
+import game.system.Conductor;
 
 enum DanceType {
 	QUICK;
@@ -166,13 +166,11 @@ class Character extends FNFSprite {
 	public function dance(forced:Bool = false, ?startFrame:Int = 0):Void {
 		switch (danceStyle) {
 			case QUICK:
-				/*
 					if (animation.curAnim != null && !animation.curAnim.name.startsWith('hair'))
 						danced = !danced;
-				 */
 
 				var direction:String = (danced ? 'Right' : 'Left');
-				playAnim('dance${direction}${suffix}', forced, false, startFrame);
+				playAnim('dance' + direction + '${suffix}', forced, false, startFrame);
 			default:
 				playAnim('idle${suffix}', forced, false, startFrame);
 		}

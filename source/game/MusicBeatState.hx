@@ -3,7 +3,7 @@ package game;
 import core.Controls;
 import flixel.FlxSubState;
 import flixel.addons.ui.FlxUIState;
-import game.system.music.BeatManager;
+import game.system.Conductor;
 
 class MusicBeatState extends FlxUIState implements IMusicFunctions {
 	public var controls(get, never):Controls;
@@ -11,24 +11,25 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions {
 	function get_controls():Controls
 		return Controls.self;
 
-	public var beatContainer:BeatManager;
+	public var beatContainer:Conductor;
 
 	public var curBeat(get, never):Int;
 	public var curSec(get, never):Int;
 	public var curStep(get, never):Int;
 
 	function get_curBeat():Int
-		return beatContainer.beat;
+		return beatContainer.beatPos;
 
 	function get_curSec():Int
-		return beatContainer.sec;
+		return beatContainer.secPos;
 
 	function get_curStep():Int
-		return beatContainer.step;
+		return beatContainer.stepPos;
 
 	public function new():Void {
 		super();
-		beatContainer = new BeatManager(this);
+
+		beatContainer = new Conductor(this);
 
 		if (!TransitionState.skipNextTransIn)
 			transIn = TransitionState.defaultTransIn;
@@ -39,12 +40,12 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions {
 	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (game.system.music.Conductor.songPosition >= 0) {
+		if (Conductor.songPosition >= 0) {
 			beatContainer.update(elapsed);
-			FlxG.watch.add(game.system.music.Conductor, "songPosition", "Song Pos:");
-			FlxG.watch.add(beatContainer, "beat", "Song Beat:");
-			FlxG.watch.add(beatContainer, "step", "Song Step:");
-			FlxG.watch.add(beatContainer, "sec", "Song Section:");
+			FlxG.watch.add(Conductor, "songPosition", "Song Pos:");
+			FlxG.watch.add(this, "curBeat", "Song Beat:");
+			FlxG.watch.add(this, "curStep", "Song Step:");
+			FlxG.watch.add(this, "curSec", "Song Section:");
 		}
 	}
 
@@ -77,30 +78,30 @@ class MusicBeatSubState extends FlxSubState implements IMusicFunctions {
 	function get_controls():Controls
 		return Controls.self;
 
-	public var beatContainer:BeatManager;
+	public var beatContainer:Conductor;
 
 	public var curBeat(get, never):Int;
 	public var curSec(get, never):Int;
 	public var curStep(get, never):Int;
 
 	function get_curBeat():Int
-		return beatContainer.beat;
+		return beatContainer.beatPos;
 
 	function get_curSec():Int
-		return beatContainer.sec;
+		return beatContainer.secPos;
 
 	function get_curStep():Int
-		return beatContainer.step;
+		return beatContainer.stepPos;
 
 	public function new():Void {
 		super();
-		beatContainer = new BeatManager(this);
+		beatContainer = new Conductor(this);
 	}
 
 	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (game.system.music.Conductor.songPosition >= 0)
+		if (game.system.Conductor.songPosition >= 0)
 			beatContainer.update(elapsed);
 	}
 
