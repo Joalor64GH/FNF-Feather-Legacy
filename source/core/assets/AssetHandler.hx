@@ -30,6 +30,16 @@ class AssetHandler
 		}
 	}
 
+	public static function preload(file:String, type:AssetType = IMAGE):Void
+	{
+		return switch (type)
+		{
+			case IMAGE: CacheHandler.getGraphicData(file);
+			case SOUND: CacheHandler.getSoundData(file);
+			default:
+		}
+	}
+
 	public static function exists(path:String):Bool
 		return sys.FileSystem.exists(path);
 

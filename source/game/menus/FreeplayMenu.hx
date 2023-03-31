@@ -120,9 +120,9 @@ class FreeplayMenu extends MenuBase
 				FlxG.sound.music.stop();
 
 			if (FlxG.keys.pressed.SHIFT)
-				FlxG.switchState(new ChartEditor(parameters));
+				MusicBeatState.switchState(new ChartEditor(parameters));
 			else
-				FlxG.switchState(new PlayState(parameters));
+				MusicBeatState.switchState(new PlayState(parameters));
 		}
 
 		if (controls.anyJustPressed(["left", "right"]))
@@ -134,7 +134,7 @@ class FreeplayMenu extends MenuBase
 				FlxG.sound.music.stop();
 
 			FlxG.sound.play(Paths.sound("cancelMenu"));
-			FlxG.switchState(new MainMenu());
+			MusicBeatState.switchState(new MainMenu());
 		}
 	}
 

@@ -48,10 +48,12 @@ class CacheHandler
 		return null;
 	}
 
-	public static function purgeStored():Void
+	public static function purge(stored:Bool = false):Void
 	{
 		_purgeUnused();
-		_purgeStored();
+		if (stored)
+			_purgeStored();
+		SysGC.run(true);
 	}
 
 	static function _purgeStored():Void
@@ -90,7 +92,5 @@ class CacheHandler
 			}
 			cachedGraphics.remove(data);
 		}
-
-		SysGC.run(true);
 	}
 }

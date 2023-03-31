@@ -2,8 +2,8 @@ package;
 
 import core.Controls;
 import core.FPS;
+import core.assets.CacheHandler;
 import flixel.FlxGame;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
 import haxe.CallStack;
@@ -62,6 +62,11 @@ class Main extends Sprite
 
 		FlxG.game.soundTray.volumeUpSound = Paths.getPath("sounds/scrollMenu", SOUND);
 		FlxG.game.soundTray.volumeDownSound = Paths.getPath("sounds/scrollMenu", SOUND);
+
+		FlxG.signals.preStateSwitch.add(function():Void
+		{
+			CacheHandler.purge(true);
+		});
 
 		openfl.Lib.current.stage.application.onExit.add(function(code:Int):Void
 		{

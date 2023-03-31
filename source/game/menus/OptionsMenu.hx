@@ -2,8 +2,8 @@ package game.menus;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
+import game.MusicBeatState.MusicBeatSubState;
 import game.options.Option;
-import game.subStates.MusicBeatSubState;
 
 class OptionsMenu extends MusicBeatSubState
 {
@@ -113,7 +113,7 @@ class OptionsMenu extends MusicBeatSubState
 					if (onPause)
 						close();
 					else
-						FlxG.switchState(new game.menus.MainMenu());
+						MusicBeatState.switchState(new game.menus.MainMenu());
 				}
 
 				if (controls.justPressed("accept"))

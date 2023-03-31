@@ -1,5 +1,6 @@
 package game.subStates;
 
+import game.MusicBeatState.MusicBeatSubState;
 import game.gameplay.Character;
 import game.system.music.Conductor;
 
@@ -51,7 +52,7 @@ class GameOverSubState extends MusicBeatSubState
 		 */
 
 		if (controls.justPressed("back"))
-			FlxG.switchState(new game.menus.FreeplayMenu());
+			MusicBeatState.switchState(new game.menus.FreeplayMenu());
 	}
 
 	public override function beatHit():Void

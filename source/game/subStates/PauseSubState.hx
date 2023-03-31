@@ -3,6 +3,7 @@ package game.subStates;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import game.MusicBeatState.MusicBeatSubState;
 import game.system.Levels;
 import game.ui.Alphabet;
 
@@ -19,7 +20,7 @@ class PauseSubState extends MusicBeatSubState
 				callback: function():Void
 				{
 					var oldConstructor = PlayState.self.constructor;
-					FlxG.switchState(new PlayState(oldConstructor));
+					MusicBeatState.switchState(new PlayState(oldConstructor));
 				}
 			},
 			{name: "Options", callback: null},
@@ -31,7 +32,7 @@ class PauseSubState extends MusicBeatSubState
 					{
 						case STORY_MODE:
 						default:
-							FlxG.switchState(new game.menus.FreeplayMenu());
+							MusicBeatState.switchState(new game.menus.FreeplayMenu());
 					}
 				}
 			}
@@ -64,7 +65,7 @@ class PauseSubState extends MusicBeatSubState
 					callback: function():Void
 					{
 						var oldConstructor = PlayState.self.constructor;
-						FlxG.switchState(new PlayState({
+						MusicBeatState.switchState(new PlayState({
 							songName: oldConstructor.songName,
 							difficulty: Levels.DEFAULT_DIFFICULTIES[i],
 							gamemode: oldConstructor.gamemode

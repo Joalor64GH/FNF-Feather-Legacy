@@ -67,7 +67,7 @@ class ChartEditor extends MusicBeatState
 		noteCamera.centerOverlay(checkerboard, X);
 
 		// note strumline
-		noteRender = new FlxSprite().makeGraphic(cellSize * keys, 5, 0xFFFFFFFF);
+		noteRender = new FlxSprite().makeGraphic(cellSize * getNoteKeys(), 5, 0xFFFFFFFF);
 		noteRender.centerOverlay(checkerboard, X);
 		add(noteRender);
 
@@ -76,7 +76,6 @@ class ChartEditor extends MusicBeatState
 
 	public var checkerboard:FlxTiledSprite;
 
-	public var keys:Int = 8;
 	public var cellSize:Int = 50;
 
 	public var renderedSections:FlxTypedGroup<FlxSprite>;
@@ -85,7 +84,7 @@ class ChartEditor extends MusicBeatState
 	{
 		var checkerSprite:FlxSprite = FlxGridOverlay.create(cellSize, cellSize, cellSize * 2, cellSize * 2, true, 0xFFD8AC9C, 0xFF947566);
 
-		checkerboard = new FlxTiledSprite(null, cellSize * keys, cellSize);
+		checkerboard = new FlxTiledSprite(null, cellSize * getNoteKeys(), cellSize);
 		checkerboard.loadGraphic(checkerSprite.graphic.bitmap);
 		checkerboard.screenCenter(X);
 		// extend the checkerboard until the song ends, how accurate is this?
@@ -131,13 +130,13 @@ class ChartEditor extends MusicBeatState
 		if (FlxG.keys.justPressed.BACKSPACE)
 		{
 			FlxG.mouse.visible = false;
-			FlxG.switchState(new game.menus.FreeplayMenu());
+			MusicBeatState.switchState(new game.menus.FreeplayMenu());
 		}
 
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
 			FlxG.mouse.visible = false;
-			FlxG.switchState(new PlayState({songName: const.songName, difficulty: const.difficulty, gamemode: CHARTING}));
+			MusicBeatState.switchState(new PlayState({songName: const.songName, difficulty: const.difficulty, gamemode: CHARTING}));
 		}
 	}
 
@@ -157,7 +156,7 @@ class ChartEditor extends MusicBeatState
 		note.updateHitbox();
 
 		note.centerOverlay(checkerboard, X);
-		note.x -= (cellSize * (keys / 2) - (cellSize / 2));
+		note.x -= (cellSize * (getNoteKeys() / 2) - (cellSize / 2));
 		note.x += Math.floor(getNoteSide(index, strumline == 1) * cellSize);
 		note.y = Math.floor(getYfromStrum(step));
 		renderedNotes.add(note);
@@ -246,4 +245,8 @@ class ChartEditor extends MusicBeatState
 
 	function getSectionLength():Int
 		return song.sections[curSec].length;
+
+	// replace with strumline values later
+	function getNoteKeys():Int
+		return 8;
 }

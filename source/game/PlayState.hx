@@ -321,9 +321,9 @@ class PlayState extends MusicBeatState
 			// placeholder
 			case FREEPLAY:
 				Highscore.saveScore(Utils.removeForbidden(constructor.songName), constructor.difficulty, currentStat.score);
-				FlxG.switchState(new game.menus.FreeplayMenu());
+				MusicBeatState.switchState(new game.menus.FreeplayMenu());
 			case CHARTING:
-				FlxG.switchState(new game.editors.ChartEditor(constructor));
+				MusicBeatState.switchState(new game.editors.ChartEditor(constructor));
 		}
 	}
 
@@ -379,7 +379,7 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.SEVEN)
 		{
 			music.cease();
-			FlxG.switchState(new ChartEditor({songName: constructor.songName, difficulty: constructor.difficulty}));
+			MusicBeatState.switchState(new ChartEditor({songName: constructor.songName, difficulty: constructor.difficulty}));
 		}
 
 		if (song != null && !paused)
