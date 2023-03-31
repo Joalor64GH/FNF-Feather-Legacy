@@ -45,9 +45,7 @@ class Main extends Sprite {
 		Controls.self = new Controls();
 		game.system.Settings.load();
 
-		#if cpp
-		cpp.vm.Gc.enable(true);
-		#end
+		CacheHandler.gcEnable();
 
 		TransitionState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
 		TransitionState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, new FlxPoint(0, 1));

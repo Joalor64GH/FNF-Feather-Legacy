@@ -1,12 +1,15 @@
 package core;
 
+import flixel.FlxBasic;
 import flixel.FlxObject;
+import flixel.group.FlxGroup;
 import flixel.system.FlxSound;
 import flixel.util.FlxAxes;
 import flixel.util.FlxSave;
 import game.system.music.Conductor;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
+import openfl.media.Sound;
 import openfl.net.FileReference;
 
 typedef TransitionState = flixel.addons.transition.FlxTransitionableState;
@@ -14,6 +17,18 @@ typedef TransitionState = flixel.addons.transition.FlxTransitionableState;
 class Utils {
 	/**
 	 * Centers the specified object to the bounds of another object
+	 *
+	 * USAGE:
+	 * ```haxe
+	 * var myOverlay:FlxSprite = new FlxSprite(0, 150).makeGraphic(300, 500, 0xFF000000);
+	 * myOverlay.screenCenter(X);
+	 * add(myOverlay);
+	 *
+	 * var myObject:FlxObject = new FlxObject(0, 0, 1, 1);
+	 * myObject.centerOverlay(myOverlay, X);
+	 * add(myObject);
+	 * ```
+	 *
 	 * @author SwickTheGreat
 	 *
 	 * @param object         the child object that should be centered
@@ -21,16 +36,50 @@ class Utils {
 	 * @param axes           in which axes should the child object be centered? (default: XY)
 	 * @return               child object, now centered according to the base object
 	 */
-	public static function centerOverlay(object:FlxObject, base:FlxObject, axes:FlxAxes = XY):FlxObject {
+	@:keep public static inline function centerOverlay(object:FlxObject, base:FlxObject, axes:FlxAxes = XY):FlxObject {
 		if (object == null || base == null)
 			return object;
-
 		if (axes.x)
 			object.x = base.x + (base.width / 2) - (object.width / 2);
-
 		if (axes.y)
 			object.y = base.y + (base.height / 2) - (object.height / 2);
+		return object;
+	}
 
+	/**
+	 * Adds an object behind the specified group
+	 *
+	 * USAGE:
+	 * ```haxe
+	 * // this will add the object to the beginning position of the current state
+	 * var exampleObject:FlxObject = new FlxObject(0, 0, 1, 1)
+	 * exampleObject.addToPos(FlxG.state, 0);
+	 * ```
+	 *
+	 * @param group              the group in which the object should get added
+	 * @param index              the position of the object
+	 */
+	@:keep public static inline function addToPos(object:FlxBasic, group:FlxGroup, index:Int):FlxBasic {
+		group.insert(index, object);
+		return object;
+	}
+
+	/**
+	 * Adds an object behind the specified typed group
+	 *
+	 * USAGE:
+	 * ```haxe
+	 * var objectGroup:FlxTypedGroup<FlxObject> = new FlxTypedGroup<FlxObject>();
+	 * // this will add the object to the beginning position of the objectGroup
+	 * var exampleObject:FlxObject = new FlxObject(0, 0, 1, 1)
+	 * exampleObject.addTypedPos(objectGroup, 0);
+	 * ```
+	 *
+	 * @param group              the group in which the object should get added
+	 * @param index              the position of the object
+	 */
+	@:keep public static inline function addTypedPos(object:FlxBasic, group:FlxTypedGroup<Dynamic>, index:Int):FlxBasic {
+		group.insert(index, object);
 		return object;
 	}
 
@@ -76,6 +125,50 @@ class Utils {
 		newArrow.animation.addByPrefix('press', "arrow push " + dir);
 		newArrow.animation.play('idle');
 		return newArrow;
+	}
+
+	/**
+	 * Returns the specified asset, followed by its type while searching for the IMAGE ui skin folders
+	 *
+	 * @param asset                 the name of the asset (e.g: healthBar)
+	 * @param type                  the type of the asset (e.g: IMAGE)
+	 * @param skin                  the skin asset, defaults to `default`
+	 */
+	@:keep public static inline function getUIAsset(asset:String, type:AssetType = IMAGE, skin:String = 'default'):Dynamic {
+		var path:String = AssetHandler.getPath('images/ui/${skin}/${asset}', type);
+		if (!AssetHandler.exists(path))
+			skin = 'default';
+
+		return AssetHandler.getAsset('images/ui/${skin}/${asset}', type);
+	}
+
+	/**
+	 * Behaves equal to `Utils.getUIAsset`, but for sounds instead
+	 *
+	 * @param asset                 the name of the sound
+	 * @param skin                  the sound's skin asset, defaults to `default`
+	 */
+	@:keep public static inline function getUISound(sound:String, skin:String = 'default'):Sound {
+		var path:String = AssetHandler.getPath('sounds/${skin}/${sound}', SOUND);
+		if (!AssetHandler.exists(path))
+			skin = 'default';
+
+		return AssetHandler.getAsset('sounds/${skin}/${sound}', SOUND);
+	}
+
+	/**
+	 * Updates the Framerate Capping based on the specified value
+	 *
+	 * @param newFramerate           the new Framerate Cap that the game should use
+	 */
+	@:keep public static inline function updateFramerateCap(newFramerate:Int):Void {
+		if (newFramerate > FlxG.drawFramerate) {
+			FlxG.updateFramerate = newFramerate;
+			FlxG.drawFramerate = newFramerate;
+		} else {
+			FlxG.drawFramerate = newFramerate;
+			FlxG.updateFramerate = newFramerate;
+		}
 	}
 
 	/**

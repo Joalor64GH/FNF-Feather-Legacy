@@ -222,7 +222,7 @@ class PlayState extends MusicBeatState {
 		var countdownSounds:Array<String> = ['intro3', 'intro2', 'intro1', 'introGo'];
 
 		for (graphic in countdownSprites)
-			countdownGraphics.push(FtrAssets.getUIAsset('${graphic}'));
+			countdownGraphics.push(Utils.getUIAsset('${graphic}'));
 
 		for (sound in countdownSounds)
 			countdownNoises.push(AssetHandler.getAsset('sounds/game/${sound}', SOUND));
@@ -509,6 +509,7 @@ class PlayState extends MusicBeatState {
 	public function spawnNotes():Void {
 		while (ChartLoader.noteList[0] != null && ChartLoader.noteList[0].step - Conductor.songPosition < 2000) {
 			var note = ChartLoader.noteList[0];
+			var strum:NoteGroup = lines.members[note.strumline];
 
 			var type:String = 'default';
 			if (note.type != null)
@@ -519,23 +520,26 @@ class PlayState extends MusicBeatState {
 			if (note.strumline == null || note.strumline < 0)
 				note.strumline = 0;
 
-			var strum:NoteGroup = lines.members[note.strumline];
-
-			if (note.sustainTime > 0) {
-				for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
-					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
-					var newSustain:Note = new Note(sustainStep, note.index, true, type, strum.noteSprites.members[strum.noteSprites.members.length - 1]);
-					newSustain.strumline = note.strumline;
-					newSustain.downscroll = Settings.get("scrollType") == "DOWN";
-					strum.add(newSustain);
-				}
-			}
-
 			var newNote:Note = new Note(note.step, note.index, false, type);
 			newNote.sustainTime = note.sustainTime;
 			newNote.strumline = note.strumline;
 			newNote.downscroll = Settings.get("scrollType") == "DOWN";
 			strum.add(newNote);
+
+			if (note.sustainTime > 0) {
+				var prevNote:Note = strum.noteSprites.members[strum.noteSprites.members.length - 1];
+
+				for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
+					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
+					var newSustain:Note = new Note(sustainStep, note.index, true, type, prevNote);
+					newSustain.downscroll = Settings.get("scrollType") == "DOWN";
+					newSustain.strumline = note.strumline;
+					if (note.sustainTime == noteSustain - 1)
+						newSustain.isEnd = true;
+					newSustain.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(newNote));
+					prevNote = newSustain;
+				}
+			}
 
 			ChartLoader.noteList.shift();
 		}

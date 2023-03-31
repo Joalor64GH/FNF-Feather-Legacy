@@ -11,7 +11,7 @@ class RatingPopup {
 
 	public function popRating(name:String, preload:Bool = false):Void {
 		var rating:FNFSprite = new FNFSprite(0, 0);
-		rating.frames = FtrAssets.getUIAsset('ratingSheet', XML);
+		rating.frames = Utils.getUIAsset('ratingSheet', XML);
 
 		for (i in 0...Highscore.RATINGS[0].length)
 			rating.addAnim(Highscore.RATINGS[0][i], Highscore.RATINGS[0][i]);

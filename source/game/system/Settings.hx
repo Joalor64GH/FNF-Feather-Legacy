@@ -9,6 +9,7 @@ class Settings {
 		["scrollType", "UP"],
 		["ghostTapping", true],
 		["noteSplashes", true],
+		["framerateCap", Std.int(60)],
 		["infoText", "TIME"], // time, song, none
 	];
 
@@ -59,5 +60,9 @@ class Settings {
 			FlxG.sound.volume = FlxG.save.data.volume;
 		if (FlxG.save.data.muted != null)
 			FlxG.sound.muted = FlxG.save.data.muted;
+	}
+
+	public static function update():Void {
+		Utils.updateFramerateCap(Settings.get("framerateCap"));
 	}
 }

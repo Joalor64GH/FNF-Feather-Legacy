@@ -73,11 +73,8 @@ class Note extends FNFSprite {
 		if (!isSustain) {
 			hitboxEarly = 1;
 			playAnim('${NoteGroup.colors[index]} note');
-		} else {
+		} else
 			updateSustain();
-			if (animation.curAnim != null && animation.curAnim.name.endsWith("end"))
-				isEnd = true;
-		}
 	}
 
 	/**
@@ -99,12 +96,10 @@ class Note extends FNFSprite {
 			if (downscroll)
 				offsetY += ((height / 2) - (height / 2)) + 30;
 
-			if (prevNote != null && prevNote.exists) {
-				if (prevNote.isSustain) {
-					prevNote.playAnim('${NoteGroup.colors[index]} hold');
-					prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((noteStepCrochet / 100) * 1.5 * speed);
-					prevNote.updateHitbox();
-				}
+			if (prevNote != null && prevNote.isSustain) {
+				prevNote.playAnim('${NoteGroup.colors[index]} hold');
+				prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((noteStepCrochet / 100) * 1.5 * speed);
+				prevNote.updateHitbox();
 			}
 		}
 	}

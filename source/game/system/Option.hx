@@ -14,6 +14,11 @@ class Option {
 	public var description:String;
 
 	/**
+	 * the Current value for ths Option
+	 */
+	public var value(get, set):Dynamic;
+
+	/**
 	 * Variable Name for the Option
 	 */
 	public var apiKey:String;
@@ -43,14 +48,19 @@ class Option {
 	public var minimum:Int = 0;
 
 	/**
-	 * Declares how many decimals a number option has
+	 * Defines how many decimals a number option has
 	 */
-	public var decimals:Float = 1;
+	public var decimals:Int = 1;
 
 	/**
 	 * Defines the maximum value for a number option
 	 */
 	public var maximum:Int = 1;
+
+	/**
+	 * a Function that gets ran whenever you set an option a new value
+	 */
+	public var onSet:Void->Void = null;
 
 	public function new(name:String, description:String, apiKey:String, ?optionsList:Array<String>, lockOnPause:Bool = false):Void {
 		this.name = name;
@@ -63,12 +73,16 @@ class Option {
 		this.type = getType();
 	}
 
-	public inline function getValue():Dynamic {
+	public inline function get_value():Dynamic {
 		return Settings.get(apiKey);
 	}
 
-	public inline function setValue(Value:Dynamic):Void {
+	public inline function set_value(Value:Dynamic):Dynamic {
 		Settings.set(apiKey, Value);
+		if (onSet != null)
+			onSet();
+
+		return Value;
 	}
 
 	@:noCompletion inline function getType():Int {

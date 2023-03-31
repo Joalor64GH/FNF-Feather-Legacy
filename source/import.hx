@@ -1,6 +1,5 @@
 // default imports
 import core.assets.AssetHandler;
-import core.assets.FtrAssets;
 import core.assets.Paths;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -12,4 +11,3 @@ import flixel.util.FlxTimer;
 
 using StringTools;
 using core.Utils;
-using core.assets.SysGC;

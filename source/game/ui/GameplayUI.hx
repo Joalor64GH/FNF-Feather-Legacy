@@ -29,7 +29,7 @@ class GameplayUI extends FlxSpriteGroup {
 		if (downscroll)
 			barY = FlxG.height * 0.11;
 
-		healthBG = new FlxSprite(0, barY).loadGraphic(FtrAssets.getUIAsset('healthBar'));
+		healthBG = new FlxSprite(0, barY).loadGraphic(Utils.getUIAsset('healthBar'));
 		healthBG.screenCenter(X);
 		add(healthBG);
 

@@ -4,6 +4,15 @@ import flixel.graphics.FlxGraphic;
 import openfl.display.BitmapData;
 import openfl.media.Sound;
 import openfl.utils.Assets as OpenFLAssets;
+#if cpp
+import cpp.vm.Gc;
+#elseif hl
+import hl.Gc;
+#elseif java
+import java.vm.Gc;
+#elseif neko
+import neko.vm.Gc;
+#end
 
 class CacheHandler {
 	public static var cachedGraphics:Map<String, FlxGraphic> = new Map<String, FlxGraphic>();
@@ -44,7 +53,7 @@ class CacheHandler {
 		_purgeUnused();
 		if (stored)
 			_purgeStored();
-		SysGC.run(true);
+		gcRun(true);
 	}
 
 	static function _purgeStored():Void {
@@ -75,5 +84,27 @@ class CacheHandler {
 			}
 			cachedGraphics.remove(data);
 		}
+	}
+
+	public static function gcEnable():Void {
+		#if (cpp || hl) Gc.enable(true); #end
+	}
+
+	public static function gcDisable():Void {
+		#if (cpp || hl) Gc.enable(false); #end
+	}
+
+	public static function gcRun(major:Bool = false):Void {
+		#if (cpp || java || neko)
+		Gc.run(major);
+		#elseif hl
+		Gc.major();
+		#else
+		openfl.system.System.gc();
+		#end
+
+		#if cpp
+		Gc.compact();
+		#end
 	}
 }

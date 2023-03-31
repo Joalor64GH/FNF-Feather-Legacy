@@ -4,6 +4,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import game.MusicBeatState.MusicBeatSubState;
 import game.system.Option;
+import game.system.OptionList;
 
 class OptionsMenu extends MusicBeatSubState {
 	public var curSelection:Int = 0;
@@ -12,18 +13,15 @@ class OptionsMenu extends MusicBeatSubState {
 	public var pageGroup:FlxTypedGroup<FlxText>;
 	public var descriptionHolder:FlxText;
 
-	public var pageOptions:Array<Option> = [
-		new Option("Scroll Type", "In which direction should notes spawn?", "scrollType", ["UP", "DOWN"], true),
-		new Option("Ghost Tapping", "If mashing keys should be allowed during gameplay.", "ghostTapping"),
-		new Option("Note Splashes", "If the firework effect should appear when hitting \"Sick\"s on Notes.", "noteSplashes"),
-		new Option("Info Display", "Choose what to display on the info text (usually shows time)", "infoText", ["TIME", "SONG", "NONE"])
-	];
+	public var pageOptions:Array<Option> = [];
 
 	public var onPause:Bool = false;
 
 	public function new(onPause:Bool = false):Void {
 		super();
 		this.onPause = onPause;
+
+		pageOptions = OptionList.get();
 	}
 
 	public override function create():Void {
@@ -111,31 +109,39 @@ class OptionsMenu extends MusicBeatSubState {
 				}
 			} else {
 				if (controls.anyJustPressed(["left", "right"])) {
-					switch (pageOptions[curSelection].type) {
+					var option:Option = pageOptions[curSelection];
+					switch (option.type) {
 						case Checkmark:
-							pageOptions[curSelection].setValue(!Settings.get(pageOptions[curSelection].apiKey));
+							option.value = !Settings.get(option.apiKey);
 
 						case StringList:
 							var storedValue:Int = 0;
-							for (i in 0...pageOptions[curSelection].optionsList.length) {
-								if (pageOptions[curSelection].optionsList[i] == getValueText(curSelection))
+							for (i in 0...option.optionsList.length) {
+								if (option.optionsList[i] == getValueText(curSelection))
 									storedValue = i;
 
-								pageOptions[curSelection].maximum = pageOptions[curSelection].optionsList.length - 1;
+								option.maximum = option.optionsList.length - 1;
 							}
 
-							var wrapValue:Int = 0;
 							var nextValue:Int = controls.justPressed("left") ? -1 : 1;
+							var wrapValue:Int = FlxMath.wrap(storedValue + nextValue, option.minimum, option.maximum);
+							option.value = option.optionsList[wrapValue];
 
-							wrapValue = FlxMath.wrap(storedValue + nextValue, pageOptions[curSelection].minimum, pageOptions[curSelection].maximum);
-							pageOptions[curSelection].setValue(pageOptions[curSelection].optionsList[wrapValue]);
+						case Number:
+							var nextValue:Int = controls.justPressed("left") ? -1 : 1;
+							var keyValue:Int = Settings.get(option.apiKey) + option.decimals * nextValue;
+							if (keyValue < option.minimum || keyValue > option.maximum)
+								keyValue = Settings.get(option.apiKey) + nextValue;
+
+							option.value = FlxMath.wrap(keyValue, option.minimum, option.maximum);
 					}
 
-					pageGroup.members[curSelection].text = '${pageOptions[curSelection].name}: ${getValueText(curSelection)}';
+					pageGroup.members[curSelection].text = '${option.name}: ${getValueText(curSelection)}';
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 				}
 
 				if (controls.justPressed("back")) {
+					Settings.update();
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 					isChanging = false;
 				}
@@ -144,10 +150,10 @@ class OptionsMenu extends MusicBeatSubState {
 	}
 
 	public function getValueText(index:Int):String {
-		return switch (pageOptions[index].getValue()) {
+		return switch (pageOptions[index].value) {
 			case "true": "ON";
 			case "false": "OFF";
-			default: pageOptions[index].getValue();
+			default: pageOptions[index].value;
 		}
 	}
 
