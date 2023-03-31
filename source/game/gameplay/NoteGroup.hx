@@ -138,8 +138,8 @@ class NoteGroup extends FlxGroup {
 
 					if (note.isSustain) {
 						if (note.downscroll) {
-							if (note.isEnd && note.prevNote != null) {
-								if (note.prevNote.isSustain)
+							if (note.animation.curAnim != null && note.animation.curAnim.name.endsWith("end")) {
+								if (note.prevNote != null && note.prevNote.isSustain)
 									note.y += Math.ceil(/*note.prevNote.y -*/ note.prevNote.frameHeight);
 							}
 
