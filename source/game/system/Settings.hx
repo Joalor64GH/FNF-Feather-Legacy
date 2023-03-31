@@ -2,13 +2,14 @@ package game.system;
 
 class Settings {
 	/**
-	 * TODO: refactor this?
+	 * TODO: refactor this
 	 */
 	public static final defaultSettings:Array<Dynamic> = [
 		// ["key", value]
 		["scrollType", "UP"],
 		["ghostTapping", true],
 		["noteSplashes", true],
+		["judgeCount", false],
 		["framerateCap", Std.int(60)],
 		["infoText", "TIME"], // time, song, none
 	];
@@ -25,7 +26,7 @@ class Settings {
 		return null;
 	}
 
-	public static function set(name:String, value:Dynamic):Void {
+	@:keep public static inline function set(name:String, value:Dynamic):Void {
 		if (Std.isOfType(value, String)) {
 			value = switch (value) {
 				case "ON": true;
@@ -39,15 +40,16 @@ class Settings {
 				mySettings[i][1] = value;
 	}
 
-	public static function save():Void {
-		Utils.bindSave("Settings");
+	@:keep public static inline function save():Void {
+		FlxG.save.bind("Settings", Utils.saveFolder());
 
 		FlxG.save.data.mySettings = mySettings;
 		FlxG.save.data.volume = FlxG.sound.volume;
 		FlxG.save.data.muted = FlxG.sound.muted;
 	}
 
-	public static function load():Void {
+	@:keep public static inline function load():Void {
+		FlxG.save.bind("Settings", Utils.saveFolder());
 		mySettings = defaultSettings;
 
 		if (FlxG.save.data.mySettings != null) {
@@ -62,7 +64,8 @@ class Settings {
 			FlxG.sound.muted = FlxG.save.data.muted;
 	}
 
-	public static function update():Void {
+	@:keep public static inline function update():Void {
+		FlxG.save.bind("Settings", Utils.saveFolder());
 		Utils.updateFramerateCap(Settings.get("framerateCap"));
 	}
 }

@@ -42,10 +42,9 @@ class Main extends Sprite {
 		fpsCounter = new FPS(10, 5, FlxColor.WHITE);
 		addChild(fpsCounter);
 
+		CacheHandler.gcEnable();
 		Controls.self = new Controls();
 		game.system.Settings.load();
-
-		CacheHandler.gcEnable();
 
 		TransitionState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
 		TransitionState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, new FlxPoint(0, 1));
@@ -54,9 +53,6 @@ class Main extends Sprite {
 		FlxG.fixedTimestep = true;
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
-
-		FlxG.game.soundTray.volumeUpSound = Paths.getPath("sounds/scrollMenu", SOUND);
-		FlxG.game.soundTray.volumeDownSound = Paths.getPath("sounds/scrollMenu", SOUND);
 
 		FlxG.signals.preStateSwitch.add(function():Void {
 			CacheHandler.purge(true);

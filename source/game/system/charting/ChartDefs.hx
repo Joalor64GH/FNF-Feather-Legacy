@@ -12,6 +12,7 @@ typedef ChartMeta = {
 	var opponent:String;
 	var ?crowd:String; // defaults to "gf"
 	var ?stage:String; // defaults to "stage"
+	var strumlines:Int;
 	var speed:Float;
 	var bpm:Float;
 }

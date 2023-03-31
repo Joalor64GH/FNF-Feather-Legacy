@@ -84,19 +84,20 @@ class Utils {
 	}
 
 	/**
-	 * Binds the `FlxG.save` variable
-	 *
-	 * @param name          the new save name
-	 * @param folder        the save's folder name,
-	 *
+	 * Returns a folder for use with FlxG.save
 	 * if on flixel 5.0.0 or greater, it will be formatted `COMPANY/EXECUTABLE_NAME/FOLDER`
 	 * - so `BeastlyGhost/FunkinFeather/FOLDER` by default
+	 *
+	 * @param name          the new save name
+	 * @param folder        the save's folder name
 	 */
-	@:keep public static inline function bindSave(name:String, ?folder:String):Void {
-		@:privateAccess
-		var saveFolder:String = #if (flixel < "5.0.0") folder #else '${FlxG.stage.application.meta.get('company')}/${FlxSave.validate(FlxG.stage.application.meta.get('file'))}'
-			+ folder != null ? '/${folder}' : '' #end;
-		FlxG.save.bind(name, saveFolder);
+	@:keep public static inline function saveFolder(?folder:String):String {
+		#if (flixel < "5.0.0")
+		return folder;
+		#else
+		var folderResult:String = folder != null ? '/${folder}' : '';
+		return @:privateAccess '${FlxG.stage.application.meta.get('company')}/${FlxSave.validate(FlxG.stage.application.meta.get('file'))}' + folderResult;
+		#end
 	}
 
 	/**

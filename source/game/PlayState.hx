@@ -46,9 +46,6 @@ class PlayState extends MusicBeatState {
 	// Gameplay
 	public var lines:FlxTypedGroup<NoteGroup>;
 
-	public var leftSideNotes:NoteGroup;
-	public var rightSideNotes:NoteGroup;
-
 	public var playerStrumline:Int = 1;
 	public var playerStrums(get, never):NoteGroup;
 
@@ -89,6 +86,9 @@ class PlayState extends MusicBeatState {
 					constructor.difficulty = 'normal';
 
 				song = ChartLoader.loadSong(constructor.songName, constructor.difficulty);
+
+				if (song.metadata.strumlines == 1)
+					playerStrumline = 0;
 			}
 
 			if (constructor.gamemode == null)
@@ -176,21 +176,29 @@ class PlayState extends MusicBeatState {
 		lines = new FlxTypedGroup<NoteGroup>();
 		addOnHUD(lines);
 
-		var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 55;
+		for (i in 0...song.metadata.strumlines) {
+			var spacing:Float = 160 * 0.7;
+			var distance:Int = 2;
 
-		leftSideNotes = new NoteGroup(FlxG.width / 5 - FlxG.width / 7, yPos, opponent);
-		lines.add(leftSideNotes);
+			var xPos:Float = FlxG.width / 10 + FlxG.width / distance * i;
+			var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 60;
+			var character:Character = switch (i) {
+				case 1: player;
+				default: opponent;
+			};
 
-		rightSideNotes = new NoteGroup(FlxG.width / 3 + FlxG.width / 4, yPos, player);
-		lines.add(rightSideNotes);
+			if (i == 0)
+				xPos -= 60;
+
+			var newStrumline:NoteGroup = new NoteGroup(xPos, yPos, character, spacing);
+			newStrumline.cpuControlled = i != playerStrumline;
+			lines.add(newStrumline);
+		}
 
 		controls.onKeyPressed.add(onKeyPress);
 		controls.onKeyReleased.add(onKeyRelease);
 
 		songCutscene();
-
-		for (i in 0...lines.members.length)
-			lines.members[i].cpuControlled = i != playerStrumline;
 
 		TransitionState.nextStateCamera = camOver;
 	}

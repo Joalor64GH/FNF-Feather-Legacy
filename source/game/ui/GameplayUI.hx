@@ -117,7 +117,7 @@ class GameplayUI extends FlxSpriteGroup {
 		scoreText.screenCenter(X);
 
 		if (!miss) {
-			scoreText.scale.set(1.1, 1.1);
+			scoreText.scale.set(1.3, 1.1);
 
 			if (scoreTween != null)
 				scoreTween.cancel();

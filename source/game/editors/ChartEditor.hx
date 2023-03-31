@@ -226,7 +226,10 @@ class ChartEditor extends MusicBeatState {
 	function getSectionLength():Int
 		return song.sections[curSec].length;
 
-	// replace with strumline values later
-	function getNoteKeys():Int
-		return 8;
+	function getNoteKeys():Int {
+		var value:Int = 0;
+		for (i in 0...song.metadata.strumlines)
+			value += 4;
+		return value;
+	}
 }

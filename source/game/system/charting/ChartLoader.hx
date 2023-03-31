@@ -93,6 +93,7 @@ class ChartLoader {
 							player: fnfSong.player1,
 							opponent: fnfSong.player2,
 							crowd: fnfSong.gfVersion,
+							strumlines: 2,
 							stage: fnfSong.stage,
 							speed: fnfSong.speed,
 							bpm: fnfSong.bpm
@@ -157,6 +158,11 @@ class ChartLoader {
 				}
 			}
 		}
+
+		if (tempSong.metadata.strumlines < 1)
+			tempSong.metadata.strumlines = 1;
+		if (tempSong.metadata.strumlines > 4)
+			tempSong.metadata.strumlines = 4;
 
 		return tempSong;
 	}

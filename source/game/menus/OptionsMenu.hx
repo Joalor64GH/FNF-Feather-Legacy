@@ -112,7 +112,7 @@ class OptionsMenu extends MusicBeatSubState {
 					var option:Option = pageOptions[curSelection];
 					switch (option.type) {
 						case Checkmark:
-							option.value = !Settings.get(option.apiKey);
+							option.value = !option.value;
 
 						case StringList:
 							var storedValue:Int = 0;
@@ -141,6 +141,7 @@ class OptionsMenu extends MusicBeatSubState {
 				}
 
 				if (controls.justPressed("back")) {
+					Settings.save();
 					Settings.update();
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 					isChanging = false;
