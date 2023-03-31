@@ -128,6 +128,12 @@ class ChartEditor extends MusicBeatState
 				music.pause();
 		}
 
+		if (FlxG.keys.justPressed.BACKSPACE)
+		{
+			FlxG.mouse.visible = false;
+			FlxG.switchState(new game.menus.FreeplayMenu());
+		}
+
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
 			FlxG.mouse.visible = false;
@@ -157,10 +163,8 @@ class ChartEditor extends MusicBeatState
 		renderedNotes.add(note);
 
 		if (note.sustainTime > 0)
-		{
 			for (sustain in generateSustainNote(Conductor.stepCrochet, note))
 				renderedSustains.add(sustain);
-		}
 	}
 
 	function generateSustainNote(step:Float, note:Note):Array<Note>
