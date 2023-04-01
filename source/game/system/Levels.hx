@@ -85,5 +85,5 @@ typedef GameWeek = {
 typedef ListableSong = {
 	var name:String;
 	var opponent:String;
-	var ?color:Int;
+	var ?color:FlxColor;
 }

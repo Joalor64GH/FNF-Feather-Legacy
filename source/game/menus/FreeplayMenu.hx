@@ -8,6 +8,7 @@ import game.system.Levels;
 import game.system.charting.ChartLoader;
 import game.ui.Alphabet;
 import game.ui.HealthIcon;
+import sys.FileSystem;
 #if target.threaded
 import sys.thread.Thread;
 #end
@@ -51,7 +52,20 @@ class FreeplayMenu extends MenuBase {
 			}
 		}
 
-		songList.push({name: 'test', opponent: 'bf', color: 0xFFFFFFFF});
+		for (folder in FileSystem.readDirectory(Paths.getPath("data/songs"))) {
+			if (folder != null) {
+				var path:String = 'data/songs/${folder}/freeplay';
+				if (FileSystem.exists(Paths.getPath(path, JSON))) {
+					var data:ListableSong = null;
+
+					try {
+						data = cast haxe.Json.parse(AssetHandler.getAsset(path, JSON));
+						songList.push({name: data.name, opponent: data.opponent, color: FlxColor.fromString(Std.string(data.color))});
+					} catch (e:haxe.Exception)
+						trace('Song "${folder}" not added, Caught: "${e}"');
+				}
+			}
+		}
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menus/shared/menuDesat'));
 		bg.color = 0xFFFFFFFF;

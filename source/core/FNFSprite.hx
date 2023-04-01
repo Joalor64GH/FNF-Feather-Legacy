@@ -60,7 +60,8 @@ class FNFSprite extends FlxSprite implements ISpriteOffset {
 		return this;
 	}
 
-	public function addAnim(name:String, prefix:String, ?animOffsets:Array<Float>, framerate:Int = 24, looped:Bool = false, ?indices:Array<Int>, ?flipX:Bool = false, ?flipY:Bool = false):Void {
+	public function addAnim(name:String, prefix:String, ?animOffsets:Array<Float>, framerate:Int = 24, looped:Bool = false, ?indices:Array<Int>,
+			?flipX:Bool = false, ?flipY:Bool = false):Void {
 		if (indices != null && indices.length > 0)
 			animation.addByIndices(name, prefix, indices, '', framerate, looped, flipX, flipY);
 		else
