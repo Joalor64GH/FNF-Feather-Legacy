@@ -4,6 +4,7 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
 import flixel.system.FlxSound;
+import flixel.input.keyboard.FlxKey;
 import flixel.util.FlxAxes;
 import flixel.util.FlxSave;
 import game.system.Conductor;
@@ -15,6 +16,19 @@ import openfl.net.FileReference;
 typedef TransitionState = flixel.addons.transition.FlxTransitionableState;
 
 class Utils {
+	public static function setVolKeys(?keysUp:Array<FlxKey>, ?keysDown:Array<FlxKey>, ?keysMute:Array<FlxKey>):Void {
+		if (keysUp == null)
+			keysUp = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
+		if (keysDown == null)
+			keysDown = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
+		if (keysMute == null)
+			keysMute = [FlxKey.NUMPADZERO, FlxKey.ZERO];
+
+		FlxG.sound.muteKeys = keysMute;
+		FlxG.sound.volumeDownKeys = keysDown;
+		FlxG.sound.volumeUpKeys = keysUp;
+	}
+
 	/**
 	 * Centers the specified object to the bounds of another object
 	 *

@@ -11,6 +11,9 @@ class CrashState extends FlxUIState {
 	public function new(error:String, ?caught:String, ?lastState:Class<Dynamic>):Void {
 		super();
 
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
 		this.lastState = lastState;
 
 		textGroup = new FlxTypedGroup<FlxText>();
@@ -55,7 +58,12 @@ class CrashState extends FlxUIState {
 
 		// if (FlxG.keys.justPressed.SPACE)
 		//	openURL('https://github.com/BeastlyGabi/FNF-Feather');
-		if (FlxG.keys.justPressed.ESCAPE)
-			FlxG.switchState(Type.createInstance(game.menus.MainMenu, []));
+		if (FlxG.keys.justPressed.ESCAPE) {
+			// force switching
+			@:privateAccess {
+				FlxG.game._requestedState = new game.menus.MainMenu();
+				FlxG.game.switchState();
+			}
+		}
 	}
 }

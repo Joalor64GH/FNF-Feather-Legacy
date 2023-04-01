@@ -1,6 +1,7 @@
 package game.menus;
 
 import flixel.text.FlxText;
+import flixel.effects.FlxFlicker;
 import game.PlayState.PlayStateStruct;
 import game.editors.ChartEditor;
 import game.gameplay.Highscore;
@@ -79,7 +80,7 @@ class FreeplayMenu extends MenuBase {
 			newSong.groupIndex = i;
 			optionsGroup.add(newSong);
 
-			var songIcon:HealthIcon = new HealthIcon("bf");
+			var songIcon:HealthIcon = new HealthIcon(songList[i].opponent);
 			songIcon.sprTracker = newSong;
 			songIcon.ID = i;
 
@@ -132,8 +133,10 @@ class FreeplayMenu extends MenuBase {
 
 			if (FlxG.keys.pressed.SHIFT)
 				FlxG.switchState(new ChartEditor(parameters));
-			else
-				FlxG.switchState(new PlayState(parameters));
+			else {
+				FlxG.sound.play(Paths.sound("confirmMenu"));
+				FlxFlicker.flicker(optionsGroup.members[curSelection], 0.5, false, false, (flick:FlxFlicker) -> FlxG.switchState(new PlayState(parameters)));
+			}
 		}
 
 		if (controls.anyJustPressed(["left", "right"]))

@@ -17,20 +17,6 @@ class HealthIcon extends FlxSprite {
 	public function new(char:String = "face", isPlayer:Bool = false, canBounce:Bool = true):Void {
 		super();
 
-		var subString:String = char;
-		if (char.contains('-'))
-			subString = char.substring(0, char.indexOf('-'));
-
-		try {
-			if (!AssetHandler.exists(AssetHandler.getPath('images/characters/${char}/icon', IMAGE))) {
-				if (char != subString)
-					char = subString;
-				else
-					char = "face";
-			}
-		} catch (e:haxe.Exception)
-			char = "face";
-
 		this.isPlayer = isPlayer;
 		this.canBounce = canBounce;
 
@@ -49,9 +35,15 @@ class HealthIcon extends FlxSprite {
 	}
 
 	public function loadIcon(char:String = "face"):Void {
+		var subString:String = char;
+		if (char.contains('-'))
+			subString = char.substring(0, char.indexOf('-'));
+
+		if (!AssetHandler.exists(Paths.getPath('images/characters/${char}/icon', IMAGE)))
+			char = "face";
+
 		if (AssetHandler.exists(Paths.getPath('images/characters/${char}/icon', XML))) {
 			frames = Paths.getSparrowAtlas('characters/${char}/icon');
-
 			animation.addByPrefix("idle", "idle", 24, true);
 			animation.addByPrefix("losing", "losing", 24, true);
 			animation.addByPrefix("winning", "winning", 24, true);

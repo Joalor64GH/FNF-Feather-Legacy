@@ -85,7 +85,8 @@ class ChartEditor extends MusicBeatState {
 		checkerboard.screenCenter(X);
 		// extend the checkerboard until the song ends, how accurate is this?
 		checkerboard.height = (music.inst.length / Conductor.stepCrochet) * cellSize;
-		add(checkerboard);
+		// always add this behind the background
+		insert(this.members.indexOf(background), checkerboard);
 
 		generateSection();
 	}
@@ -112,6 +113,20 @@ class ChartEditor extends MusicBeatState {
 		var cameraY:Float = noteCamera.y - (FlxG.height / 2);
 		background.y = cameraY;
 
+		if (FlxG.keys.pressed.SHIFT) {
+			if (FlxG.keys.justPressed.MINUS || FlxG.keys.justPressed.PLUS) {
+				Utils.setVolKeys([], []);
+
+				var nextValue:Int = FlxG.keys.justPressed.MINUS ? -1 : 1;
+				song.metadata.strumlines = FlxMath.wrap(song.metadata.strumlines + nextValue, 1, 4);
+				regenerateSections();
+			} else // reset
+				Utils.setVolKeys();
+		}
+
+		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S)
+			exportChart();
+
 		if (FlxG.keys.justPressed.SPACE) {
 			if (!music.inst.playing)
 				music.play();
@@ -124,9 +139,26 @@ class ChartEditor extends MusicBeatState {
 			FlxG.switchState(new game.menus.FreeplayMenu());
 		}
 
-		if (FlxG.keys.justPressed.ESCAPE) {
+		if (FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.ESCAPE) {
 			FlxG.mouse.visible = false;
-			FlxG.switchState(new PlayState({songName: const.songName, difficulty: const.difficulty, gamemode: CHARTING}));
+
+			var state:flixel.FlxState = new game.menus.FreeplayMenu();
+			if (FlxG.keys.justPressed.ESCAPE) {
+				ChartLoader.noteList = [];
+
+				state = new PlayState({
+					songName: const.songName,
+					difficulty: const.difficulty,
+					songData: song,
+					gamemode: CHARTING
+				});
+
+				for (i in 0...song.sections.length)
+					for (j in song.sections[i].notes)
+						ChartLoader.noteList.push(j);
+			}
+
+			FlxG.switchState(state);
 		}
 	}
 
@@ -145,7 +177,7 @@ class ChartEditor extends MusicBeatState {
 
 		note.centerOverlay(checkerboard, X);
 		note.x -= (cellSize * (getNoteKeys() / 2) - (cellSize / 2));
-		note.x += Math.floor(getNoteSide(index, strumline == 1) * cellSize);
+		note.x += Math.floor(getNoteSide(index, strumline) * cellSize);
 		note.y = Math.floor(getYfromStrum(step));
 		renderedNotes.add(note);
 
@@ -203,6 +235,18 @@ class ChartEditor extends MusicBeatState {
 		Utils.saveData('${song.name.toLowerCase()}.json', data);
 	}
 
+	function regenerateSections():Void {
+		if (checkerboard != null)
+			checkerboard.destroy();
+
+		renderedSections.clear();
+		renderedSustains.clear();
+		renderedNotes.clear();
+
+		// regenerate all sections
+		generateCheckerboard();
+	}
+
 	function getSectionStart():Float {
 		var daBPM:Float = song.metadata.bpm;
 		var daPos:Float = 0;
@@ -220,8 +264,16 @@ class ChartEditor extends MusicBeatState {
 	function getYfromStrum(strumTime:Float):Float
 		return FlxMath.remapToRange(strumTime, 0, music.inst.length, 0, (music.inst.length / Conductor.stepCrochet) * cellSize);
 
-	function getNoteSide(index:Int, mustHit:Bool):Float
-		return mustHit ? ((index + 4) % 8) : index;
+	function getNoteSide(index:Int, strum:Int):Float {
+		var ret:Int = index;
+		if (strum > 0) {
+			// equation to get correct strumline bs
+			for (i in 0...strum)
+				ret = (index + 4) % getNoteKeys();
+		}
+
+		return ret;
+	}
 
 	function getSectionLength():Int
 		return song.sections[curSec].length;

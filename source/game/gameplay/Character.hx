@@ -56,6 +56,8 @@ class Character extends FNFSprite {
 			windyHair: false,
 		};
 
+	public var icon:String = null;
+
 	public var holdTimer:Float = 0;
 
 	public var singDuration:Float = 4;
@@ -69,7 +71,11 @@ class Character extends FNFSprite {
 
 	public function loadChar(name:String = "bf", isPlayer:Bool = false):Character {
 		this.name = name;
+
 		antialiasing = Settings.get("antialiasing") && !name.endsWith("-pixel");
+
+		if (icon == null)
+			icon = name;
 
 		switch (name) {
 			case "__chop": // I hate this.
@@ -101,12 +107,11 @@ class Character extends FNFSprite {
 				flipX = isPlayer;
 
 			default:
-				try {
+				if (sys.FileSystem.exists(AssetHandler.getPath('images/characters/${name}/${name}', JSON))) {
 					var file:CharacterFormat = cast haxe.Json.parse(AssetHandler.getAsset('images/characters/${name}/${name}', JSON));
 					if (file != null) {
 						if (file.flipX != null)
 							flipX = file.flipX;
-
 						if (file.characterOffset != null)
 							characterOffset = file.characterOffset;
 						if (file.cameraOffset != null)
@@ -123,7 +128,7 @@ class Character extends FNFSprite {
 						for (anim in file.animations)
 							addAnim(anim.name, anim.prefix, anim.animOffsets, anim.framerate, anim.looped, anim.indices, anim.flipX, anim.flipY);
 					}
-				} catch (e:haxe.Exception)
+				} else
 					loadChar("face", isPlayer);
 		}
 

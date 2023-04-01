@@ -13,7 +13,7 @@ class GameplayUI extends FlxSpriteGroup {
 	public var healthBG:FlxSprite;
 	public var healthBar:FlxBar;
 
-	public var iconP1:HealthIcon;
+	public var iconPL:HealthIcon;
 	public var iconOPP:HealthIcon;
 
 	public var scoreText:FlxText;
@@ -37,12 +37,12 @@ class GameplayUI extends FlxSpriteGroup {
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		add(healthBar);
 
-		iconP1 = new HealthIcon("bf", true);
-		iconP1.y = healthBar.y - (iconP1.height / 2);
-		iconP1.scrollFactor.set();
-		add(iconP1);
+		iconPL = new HealthIcon(game.player.icon, true);
+		iconPL.y = healthBar.y - (iconPL.height / 2);
+		iconPL.scrollFactor.set();
+		add(iconPL);
 
-		iconOPP = new HealthIcon("dad", false);
+		iconOPP = new HealthIcon(game.opponent.icon, false);
 		iconOPP.y = healthBar.y - (iconOPP.height / 2);
 		iconOPP.scrollFactor.set();
 		add(iconOPP);
@@ -87,10 +87,10 @@ class GameplayUI extends FlxSpriteGroup {
 		healthBar.percent = game.currentStat.health * 50;
 
 		var iconOffset:Int = 26;
-		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
+		iconPL.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconOPP.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconOPP.width - iconOffset);
 
-		iconP1.updateAnim(healthBar.percent);
+		iconPL.updateAnim(healthBar.percent);
 		iconOPP.updateAnim(100 - healthBar.percent);
 
 		if (Settings.get("infoText") == 'TIME') {
@@ -129,7 +129,7 @@ class GameplayUI extends FlxSpriteGroup {
 	}
 
 	public function beatHit(curBeat:Int):Void {
-		iconP1.beatHit(curBeat);
+		iconPL.beatHit(curBeat);
 		iconOPP.beatHit(curBeat);
 	}
 }

@@ -3,6 +3,8 @@ package game.system;
 class Levels {
 	public static final DEFAULT_DIFFICULTIES:Array<String> = ["easy", "normal", "hard"];
 
+	public static var DIFFICULTIES:Array<String> = [];
+
 	public static var GAME_LEVELS:Array<GameWeek> = [
 		{
 			songs: [{name: "Tutorial", opponent: "gf", color: 0xFF9271FD}],

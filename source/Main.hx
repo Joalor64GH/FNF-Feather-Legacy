@@ -123,6 +123,9 @@ class CustomGame extends FlxGame {
 		} catch (e:Dynamic)
 			Sys.println('Error!\nCouldn\'t save crash log\nCaught: ${e}');
 
-		return FlxG.switchState(new core.CrashState(msg, e.message, Type.getClass(FlxG.state)));
+		@:privateAccess {
+			FlxG.game._requestedState = new core.CrashState(msg, e.message, Type.getClass(FlxG.state));
+			FlxG.game.switchState();
+		}
 	}
 }

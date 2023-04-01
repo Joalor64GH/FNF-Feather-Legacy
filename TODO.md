@@ -8,5 +8,6 @@
 * Basic Chart Editor
 * Options Menu
 
+--------------
 # 1.0.0
 - make a Initial Public Release.

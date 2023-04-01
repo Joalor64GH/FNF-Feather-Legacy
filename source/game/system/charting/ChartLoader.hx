@@ -55,12 +55,10 @@ class ChartLoader {
 		var jsonPath:String = AssetHandler.getAsset('data/songs/${songName}/${songName}${difficulty}', JSON);
 		var fnfSong:FNFSong = cast Json.parse(jsonPath).song;
 
-		if (fnfSong == null)
-			tempSong = cast Json.parse(jsonPath);
-		else {
+		if (fnfSong != null && fnfSong.notes != null) {
 			parsedType = 'FNF LEGACY/HYBRID';
 
-			// retrocompatibility
+			// yikes, retrocompatibility
 			if (fnfSong.stage == null) {
 				fnfSong.stage = switch (fnfSong.song) {
 					case 'ugh', 'guns', 'stress': 'military-zone';
@@ -157,6 +155,8 @@ class ChartLoader {
 					for (event in fnfSong.events) {}
 				}
 			}
+		} else { // parse as feather format
+			tempSong = cast Json.parse(jsonPath);
 		}
 
 		if (tempSong.metadata.strumlines < 1)

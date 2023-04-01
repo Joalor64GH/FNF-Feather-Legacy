@@ -22,8 +22,9 @@ enum GameplayMode {
 }
 
 typedef PlayStateStruct = {
-	var songName:String;
-	var difficulty:String;
+	var ?songName:String;
+	var ?difficulty:String;
+	var ?songData:ChartFormat;
 	var ?gamemode:GameplayMode;
 	var ?startTime:Float;
 }
@@ -70,7 +71,7 @@ class PlayState extends MusicBeatState {
 	public var opponent:Character;
 	public var crowd:Character;
 
-	public function new(constructor:PlayStateStruct):Void {
+	public function new(?constructor:PlayStateStruct):Void {
 		super();
 
 		if (FlxG.sound.music != null)
@@ -85,7 +86,12 @@ class PlayState extends MusicBeatState {
 				if (constructor.difficulty == null)
 					constructor.difficulty = 'normal';
 
-				song = ChartLoader.loadSong(constructor.songName, constructor.difficulty);
+				if (song == null) {
+					if (constructor.songData != null)
+						song = constructor.songData;
+					else
+						song = ChartLoader.loadSong(constructor.songName, constructor.difficulty);
+				}
 
 				if (song.metadata.strumlines == 1)
 					playerStrumline = 0;
@@ -181,6 +187,9 @@ class PlayState extends MusicBeatState {
 			var distance:Int = 2;
 
 			var xPos:Float = FlxG.width / 10 + FlxG.width / distance * i;
+			if (song.metadata.strumlines == 1)
+				xPos = FlxG.width / 2 - FlxG.width / 9;
+
 			var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 60;
 			var character:Character = switch (i) {
 				case 1: player;
@@ -517,35 +526,40 @@ class PlayState extends MusicBeatState {
 	public function spawnNotes():Void {
 		while (ChartLoader.noteList[0] != null && ChartLoader.noteList[0].step - Conductor.songPosition < 2000) {
 			var note = ChartLoader.noteList[0];
-			var strum:NoteGroup = lines.members[note.strumline];
-
-			var type:String = 'default';
-			if (note.type != null)
-				type = note.type;
 
 			// "but if the default strumline is 0 why didn't you export the number in the first place?"
 			// less characters on the json file, that's all
 			if (note.strumline == null || note.strumline < 0)
 				note.strumline = 0;
 
-			var newNote:Note = new Note(note.step, note.index, false, type);
-			newNote.sustainTime = note.sustainTime;
-			newNote.strumline = note.strumline;
-			newNote.downscroll = Settings.get("scrollType") == "DOWN";
-			strum.add(newNote);
+			var strum:NoteGroup = lines.members[note.strumline];
 
-			if (note.sustainTime > 0) {
-				var prevNote:Note = strum.noteSprites.members[strum.noteSprites.members.length - 1];
+			var type:String = 'default';
+			if (note.type != null)
+				type = note.type;
 
-				for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
-					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
-					var newSustain:Note = new Note(sustainStep, note.index, true, type, prevNote);
-					newSustain.downscroll = Settings.get("scrollType") == "DOWN";
-					newSustain.strumline = note.strumline;
-					if (note.sustainTime == noteSustain - 1)
-						newSustain.isEnd = true;
-					newSustain.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(newNote));
-					prevNote = newSustain;
+			if (strum != null) {
+				var newNote:Note = new Note(note.step, note.index, false, type);
+				newNote.sustainTime = note.sustainTime;
+				newNote.strumline = note.strumline;
+				newNote.downscroll = Settings.get("scrollType") == "DOWN";
+				strum.add(newNote);
+
+				if (note.sustainTime > 0) {
+					var prevNote:Note = strum.noteSprites.members[strum.noteSprites.members.length - 1];
+
+					for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
+						var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
+						var newSustain:Note = new Note(sustainStep, note.index, true, type, prevNote);
+
+						newSustain.downscroll = Settings.get("scrollType") == "DOWN";
+						newSustain.strumline = note.strumline;
+						if (note.sustainTime == noteSustain - 1)
+							newSustain.isEnd = true;
+
+						newSustain.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(newNote));
+						prevNote = newSustain;
+					}
 				}
 			}
 
@@ -585,6 +599,9 @@ class PlayState extends MusicBeatState {
 					animName = song.sections[curSec].animation;
 			}
 
+			if (music.vocals != null)
+				music.vocals.volume = 1;
+
 			strum.character.playAnim(animName, true);
 			strum.character.holdTimer = 0;
 
@@ -616,7 +633,7 @@ class PlayState extends MusicBeatState {
 	public var notesPressed:Array<Bool> = [];
 
 	public function onKeyPress(key:Int, action:String):Void {
-		if (playerStrums.cpuControlled || paused || !startedCountdown)
+		if (playerStrums == null || playerStrums.cpuControlled || paused || !startedCountdown)
 			return;
 
 		if (action != null && NoteGroup.directions.contains(action)) {
@@ -671,6 +688,9 @@ class PlayState extends MusicBeatState {
 			currentStat.combo--;
 		}
 
+		if (music.vocals != null)
+			music.vocals.volume = 0;
+
 		currentStat.misses++;
 		FlxG.sound.play(AssetHandler.getAsset('sounds/game/miss' + FlxG.random.int(1, 3), SOUND), FlxG.random.float(0.3, 0.6));
 
@@ -693,7 +713,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function onKeyRelease(key:Int, action:String):Void {
-		if (playerStrums.cpuControlled || paused || !startedCountdown)
+		if (playerStrums == null || playerStrums.cpuControlled || paused || !startedCountdown)
 			return;
 
 		if (action != null && NoteGroup.directions.contains(action)) {
