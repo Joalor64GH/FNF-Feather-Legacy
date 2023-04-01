@@ -81,6 +81,7 @@ class FreeplayMenu extends MenuBase {
 			optionsGroup.add(newSong);
 
 			var songIcon:HealthIcon = new HealthIcon(songList[i].opponent);
+			songIcon.canBounce = false;
 			songIcon.sprTracker = newSong;
 			songIcon.ID = i;
 

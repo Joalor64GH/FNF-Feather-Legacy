@@ -73,7 +73,7 @@ class FPS extends TextField {
 			text += ']\n';
 
 			text += '[STATE: ${Type.getClassName(Type.getClass(FlxG.state))}';
-			text += separator + 'OBJECTS: ${FlxG.state.members.length}';
+			text += separator + 'OBJS: ${FlxG.state.countLiving()} - DEAD: ${FlxG.state.countDead()}';
 			#end
 
 			text += ']\n';

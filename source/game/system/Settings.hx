@@ -7,6 +7,7 @@ class Settings {
 	public static final defaultSettings:Array<Dynamic> = [
 		// ["key", value]
 		["scrollType", "UP"],
+		["centerScroll", false],
 		["ghostTapping", true],
 		["noteSplashes", true],
 		["judgeCount", false],

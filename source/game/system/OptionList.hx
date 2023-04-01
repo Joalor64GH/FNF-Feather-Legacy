@@ -8,6 +8,7 @@ class OptionList {
 		var options:Array<Option> = [];
 
 		options.push(new Option("Scroll Type", "In which direction should notes spawn?", "scrollType", ["UP", "DOWN"], true));
+		options.push(new Option("Center Notes", "Attaches your notes to the center of the screen.", "centerScroll", true));
 		options.push(new Option("Ghost Tapping", "If mashing keys should be allowed during gameplay.", "ghostTapping"));
 		options.push(new Option("Antialiasing", "When disabled, saves on performance at the cost of sharper sprites.", "antialiasing"));
 		options.push(new Option("Note Splashes", "If the firework effect should appear when hitting \"Sick\"s on Notes.", "noteSplashes"));

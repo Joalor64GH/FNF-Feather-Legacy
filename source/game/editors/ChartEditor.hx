@@ -134,11 +134,6 @@ class ChartEditor extends MusicBeatState {
 				music.pause();
 		}
 
-		if (FlxG.keys.justPressed.BACKSPACE) {
-			FlxG.mouse.visible = false;
-			FlxG.switchState(new game.menus.FreeplayMenu());
-		}
-
 		if (FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.ESCAPE) {
 			FlxG.mouse.visible = false;
 

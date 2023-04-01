@@ -57,8 +57,6 @@ class PlayState extends MusicBeatState {
 	public var ratingUI:RatingPopup;
 	public var currentStat:Highscore;
 
-	public var notesCentered:Bool = false;
-
 	// Cameras
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
@@ -184,26 +182,30 @@ class PlayState extends MusicBeatState {
 		ratingUI = new RatingPopup();
 
 		for (i in 0...song.metadata.strumlines) {
+			var isPlayer:Bool = i == playerStrumline;
 			var spacing:Float = 160 * 0.7;
-			var distance:Int = 2;
 
-			var xPos:Float = FlxG.width / 10 + FlxG.width / distance * i;
-			if (song.metadata.strumlines == 1) {
-				xPos = FlxG.width / 2 - FlxG.width / 9;
-				notesCentered = true;
+			var strumInitDist:Float = FlxG.width / 10;
+			var strumDistance:Float = FlxG.width / 2 * i;
+			if (song.metadata.strumlines == 1 || isPlayer && Settings.get("centerScroll")) {
+				strumInitDist = FlxG.width / 4;
+				strumDistance = 115;
 			}
 
+			var xPos:Float = (strumInitDist) + strumDistance;
 			var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 60;
 			var character:Character = switch (i) {
 				case 1: player;
 				default: opponent;
 			};
 
-			if (i == 0)
+			if (i == 0 && song.metadata.strumlines > 1)
 				xPos -= 60;
 
 			var newStrumline:NoteGroup = new NoteGroup(xPos, yPos, character, spacing);
-			newStrumline.cpuControlled = i != playerStrumline;
+			newStrumline.cpuControlled = !isPlayer;
+			if (Settings.get("centerScroll"))
+				newStrumline.visible = isPlayer;
 			lines.add(newStrumline);
 		}
 
@@ -602,7 +604,7 @@ class PlayState extends MusicBeatState {
 					animName = song.sections[curSec].animation;
 			}
 
-			if (music.vocals != null)
+			if (music.vocals != null && music.vocals.playing)
 				music.vocals.volume = 1;
 
 			strum.character.playAnim(animName, true);
@@ -691,7 +693,7 @@ class PlayState extends MusicBeatState {
 			currentStat.combo--;
 		}
 
-		if (music.vocals != null)
+		if (music.vocals != null && music.vocals.playing)
 			music.vocals.volume = 0;
 
 		currentStat.misses++;
