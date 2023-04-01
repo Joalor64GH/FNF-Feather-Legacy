@@ -9,7 +9,6 @@ class HealthIcon extends FlxSprite {
 
 	public var initialWidth:Float = 0;
 	public var initialHeight:Float = 0;
-	public var initialScale = {x: 1.0, y: 1.0};
 
 	public var isPlayer:Bool = false;
 	public var canBounce:Bool = true;
@@ -27,10 +26,6 @@ class HealthIcon extends FlxSprite {
 		initialHeight = height;
 
 		antialiasing = Settings.get("antialiasing") && !char.endsWith("-pixel");
-
-		initialScale.x = scale.x;
-		initialScale.y = scale.y;
-
 		scrollFactor.set();
 	}
 
@@ -79,16 +74,14 @@ class HealthIcon extends FlxSprite {
 			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
 
 		if (canBounce) {
-			var nextBoundScale:Float = FlxMath.lerp(initialScale.x, scale.x, FlxMath.bound(initialScale.y - (elapsed * 3), 0, 1));
-			scale.set(nextBoundScale, nextBoundScale);
+			setGraphicSize(Std.int(FlxMath.lerp(150, width, 0.85)));
 			updateHitbox();
 		}
 	}
 
 	public function beatHit(curBeat:Int):Void {
 		if (canBounce) {
-			var originalScale:{x:Float, y:Float} = {x: initialScale.x + .10, y: initialScale.y + .10};
-			scale.set(originalScale.x, originalScale.y);
+			setGraphicSize(Std.int(width + 30));
 			updateHitbox();
 		}
 	}
