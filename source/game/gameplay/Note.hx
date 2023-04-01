@@ -70,6 +70,8 @@ class Note extends FNFSprite {
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
 
+		antialiasing = Settings.get("antialiasing");
+
 		if (!isSustain) {
 			hitboxEarly = 1;
 			playAnim('${NoteGroup.colors[index]} note');

@@ -16,6 +16,7 @@ class RatingPopup {
 		for (i in 0...Highscore.RATINGS[0].length)
 			rating.addAnim(Highscore.RATINGS[0][i], Highscore.RATINGS[0][i]);
 
+		rating.antialiasing = Settings.get("antialiasing");
 		rating.alpha = preload ? 0.000001 : 1;
 		rating.screenCenter();
 		rating.setGraphicSize(Std.int(rating.width * 0.7));

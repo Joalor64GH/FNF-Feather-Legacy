@@ -40,6 +40,8 @@ class HealthIcon extends FlxSprite {
 		initialWidth = width;
 		initialHeight = height;
 
+		antialiasing = Settings.get("antialiasing") && !char.endsWith("-pixel");
+
 		initialScale.x = scale.x;
 		initialScale.y = scale.y;
 

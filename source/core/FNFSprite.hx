@@ -8,6 +8,8 @@ typedef FNFAnimation = {
 	var ?indices:Array<Int>;
 	var ?framerate:Int;
 	var ?looped:Bool;
+	var ?flipX:Bool;
+	var ?flipY:Bool;
 }
 
 interface ISpriteOffset {
@@ -40,7 +42,7 @@ class FNFSprite extends FlxSprite implements ISpriteOffset {
 		frames = AssetHandler.getAsset(image, XML);
 		if (animations != null)
 			for (i in animations)
-				addAnim(i.name, i.prefix, i.animOffsets, i.framerate, i.looped, i.indices);
+				addAnim(i.name, i.prefix, i.animOffsets, i.framerate, i.looped, i.indices, i.flipX, i.flipY);
 
 		return this;
 	}
@@ -58,11 +60,11 @@ class FNFSprite extends FlxSprite implements ISpriteOffset {
 		return this;
 	}
 
-	public function addAnim(name:String, prefix:String, ?animOffsets:Array<Float>, framerate:Int = 24, looped:Bool = false, ?indices:Array<Int>):Void {
+	public function addAnim(name:String, prefix:String, ?animOffsets:Array<Float>, framerate:Int = 24, looped:Bool = false, ?indices:Array<Int>, ?flipX:Bool = false, ?flipY:Bool = false):Void {
 		if (indices != null && indices.length > 0)
-			animation.addByIndices(name, prefix, indices, '', framerate, looped);
+			animation.addByIndices(name, prefix, indices, '', framerate, looped, flipX, flipY);
 		else
-			animation.addByPrefix(name, prefix, framerate, looped);
+			animation.addByPrefix(name, prefix, framerate, looped, flipX, flipY);
 
 		if (!offsets.exists(name) && animOffsets != null)
 			addOffset(name, animOffsets);

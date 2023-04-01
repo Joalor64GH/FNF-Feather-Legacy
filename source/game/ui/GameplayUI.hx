@@ -52,7 +52,7 @@ class GameplayUI extends FlxSpriteGroup {
 		add(scoreText);
 
 		if (Settings.get("infoText") != 'NONE') {
-			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'SONG' ? '- ${game.song.name.toUpperCase()} -' : '');
+			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'SONG' ? '- ${game.song.name} -' : '');
 			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 			infoText.y = downscroll ? FlxG.height - infoText.height - 15 : 15;
 			infoText.screenCenter(X);
@@ -77,6 +77,7 @@ class GameplayUI extends FlxSpriteGroup {
 		add(featherText);
 
 		forEachOfType(FlxText, function(text:FlxText):Void text.borderSize = 1.5);
+		antialiasing = Settings.get("antialiasing");
 		updateScore(true);
 	}
 
@@ -117,7 +118,7 @@ class GameplayUI extends FlxSpriteGroup {
 		scoreText.screenCenter(X);
 
 		if (!miss) {
-			scoreText.scale.set(1.3, 1.1);
+			scoreText.scale.set(1.05, 1.05);
 
 			if (scoreTween != null)
 				scoreTween.cancel();

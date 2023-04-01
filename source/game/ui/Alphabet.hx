@@ -148,7 +148,7 @@ class Letter extends FNFSprite {
 		 * making this work beforehand, then make it customizable later
 		 */
 		frames = AssetHandler.getAsset("images/ui/default/alphabet", XML);
-
+		antialiasing = Settings.get("antialiasing");
 		this.size = size;
 	}
 

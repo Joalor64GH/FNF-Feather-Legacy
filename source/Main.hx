@@ -14,11 +14,6 @@ import sys.io.File;
 
 typedef VersionScheme = {
 	var number:String;
-
-	/**
-	 * - Nightly: Experimental, WIP, recommended for testers
-	 * - Unstable: Experimental, bleeding-edge, WIP
-	 */
 	var branch:String;
 }
 
@@ -26,7 +21,7 @@ class Main extends Sprite {
 	public static var self:Main;
 
 	// don't set "branch" as null, set it to "" instead!!!
-	public static var featherVer:VersionScheme = {number: "1.0.0", branch: "UNSTABLE"};
+	public static var featherVer:VersionScheme = {number: "1.0.0", branch: "POSTBETA"};
 	public static var fnfVer:VersionScheme = {number: "0.2.8", branch: "DEMO"};
 
 	public var fpsCounter:FPS;

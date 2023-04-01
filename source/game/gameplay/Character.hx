@@ -11,6 +11,7 @@ enum DanceType {
 
 typedef CharacterFormat = {
 	var image:String;
+	var flipX:Null<Bool>;
 	var animations:Array<FNFAnimation>;
 	var singDuration:Null<Float>;
 	var characterOffset:Array<Float>;
@@ -68,7 +69,7 @@ class Character extends FNFSprite {
 
 	public function loadChar(name:String = "bf", isPlayer:Bool = false):Character {
 		this.name = name;
-		antialiasing = true;
+		antialiasing = Settings.get("antialiasing") && !name.endsWith("-pixel");
 
 		switch (name) {
 			case "__chop": // I hate this.
@@ -103,6 +104,9 @@ class Character extends FNFSprite {
 				try {
 					var file:CharacterFormat = cast haxe.Json.parse(AssetHandler.getAsset('images/characters/${name}/${name}', JSON));
 					if (file != null) {
+						if (file.flipX != null)
+							flipX = file.flipX;
+
 						if (file.characterOffset != null)
 							characterOffset = file.characterOffset;
 						if (file.cameraOffset != null)
@@ -117,7 +121,7 @@ class Character extends FNFSprite {
 
 						// todo: per-player animations
 						for (anim in file.animations)
-							addAnim(anim.name, anim.prefix, anim.animOffsets, anim.framerate, anim.looped, anim.indices);
+							addAnim(anim.name, anim.prefix, anim.animOffsets, anim.framerate, anim.looped, anim.indices, anim.flipX, anim.flipY);
 					}
 				} catch (e:haxe.Exception)
 					loadChar("face", isPlayer);

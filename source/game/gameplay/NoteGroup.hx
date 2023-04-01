@@ -75,6 +75,8 @@ class NoteGroup extends FlxGroup {
 			babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
 			babyArrow.updateHitbox();
 
+			babyArrow.antialiasing = Settings.get("antialiasing");
+
 			babyArrow.animation.finishCallback = function(name:String):Void {
 				if (name == 'confirm') {
 					babyArrow.playAnim(cpuControlled ? 'static' : 'pressed', true);
@@ -103,6 +105,7 @@ class NoteGroup extends FlxGroup {
 		splash.alpha = preload ? 0.000001 : 1;
 		splash.scale.set(1, 1);
 
+		splash.antialiasing = Settings.get("antialiasing");
 		splash.depth = -Conductor.songPosition;
 		splash.setPosition(babyArrow.x - babyArrow.width, babyArrow.y - babyArrow.height);
 		splash.playAnim('impact ${colors[index]}0' /*+ FlxG.random.int(0, 1)*/);

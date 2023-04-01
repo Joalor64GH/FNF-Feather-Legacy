@@ -11,6 +11,7 @@ class Settings {
 		["noteSplashes", true],
 		["judgeCount", false],
 		["framerateCap", Std.int(60)],
+		["antialiasing", true],
 		["infoText", "TIME"], // time, song, none
 	];
 
@@ -26,7 +27,7 @@ class Settings {
 		return null;
 	}
 
-	@:keep public static inline function set(name:String, value:Dynamic):Void {
+	public static function set(name:String, value:Dynamic):Void {
 		if (Std.isOfType(value, String)) {
 			value = switch (value) {
 				case "ON": true;
@@ -40,7 +41,7 @@ class Settings {
 				mySettings[i][1] = value;
 	}
 
-	@:keep public static inline function save():Void {
+	public static function save():Void {
 		FlxG.save.bind("Settings", Utils.saveFolder());
 
 		FlxG.save.data.mySettings = mySettings;
@@ -48,7 +49,7 @@ class Settings {
 		FlxG.save.data.muted = FlxG.sound.muted;
 	}
 
-	@:keep public static inline function load():Void {
+	public static function load():Void {
 		FlxG.save.bind("Settings", Utils.saveFolder());
 		mySettings = defaultSettings;
 
@@ -62,9 +63,11 @@ class Settings {
 			FlxG.sound.volume = FlxG.save.data.volume;
 		if (FlxG.save.data.muted != null)
 			FlxG.sound.muted = FlxG.save.data.muted;
+
+		update();
 	}
 
-	@:keep public static inline function update():Void {
+	public static function update():Void {
 		FlxG.save.bind("Settings", Utils.saveFolder());
 		Utils.updateFramerateCap(Settings.get("framerateCap"));
 	}
