@@ -143,8 +143,10 @@ class FreeplayMenu extends MenuBase {
 			updateDifficulty(controls.justPressed("left") ? -1 : 1);
 
 		if (controls.justPressed("back")) {
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.stop();
+			if (!FlxG.keys.pressed.SHIFT) {
+				if (FlxG.sound.music != null)
+					FlxG.sound.music.stop();
+			}
 			playbackActive = false;
 
 			FlxG.sound.play(Paths.sound("cancelMenu"));
