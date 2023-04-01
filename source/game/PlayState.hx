@@ -57,6 +57,8 @@ class PlayState extends MusicBeatState {
 	public var ratingUI:RatingPopup;
 	public var currentStat:Highscore;
 
+	public var notesCentered:Bool = false;
+
 	// Cameras
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
@@ -105,6 +107,8 @@ class PlayState extends MusicBeatState {
 	public override function create():Void {
 		super.create();
 
+		// initialize modules
+		currentStat = new Highscore();
 		music = new MusicPlayback(constructor.songName, constructor.difficulty);
 
 		camGame = new FlxCamera();
@@ -119,17 +123,12 @@ class PlayState extends MusicBeatState {
 		FlxG.cameras.add(camOver, false);
 
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
+		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
-
 		persistentUpdate = persistentDraw = true;
-
-		// initialize gameplay modules
-		currentStat = new Highscore();
-		ratingUI = new RatingPopup();
 
 		// create the stage
 		gameStage = switch (song.metadata.stage) {
@@ -182,13 +181,17 @@ class PlayState extends MusicBeatState {
 		lines = new FlxTypedGroup<NoteGroup>();
 		addOnHUD(lines);
 
+		ratingUI = new RatingPopup();
+
 		for (i in 0...song.metadata.strumlines) {
 			var spacing:Float = 160 * 0.7;
 			var distance:Int = 2;
 
 			var xPos:Float = FlxG.width / 10 + FlxG.width / distance * i;
-			if (song.metadata.strumlines == 1)
+			if (song.metadata.strumlines == 1) {
 				xPos = FlxG.width / 2 - FlxG.width / 9;
+				notesCentered = true;
+			}
 
 			var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 60;
 			var character:Character = switch (i) {

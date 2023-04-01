@@ -117,7 +117,7 @@ class NoteGroup extends FlxGroup {
 				splash.kill();
 		}
 
-		splashSprites.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order);
+		splashSprites.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
 	}
 
 	public override function update(elapsed:Float):Void {
