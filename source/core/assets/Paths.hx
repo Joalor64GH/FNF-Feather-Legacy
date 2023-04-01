@@ -27,11 +27,11 @@ class Paths {
 		return AssetHandler.getAsset('data/fonts/${font}', FONT);
 
 	public static inline function inst(song:String):Sound
-		return AssetHandler.getAsset('data/songs/audio/${song}/Inst', SOUND);
+		return AssetHandler.getAsset('data/songs/${song}/Inst', SOUND);
 
 	public static inline function vocals(song:String):Sound {
 		if (AssetHandler.exists(AssetHandler.getPath('data/songs/audio/${song}/Voices', SOUND)))
-			return AssetHandler.getAsset('data/songs/audio/${song}/Voices', SOUND);
+			return AssetHandler.getAsset('data/songs/${song}/Voices', SOUND);
 		return null;
 	}
 

@@ -19,7 +19,7 @@ class ChartEvents {
 	public static function loadEventChart(songName:String, ?data:Array<EventLine>):Array<EventLine> {
 		var tempEvents:Array<EventLine> = [];
 
-		var eventsFolder:String = 'data/songs/chart/${songName.toLowerCase()}/events.json';
+		var eventsFolder:String = 'data/songs/${songName.toLowerCase()}/events.json';
 
 		if (AssetHandler.exists(AssetHandler.getPath(eventsFolder, JSON))) {
 			var jsonPath:String = AssetHandler.getAsset(eventsFolder, JSON);
