@@ -5,7 +5,6 @@ import flixel.util.FlxSort;
 import game.system.charting.ChartDefs;
 import game.system.charting.ChartEvents;
 import game.system.Conductor;
-import haxe.Json;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 
@@ -53,7 +52,7 @@ class ChartLoader {
 			difficulty = '';
 
 		var jsonPath:String = AssetHandler.getAsset('data/songs/${songName}/${songName}${difficulty}', JSON);
-		var fnfSong:FNFSong = cast Json.parse(jsonPath).song;
+		var fnfSong:FNFSong = cast tjson.TJSON.parse(jsonPath).song;
 
 		if (fnfSong != null && fnfSong.notes != null) {
 			parsedType = 'FNF LEGACY/HYBRID';
@@ -156,7 +155,7 @@ class ChartLoader {
 				}
 			}
 		} else { // parse as feather format
-			tempSong = cast Json.parse(jsonPath);
+			tempSong = cast tjson.TJSON.parse(jsonPath);
 		}
 
 		if (tempSong.metadata.strumlines < 1)

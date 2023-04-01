@@ -52,7 +52,7 @@ class GameOverSubState extends MusicBeatSubState {
 			FlxG.switchState(new game.menus.FreeplayMenu());
 	}
 
-	public override function beatHit():Void {
-		super.beatHit();
+	public override function onBeat():Void {
+		super.onBeat();
 	}
 }

@@ -460,32 +460,30 @@ class PlayState extends MusicBeatState {
 
 	public var zoomBeat:Int = 4;
 
-	public override function beatHit():Void {
-		super.beatHit();
+	public override function onBeat():Void {
+		super.onBeat();
 
 		charactersDance(curBeat);
 		gameStage.onBeat(curBeat);
-		gameUI.beatHit(curBeat);
+		gameUI.onBeat(curBeat);
 
 		if (camZooming) {
-			if (camGame.zoom < 1.35 && curBeat % zoomBeat == 0) {
-				camGame.zoom += 0.015;
-				camHUD.zoom += 0.05;
+			if (camGame.zoom < 0.35 && curBeat % zoomBeat == 0) {
+				camGame.zoom += 0.025;
+				camHUD.zoom += 0.015;
 			}
 		}
-
-		// gameStage.onEventDispatch(event, args);
 	}
 
-	public override function stepHit():Void {
-		super.stepHit();
+	public override function onStep():Void {
+		super.onStep();
 
 		gameStage.onStep(curStep);
 		music.resyncFunction();
 	}
 
-	public override function secHit():Void {
-		super.secHit();
+	public override function onSec():Void {
+		super.onSec();
 		gameStage.onSec(curSec);
 		moveCamera();
 	}
@@ -508,9 +506,9 @@ class PlayState extends MusicBeatState {
 		// beat zooms
 		if (camZooming) {
 			// base game way
-			var lerpValue:Float = 1 - (elapsed * 1.155);
-			camGame.zoom = FlxMath.lerp(gameStage.cameraZoom, 1, lerpValue);
-			camHUD.zoom = FlxMath.lerp(gameStage.hudZoom, 1, lerpValue);
+			var lerpValue:Float = 1 - (elapsed * 0.875);
+			camGame.zoom = FlxMath.lerp(0, gameStage.cameraZoom, lerpValue);
+			camHUD.zoom = FlxMath.lerp(0, gameStage.hudZoom, lerpValue);
 		}
 	}
 
@@ -531,9 +529,6 @@ class PlayState extends MusicBeatState {
 	public function spawnNotes():Void {
 		while (ChartLoader.noteList[0] != null && ChartLoader.noteList[0].step - Conductor.songPosition < 2000) {
 			var note = ChartLoader.noteList[0];
-
-			// "but if the default strumline is 0 why didn't you export the number in the first place?"
-			// less characters on the json file, that's all
 			if (note.strumline == null || note.strumline < 0)
 				note.strumline = 0;
 
@@ -588,6 +583,7 @@ class PlayState extends MusicBeatState {
 
 	public function eventTrigger(event:EventLine):Void {
 		switch (event.name) {}
+		// gameStage.onEventDispatch(event, args);
 	}
 
 	public function goodNoteHit(note:Note, strum:NoteGroup):Void {
@@ -654,7 +650,7 @@ class PlayState extends MusicBeatState {
 						possibleNotes.push(note);
 				}
 			});
-			possibleNotes.sort((a:Note, b:Note) -> Std.int(a.step - b.step));
+			possibleNotes.sort((a:Note, b:Note) -> flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.step, b.step));
 
 			if (possibleNotes.length > 0) {
 				var canBeHit:Bool = true;

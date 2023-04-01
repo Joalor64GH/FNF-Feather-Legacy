@@ -79,7 +79,7 @@ class HealthIcon extends FlxSprite {
 		}
 	}
 
-	public function beatHit(curBeat:Int):Void {
+	public function onBeat(curBeat:Int):Void {
 		if (canBounce) {
 			setGraphicSize(Std.int(width + 30));
 			updateHitbox();

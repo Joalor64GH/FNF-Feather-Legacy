@@ -9,9 +9,10 @@ typedef ChangeBPMEvent = {
 }
 
 interface IMusicFunctions {
-	public function beatHit():Void;
-	public function stepHit():Void;
-	public function secHit():Void;
+	public function onBeat():Void;
+	public function onStep():Void;
+	public function onSec():Void;
+	public function onTick():Void;
 }
 
 class Conductor {
@@ -29,12 +30,15 @@ class Conductor {
 
 	public var stepPos:Int = 0;
 	public var beatPos:Int = 0;
+	public var tickPos:Int = 0;
 	public var secPos:Int = 0;
 
 	public function new(newContainer:IMusicFunctions):Void
 		boundContainer = newContainer;
 
 	public function update(elapsed:Float):Void {
+		tickPos++;
+
 		updateStepPosition();
 		updateSectionPosition();
 		updateBeatPosition();
@@ -77,6 +81,7 @@ class Conductor {
 
 	var stepTemp:Int = -1;
 	var beatTemp:Int = -1;
+	var tickTemp:Int = -1;
 	var secTemp:Int = -1;
 
 	public function updateStepPosition():Void {
@@ -96,17 +101,22 @@ class Conductor {
 		if (stepTemp != stepPos) {
 			if (stepPos > stepTemp)
 				stepTemp = stepPos;
-			boundContainer.stepHit();
+			boundContainer.onStep();
+		}
+
+		if (tickPos > tickTemp) {
+			tickTemp = tickPos;
+			boundContainer.onTick();
 		}
 
 		if (stepPos % 4 == 0 && beatPos > beatTemp) {
 			beatTemp = beatPos;
-			boundContainer.beatHit();
+			boundContainer.onBeat();
 		}
 
 		if (beatPos % 4 == 0 && secPos > secTemp) {
 			secTemp = secPos;
-			boundContainer.secHit();
+			boundContainer.onSec();
 		}
 	}
 

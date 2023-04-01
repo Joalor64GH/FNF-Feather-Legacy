@@ -47,7 +47,7 @@ class GameplayUI extends FlxSpriteGroup {
 		iconOPP.scrollFactor.set();
 		add(iconOPP);
 
-		scoreText = new FlxText(0, healthBG.y + 45, Std.int(healthBG.width + 55));
+		scoreText = new FlxText(0, healthBG.y + 35, Std.int(healthBG.width + 55));
 		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(scoreText);
 
@@ -107,29 +107,17 @@ class GameplayUI extends FlxSpriteGroup {
 
 	public var separator:String = ' ~ ';
 
-	var scoreTween:FlxTween;
-
 	public function updateScore(miss:Bool = false):Void {
-		var newScore:String = '[ SCORE: ${game.currentStat.score}';
+		var newScore:String = 'SCORE: ${game.currentStat.score}';
 		newScore += separator + 'MISSES: ${game.currentStat.misses}${game.currentStat.clearType}';
-		newScore += separator + 'GRADE: ${game.currentStat.gradeType} [${game.currentStat.getPercent()}%] ]';
+		newScore += separator + 'GRADE: ${game.currentStat.gradeType} [${game.currentStat.getPercent()}%]';
 		scoreText.text = newScore;
 
 		scoreText.screenCenter(X);
-
-		if (!miss) {
-			scoreText.scale.set(1.05, 1.05);
-
-			if (scoreTween != null)
-				scoreTween.cancel();
-
-			scoreTween = FlxTween.tween(scoreText, {"scale.x": 1, "scale.y": 1}, 0.6,
-				{ease: FlxEase.cubeOut, onComplete: function(twn:FlxTween):Void scoreTween = null});
-		}
 	}
 
-	public function beatHit(curBeat:Int):Void {
-		iconPL.beatHit(curBeat);
-		iconOPP.beatHit(curBeat);
+	public function onBeat(curBeat:Int):Void {
+		iconPL.onBeat(curBeat);
+		iconOPP.onBeat(curBeat);
 	}
 }

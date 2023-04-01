@@ -10,11 +10,9 @@ class Note extends FNFSprite {
 	final game:PlayState = PlayState.self;
 
 	public var prevNote:Note = null;
-
 	public var debugging:Bool = false;
 
 	public var index:Int = 0;
-
 	public var type:String = "default";
 
 	// note type parameters

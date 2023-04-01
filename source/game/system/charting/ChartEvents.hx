@@ -1,7 +1,5 @@
 package game.system.charting;
 
-import haxe.Json;
-
 typedef EventLine = {
 	var name:String;
 	var type:Int;
@@ -24,7 +22,7 @@ class ChartEvents {
 		if (AssetHandler.exists(AssetHandler.getPath(eventsFolder, JSON))) {
 			var jsonPath:String = AssetHandler.getAsset(eventsFolder, JSON);
 
-			tempEvents = cast Json.parse(jsonPath);
+			tempEvents = cast tjson.TJSON.parse(jsonPath);
 			trace(tempEvents);
 		}
 

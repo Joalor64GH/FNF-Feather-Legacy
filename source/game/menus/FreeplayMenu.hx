@@ -60,7 +60,7 @@ class FreeplayMenu extends MenuBase {
 					var data:ListableSong = null;
 
 					try {
-						data = cast haxe.Json.parse(AssetHandler.getAsset(path, JSON));
+						data = cast tjson.TJSON.parse(AssetHandler.getAsset(path, JSON));
 						songList.push({name: data.name, opponent: data.opponent, color: FlxColor.fromString(Std.string(data.color))});
 					} catch (e:haxe.Exception)
 						trace('Song "${folder}" not added, Caught: "${e}"');

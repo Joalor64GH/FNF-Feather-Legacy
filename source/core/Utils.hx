@@ -16,7 +16,14 @@ import openfl.net.FileReference;
 typedef TransitionState = flixel.addons.transition.FlxTransitionableState;
 
 class Utils {
-	public static function setVolKeys(?keysUp:Array<FlxKey>, ?keysDown:Array<FlxKey>, ?keysMute:Array<FlxKey>):Void {
+	/**
+	 * Sets the volume keys to new ones, each parameter is optional, as setting them to null results in the default keys
+	 * 
+	 * @param keysUp        the Volume UP (+) Keys, e.g [FlxKey.NUMPADPLUS, FlxKey.PLUS]
+	 * @param keysDown      the Volume DOWN (-) Keys, e.g [FlxKey.NUMPADMINUS, FlxKey.MINUS]
+	 * @param keysMute      the Volume MUTE (silent) Keys, e.g [FlxKey.NUMPADZERO, FlxKey.ZERO]
+	**/
+	@:keep public static inline function setVolKeys(?keysUp:Array<FlxKey>, ?keysDown:Array<FlxKey>, ?keysMute:Array<FlxKey>):Void {
 		if (keysUp == null)
 			keysUp = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
 		if (keysDown == null)

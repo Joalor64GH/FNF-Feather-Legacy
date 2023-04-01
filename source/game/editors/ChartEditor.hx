@@ -3,14 +3,13 @@ package game.editors;
 import flixel.FlxObject;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.display.FlxTiledSprite;
-import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import game.PlayState;
 import game.gameplay.Note;
 import game.system.charting.ChartDefs.ChartFormat;
 import game.system.charting.ChartLoader;
 import game.system.Conductor;
-import haxe.Json;
 
 /**
  * State for Editing and Exporting new Charts
@@ -23,6 +22,8 @@ class ChartEditor extends MusicBeatState {
 
 	public var renderedNotes:NoteSpriteGroup;
 	public var renderedSustains:NoteSpriteGroup;
+	public var renderedSections:FlxTypedGroup<FlxSprite>;
+	public var renderedLanes:FlxTypedGroup<FlxSprite>;
 
 	public var noteRender:FlxSprite;
 	public var noteCamera:FlxObject;
@@ -33,8 +34,6 @@ class ChartEditor extends MusicBeatState {
 		song = ChartLoader.loadChart(const.songName, const.difficulty);
 	}
 
-	public var background:FlxSprite;
-
 	public override function create():Void {
 		super.create();
 
@@ -42,17 +41,13 @@ class ChartEditor extends MusicBeatState {
 
 		music = new MusicPlayback(const.songName, const.difficulty);
 
-		background = new FlxSprite().loadGraphic(Paths.image("menus/menuBGMagenta"));
-		background.alpha = 0.4;
-		add(background);
-
 		// initialize rendering groups
-		renderedNotes = new NoteSpriteGroup();
-		renderedSustains = new NoteSpriteGroup();
-		renderedSections = new FlxTypedGroup<FlxSprite>();
+		renderedNotes = renderedSustains = new NoteSpriteGroup();
+		renderedSections = renderedLanes = new FlxTypedGroup<FlxSprite>();
 
 		// create the grid
 		generateCheckerboard();
+		add(renderedLanes);
 		add(renderedSections);
 
 		// render sustains above notes so it doesn't look weird
@@ -61,37 +56,34 @@ class ChartEditor extends MusicBeatState {
 
 		// camera that objects will follow
 		noteCamera = new FlxObject(0, 0, 1, 1);
-		noteCamera.centerOverlay(checkerboard, X);
+		noteCamera.screenCenter(X);
 
 		// note strumline
-		noteRender = new FlxSprite().makeGraphic(cellSize * getNoteKeys(), 5, 0xFFFFFFFF);
-		noteRender.centerOverlay(checkerboard, X);
+		noteRender = new FlxSprite().makeGraphic(cellSize * getTotalStrumlines(), 5, 0xFFFFFFFF);
+		noteRender.screenCenter(X);
 		add(noteRender);
 
 		FlxG.camera.follow(noteCamera);
 	}
 
-	public var checkerboard:FlxTiledSprite;
-
 	public var cellSize:Int = 50;
-
-	public var renderedSections:FlxTypedGroup<FlxSprite>;
 
 	function generateCheckerboard():Void {
 		var checkerSprite:FlxSprite = FlxGridOverlay.create(cellSize, cellSize, cellSize * 2, cellSize * 2, true, 0xFFD8AC9C, 0xFF947566);
 
-		checkerboard = new FlxTiledSprite(null, cellSize * getNoteKeys(), cellSize);
+		var checkerboard:FlxTiledSprite = new FlxTiledSprite(null, cellSize * getTotalStrumlines(), cellSize);
 		checkerboard.loadGraphic(checkerSprite.graphic.bitmap);
 		checkerboard.screenCenter(X);
+
 		// extend the checkerboard until the song ends, how accurate is this?
 		checkerboard.height = (music.inst.length / Conductor.stepCrochet) * cellSize;
-		// always add this behind the background
-		insert(this.members.indexOf(background), checkerboard);
+		renderedLanes.add(checkerboard);
 
 		generateSection();
 	}
 
 	function generateSection():Void {
+		var checkerboard:FlxSprite = renderedLanes.members[renderedLanes.members.length - 1];
 		for (i in 0...song.sections.length) {
 			var sectionLine:FlxText = new FlxText(checkerboard.x + checkerboard.width, 16 * cellSize * i, 0, '${i + 1}');
 			sectionLine.setFormat(Paths.font("vcr"), 32);
@@ -109,9 +101,6 @@ class ChartEditor extends MusicBeatState {
 
 		noteRender.y = getYfromStrum(Conductor.songPosition);
 		noteCamera.y = noteRender.y + (FlxG.height / 2);
-
-		var cameraY:Float = noteCamera.y - (FlxG.height / 2);
-		background.y = cameraY;
 
 		if (FlxG.keys.pressed.SHIFT) {
 			if (FlxG.keys.justPressed.MINUS || FlxG.keys.justPressed.PLUS) {
@@ -157,8 +146,8 @@ class ChartEditor extends MusicBeatState {
 		}
 	}
 
-	public override function stepHit():Void {
-		super.stepHit();
+	public override function onStep():Void {
+		super.onStep();
 		music.resyncFunction();
 	}
 
@@ -170,9 +159,12 @@ class ChartEditor extends MusicBeatState {
 		note.setGraphicSize(cellSize, cellSize);
 		note.updateHitbox();
 
-		note.centerOverlay(checkerboard, X);
-		note.x -= (cellSize * (getNoteKeys() / 2) - (cellSize / 2));
+		note.screenCenter(X);
+
+		// center
+		note.x -= cellSize * (getTotalStrumlines() / 2) - (cellSize / 2);
 		note.x += Math.floor(getNoteSide(index, strumline) * cellSize);
+
 		note.y = Math.floor(getYfromStrum(step));
 		renderedNotes.add(note);
 
@@ -208,12 +200,12 @@ class ChartEditor extends MusicBeatState {
 				sustain.setGraphicSize(Std.int(cellSize * .35), Std.int((cellSize) / 2));
 				sustain.updateHitbox();
 				sustain.offset.x = 1;
-				sustain.offset.y = (cellSize) / 2 + 25;
+				sustain.offset.y += (cellSize) / 2 + 25;
 			} else {
 				sustain.setGraphicSize(Std.int(cellSize * .35), cellSize + 1);
 				sustain.updateHitbox();
 				sustain.offset.x = 1;
-				sustain.offset.y += 22.5;
+				sustain.offset.y = 25;
 			}
 		}
 
@@ -226,17 +218,14 @@ class ChartEditor extends MusicBeatState {
 				"song": song
 			};
 
-		var data:String = Json.stringify(json);
+		var data:String = tjson.TJSON.encode(json);
 		Utils.saveData('${song.name.toLowerCase()}.json', data);
 	}
 
 	function regenerateSections():Void {
-		if (checkerboard != null)
-			checkerboard.destroy();
-
-		renderedSections.clear();
-		renderedSustains.clear();
-		renderedNotes.clear();
+		var renderingGroups:Array<Dynamic> = [renderedSections, renderedSustains, renderedNotes, renderedLanes];
+		for (renderGroup in renderingGroups)
+			renderGroup.clear();
 
 		// regenerate all sections
 		generateCheckerboard();
@@ -256,24 +245,19 @@ class ChartEditor extends MusicBeatState {
 	function getNoteStep(yPos:Float):Float
 		return FlxMath.remapToRange(yPos, 0, (music.inst.length / Conductor.stepCrochet) * cellSize, 0, music.inst.length);
 
-	function getYfromStrum(strumTime:Float):Float
-		return FlxMath.remapToRange(strumTime, 0, music.inst.length, 0, (music.inst.length / Conductor.stepCrochet) * cellSize);
+	function getYfromStrum(stepTime:Float):Float
+		return FlxMath.remapToRange(stepTime, 0, music.inst.length, 0, (music.inst.length / Conductor.stepCrochet) * cellSize);
 
 	function getNoteSide(index:Int, strum:Int):Float {
 		var ret:Int = index;
-		if (strum > 0) {
-			// equation to get correct strumline bs
-			for (i in 0...strum)
-				ret = (index + 4) % getNoteKeys();
-		}
+		if (strum > 0)
+			for (i in 0...strum) // equation to get correct strumline bs
+				ret = (index + 4) % getTotalStrumlines();
 
 		return ret;
 	}
 
-	function getSectionLength():Int
-		return song.sections[curSec].length;
-
-	function getNoteKeys():Int {
+	function getTotalStrumlines():Int {
 		var value:Int = 0;
 		for (i in 0...song.metadata.strumlines)
 			value += 4;

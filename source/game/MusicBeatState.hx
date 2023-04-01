@@ -59,16 +59,20 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions {
 		}
 	}
 
-	public function beatHit():Void {
+	public function onBeat():Void {
 		// receive beats here
 	}
 
-	public function stepHit():Void {
+	public function onStep():Void {
 		// receive steps here
 	}
 
-	public function secHit():Void {
+	public function onSec():Void {
 		// receive sections here
+	}
+
+	public function onTick():Void {
+		// receive music ticks here
 	}
 }
 
@@ -105,9 +109,11 @@ class MusicBeatSubState extends FlxSubState implements IMusicFunctions {
 			beatContainer.update(elapsed);
 	}
 
-	public function beatHit():Void {}
+	public function onBeat():Void {}
 
-	public function stepHit():Void {}
+	public function onStep():Void {}
 
-	public function secHit():Void {}
+	public function onSec():Void {}
+
+	public function onTick():Void {}
 }

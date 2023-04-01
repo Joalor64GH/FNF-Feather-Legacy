@@ -13,7 +13,7 @@ class MainMenu extends MusicBeatState {
 	public var optionsList:Array<MenuOption> = [
 		{name: 'story mode', callback: /*function():Void FlxG.switchState(new StoryMenu())*/ null},
 		{name: 'freeplay', callback: function():Void FlxG.switchState(new FreeplayMenu())},
-		{name: 'credits', callback: /*function():Void FlxG.switchState(new CreditsMenu())*/ null},
+		{name: 'credits', callback: function():Void FlxG.switchState(new CreditsMenu())},
 		{name: 'options', callback: function():Void FlxG.switchState(new OptionsMenu())}
 	];
 

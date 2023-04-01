@@ -108,7 +108,7 @@ class Character extends FNFSprite {
 
 			default:
 				if (sys.FileSystem.exists(AssetHandler.getPath('images/characters/${name}/${name}', JSON))) {
-					var file:CharacterFormat = cast haxe.Json.parse(AssetHandler.getAsset('images/characters/${name}/${name}', JSON));
+					var file:CharacterFormat = cast tjson.TJSON.parse(AssetHandler.getAsset('images/characters/${name}/${name}', JSON));
 					if (file != null) {
 						if (file.flipX != null)
 							flipX = file.flipX;

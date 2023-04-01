@@ -11,7 +11,7 @@ class Settings {
 		["ghostTapping", true],
 		["noteSplashes", true],
 		["judgeCount", false],
-		["framerateCap", Std.int(60)],
+		["framerateCap", 60],
 		["antialiasing", true],
 		["infoText", "TIME"], // time, song, none
 	];
