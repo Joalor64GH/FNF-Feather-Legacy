@@ -10,10 +10,11 @@ import game.system.Conductor;
  * Week 3: Pico, Philly, Blammed
  */
 class PhillyCity extends BaseStage {
-	public var phillyLights:FlxTypedGroup<FlxSprite>;
 	public var phillyTrain:PhillyTrain;
 
+	public var phillyLight:FlxSprite;
 	public var lightShader:BuildingShaders;
+	public var lightColors:Array<Int> = [0xFF31A2FD, 0xFF31FD8C, 0xFFFB33F5, 0xFFFD4531, 0xFFFBA633];
 
 	public function new():Void {
 		super();
@@ -36,19 +37,14 @@ class PhillyCity extends BaseStage {
 		phillyCity.updateHitbox();
 		add(phillyCity);
 
-		phillyLights = new FlxTypedGroup<FlxSprite>();
-		add(phillyLights);
-
-		for (i in 0...5) {
-			var cLight:FlxSprite = new FlxSprite(phillyCity.x).loadGraphic(getObject('philly/win' + i));
-			cLight.scrollFactor.set(0.3, 0.3);
-			cLight.antialiasing = Settings.get("antialiasing");
-			cLight.visible = false;
-			cLight.setGraphicSize(Std.int(cLight.width * 0.85));
-			cLight.updateHitbox();
-			cLight.shader = lightShader.shader;
-			phillyLights.add(cLight);
-		}
+		phillyLight = new FlxSprite(phillyCity.x).loadGraphic(getObject('philly/win'));
+		phillyLight.scrollFactor.set(0.3, 0.3);
+		phillyLight.antialiasing = Settings.get("antialiasing");
+		phillyLight.shader = lightShader.shader;
+		phillyLight.visible = false;
+		phillyLight.setGraphicSize(Std.int(phillyLight.width * 0.85));
+		phillyLight.updateHitbox();
+		add(phillyLight);
 
 		var behindStreet:FlxSprite = new FlxSprite(-40, 50).loadGraphic(getObject('philly/behindTrain'));
 		add(behindStreet);
@@ -89,9 +85,10 @@ class PhillyCity extends BaseStage {
 
 		if (curBeat % 4 == 0) {
 			lightShader.reset();
-			phillyLights.forEach((light:FlxSprite) -> light.visible = false);
-			currentLightID = FlxG.random.int(0, phillyLights.length - 1);
-			phillyLights.members[currentLightID].visible = true;
+			phillyLight.visible = false;
+			currentLightID = FlxG.random.int(0, lightColors.length - 1);
+			phillyLight.color = lightColors[currentLightID];
+			phillyLight.visible = true;
 		}
 
 		if (curBeat % 8 == 4 && FlxG.random.bool(30) && !phillyTrain.moving && trainCooldown > 8) {
