@@ -6,34 +6,43 @@ class PhillyTrain extends FlxSprite {
 	public var sound:FlxSound;
 
 	public function new():Void {
-		super(2000, 360);
+		super(FlxG.width + 200, 360);
 
-		this.loadGraphic(Paths.image('images/backgrounds/philly/train'));
+		loadGraphic(Paths.image('backgrounds/philly/train'));
+		sound = new FlxSound().loadEmbedded(AssetHandler.getAsset('images/backgrounds/philly/sounds/train_passes', SOUND));
+		FlxG.sound.list.add(sound);
 	}
 
-	var trainCars:Int = 8;
-	var trainFinishing:Bool = false;
+	public var cycle:Int = 8;
+	public var moving:Bool = false;
+	public var finishing:Bool = false;
 
-	public function startMoving():Void {
-		if (sound.time >= 4700) {
-			active = true;
+	public function startMovement():Void {
+		moving = true;
+		sound.play(true);
+		updateMovement();
+	}
+
+	public function updateMovement():Void {
+		if (sound.time >= 5700) {
+			moving = true;
 
 			if (PlayState.self.crowd != null)
 				PlayState.self.crowd.playAnim('hairBlow');
 		}
 
-		if (active) {
+		if (moving) {
 			x -= 400;
 
-			if (x < -2000 && !trainFinishing) {
+			if (x < -2000 && !finishing) {
 				x = -1150;
-				trainCars -= 1;
+				cycle -= 1;
 
-				if (trainCars <= 0)
-					trainFinishing = true;
+				if (cycle <= 0)
+					finishing = true;
 			}
 
-			if (x < -4000 && trainFinishing)
+			if (x < -4000 && finishing)
 				resetPosition();
 		}
 	}
@@ -42,9 +51,8 @@ class PhillyTrain extends FlxSprite {
 		if (PlayState.self.crowd != null)
 			PlayState.self.crowd.playAnim('hairFall');
 
+		cycle = 8;
 		x = FlxG.width + 200;
-		trainCars = 8;
-		trainFinishing = false;
-		active = false;
+		moving = finishing = false;
 	}
 }

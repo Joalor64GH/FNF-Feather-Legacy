@@ -137,8 +137,8 @@ class PlayState extends MusicBeatState {
 				case 'mallEvil', 'red-mall': new RedMall();
 				case 'mall': new Mall();
 				case 'highway', 'limo': new Highway();
-				case 'philly', 'philly-city': new PhillyCity();
 			 */
+			case 'philly', 'philly-city': new PhillyCity();
 			case 'spooky', 'haunted-house': new HauntedHouse();
 			default: new Stage();
 		}
@@ -149,10 +149,10 @@ class PlayState extends MusicBeatState {
 
 		// characters
 		if (gameStage.displayCrowd)
-			crowd = new Character(400, 130).loadChar(song.metadata.crowd);
+			crowd = new Character(400 + gameStage.crowdOffset.x, 130 + gameStage.crowdOffset.y).loadChar(song.metadata.crowd);
 
-		opponent = new Character(100, 100).loadChar(song.metadata.opponent);
-		player = new Character(770, 450).loadChar(song.metadata.player, true);
+		opponent = new Character(100 + gameStage.opponentOffset.x, 100 + gameStage.opponentOffset.y).loadChar(song.metadata.opponent);
+		player = new Character(770 + gameStage.playerOffset.x, 450 + gameStage.playerOffset.y).loadChar(song.metadata.player, true);
 
 		if (crowd != null) {
 			if (song.metadata.opponent == song.metadata.crowd) {
@@ -349,6 +349,8 @@ class PlayState extends MusicBeatState {
 			persistentDraw = true;
 			paused = true;
 
+			gameStage.onPauseDispatch(true);
+
 			FlxTween.globalManager.forEach((twn:FlxTween) -> {
 				if (twn != null && twn.active)
 					twn.active = false;
@@ -456,6 +458,7 @@ class PlayState extends MusicBeatState {
 			});
 
 			paused = false;
+			gameStage.onPauseDispatch(false);
 		}
 		super.closeSubState();
 	}

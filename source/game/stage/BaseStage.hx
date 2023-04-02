@@ -1,6 +1,7 @@
 package game.stage;
 
 import flixel.group.FlxGroup;
+import flixel.math.FlxPoint;
 import game.PlayState;
 
 /*
@@ -22,17 +23,21 @@ class BaseStage extends FlxGroup {
 	/**
 	 * Defines the in-game camera zoom
 	 */
-	public var cameraZoom:Float = 1.05;
+	public var cameraZoom:Float = 1.0;
 
 	/**
 	 *	Defines the in-game hud zoom
 	 */
-	public var hudZoom:Float = 1;
+	public var hudZoom:Float = 1.0;
 
 	/**
 	 * Defines whether or not the crowd should appear on Stage
 	 */
 	public var displayCrowd:Bool = true;
+
+	public var playerOffset:FlxPoint = new FlxPoint(0, 0);
+	public var opponentOffset:FlxPoint = new FlxPoint(0, 0);
+	public var crowdOffset:FlxPoint = new FlxPoint(0, 0);
 
 	/**
 	 * Use this to create your stage objects
@@ -61,42 +66,47 @@ class BaseStage extends FlxGroup {
 	}
 
 	/**
-	 * Triggers whenever the Countdown begins
+	 * Called whenever the Countdown begins
 	 */
 	public function onCountdownStart():Void {}
 
 	/**
-	 * Triggers whenever the Countdown is ticking
+	 * Called whenever the Countdown is ticking
 	 */
 	public function onCountdownTick(position:Int):Void {}
 
 	/**
-	 * Triggers whenever the Song starts
+	 * Called whenever the Song starts
 	 */
 	public function onSongStart():Void {}
 
 	/**
-	 * Triggers whenever the song ends
+	 * Called whenever the song ends
 	 */
 	public function onSongEnd():Void {}
 
 	/**
-	 * Triggers whenever a event is activated
+	 * Called whenever a event is activated
 	 */
 	public function onEventDispatch(event:String, args:Array<Dynamic>):Void {}
 
 	/**
-	 * Triggers whenever a beat is hit
+	 * Called when pausing the game
+	**/
+	public function onPauseDispatch(paused:Bool):Void {}
+
+	/**
+	 * Called whenever a beat is hit
 	 */
 	public function onBeat(curBeat:Int):Void {}
 
 	/**
-	 * Triggers whenever a step is reached
+	 * Called whenever a step is reached
 	 */
 	public function onStep(curStep:Int):Void {}
 
 	/**
-	 * Triggers whenever a section is reached
+	 * Called whenever a section is reached
 	 */
 	public function onSec(curSec:Int):Void {}
 }

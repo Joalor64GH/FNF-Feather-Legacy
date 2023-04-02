@@ -23,6 +23,6 @@ class Stage extends BaseStage {
 		add(stageFront);
 
 		// set antialiasing
-		forEachOfType(FlxSprite, function(sprite:FlxSprite):Void sprite.antialiasing = true);
+		forEachOfType(FlxSprite, function(sprite:FlxSprite):Void sprite.antialiasing = Settings.get("antialiasing"));
 	}
 }

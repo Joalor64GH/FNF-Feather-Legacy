@@ -13,8 +13,8 @@ class HauntedHouse extends BaseStage {
 		halloweenBG.frames = getObject('spooky/halloween_bg', XML);
 		halloweenBG.animation.addByPrefix('idle', 'halloweem bg0');
 		halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
+		halloweenBG.antialiasing = Settings.get("antialiasing");
 		halloweenBG.animation.play('idle');
-		halloweenBG.antialiasing = true;
 		add(halloweenBG);
 	}
 
