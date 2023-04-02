@@ -165,9 +165,6 @@ class Letter extends FNFSprite {
 	}
 
 	public function createSprite(char:String, bold:Bool = false, isNumber:Bool = false):Void {
-		if (char == "" && char == " " && char == null)
-			return;
-
 		var animName:String = char;
 		if (!isNumber) {
 			animName = char + " lowercase";
