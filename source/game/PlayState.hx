@@ -374,6 +374,7 @@ class PlayState extends MusicBeatState {
 			FlxG.switchState(new ChartEditor({songName: constructor.songName, difficulty: constructor.difficulty}));
 		}
 
+		#if debug
 		if (FlxG.keys.justPressed.EIGHT) {
 			music.cease();
 
@@ -383,6 +384,7 @@ class PlayState extends MusicBeatState {
 			var char:Character = shift && alt ? crowd : shift ? player : opponent;
 			FlxG.switchState(new CharacterEditor(char.name, char.isPlayer));
 		}
+		#end
 
 		if (song != null && !paused) {
 			spawnNotes();
