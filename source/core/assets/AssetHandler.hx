@@ -35,8 +35,8 @@ class AssetHandler {
 		return switch (type) {
 			case IMAGE: CacheHandler.getGraphicData(finalPath);
 			case SOUND: CacheHandler.getSoundData(finalPath);
-			case XML: FlxAtlasFrames.fromSparrow(getPath(folder, IMAGE), getPath(folder, XML));
-			case TXT: FlxAtlasFrames.fromSpriteSheetPacker(getPath(folder, IMAGE), getPath(folder, TXT));
+			case XML: FlxAtlasFrames.fromSparrow(getAsset(folder, IMAGE), File.getContent(getPath(folder, XML)));
+			case TXT: FlxAtlasFrames.fromSpriteSheetPacker(getAsset(folder, IMAGE), getPath(folder, TXT));
 			case JSON:
 				var json = sys.io.File.getContent(finalPath);
 				while (!json.endsWith("}"))
@@ -96,3 +96,5 @@ enum abstract AssetType(String) to String from String {
 		}
 	}
 }
+
+// haha u looked.

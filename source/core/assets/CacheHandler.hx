@@ -22,7 +22,13 @@ class CacheHandler {
 
 	public static function getGraphicData(path:String):FlxGraphic {
 		if (!cachedGraphics.exists(path)) {
-			var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false, path);
+			var newGraphic:FlxGraphic = null;
+
+			try newGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false, path) catch (e:haxe.Exception) {
+				newGraphic = FlxGraphic.fromRectangle(100, 100, 0xFFAAAAAA);
+				trace('image graphic at "${path}" could not be loaded.');
+			}
+
 			newGraphic.persist = true;
 			cachedGraphics.set(path, newGraphic);
 			trackedIDs.push(path);

@@ -51,10 +51,7 @@ class Character extends FNFSprite {
 	 * for instance: windyHair makes it so week 4's characters play an animation named
 	 * `idleHair` once their idle animation finishes
 	 */
-	public var danceProperties =
-		{
-			windyHair: false,
-		};
+	public var danceProperties = {windyHair: false};
 
 	public var icon:String = null;
 
