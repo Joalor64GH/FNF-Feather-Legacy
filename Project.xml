@@ -35,6 +35,10 @@
 	<!-- Mobile-specific -->
 	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
 
+	<!-- _______ Custom Defines _______ -->
+
+	<define name="MODDING_ENABLED" />
+
 	<!-- _______ Paths _______ -->
 
 	<set name="BUILD_DIR" value="export/release" />
@@ -42,6 +46,7 @@
 
 	<source path="source" />
 	<assets path="assets" />
+	<assets path="mods" type="template" if="MODDING_ENABLED" />
 
 	<!-- _______ Libraries _______ -->
 

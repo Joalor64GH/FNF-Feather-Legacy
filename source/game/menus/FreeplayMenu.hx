@@ -53,18 +53,11 @@ class FreeplayMenu extends MenuBase {
 			}
 		}
 
-		for (folder in FileSystem.readDirectory(Paths.getPath("data/songs"))) {
-			if (folder != null) {
-				var path:String = 'data/songs/${folder}/freeplay';
-				if (FileSystem.exists(Paths.getPath(path, JSON))) {
-					var data:ListableSong = null;
-
-					try {
-						data = cast tjson.TJSON.parse(AssetHandler.getAsset(path, JSON));
-						songList.push({name: data.name, opponent: data.opponent, color: FlxColor.fromString(Std.string(data.color))});
-					} catch (e:haxe.Exception)
-						trace('Song "${folder}" not added, Caught: "${e}"');
-				}
+		for (folder in FileSystem.readDirectory(AssetHandler.getPath("data/songs", true))) {
+			var path:String = 'data/songs/${folder}/freeplay';
+			if (FileSystem.exists(AssetHandler.getPath(path, JSON))) {
+				var data:ListableSong = cast tjson.TJSON.parse(AssetHandler.getAsset(path, JSON));
+				songList.push({name: data.name, opponent: data.opponent, color: FlxColor.fromString(Std.string(data.color))});
 			}
 		}
 

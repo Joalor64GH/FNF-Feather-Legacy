@@ -23,6 +23,10 @@ class MainMenu extends MusicBeatState {
 	public override function create():Void {
 		super.create();
 
+		#if MODDING_ENABLED
+		core.assets.ModHandler.scanMods();
+		#end
+
 		Utils.resetMusic();
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menus/menuBG'));
@@ -128,6 +132,13 @@ class MainMenu extends MusicBeatState {
 				});
 			}
 
+			#if MODDING_ENABLED
+			if (FlxG.keys.justPressed.SHIFT) {
+				persistentUpdate = false;
+				openSubState(new game.subStates.ModMenuSubState());
+			}
+			#end
+
 			/*
 				if (controls.justPressed("back"))
 					FlxG.switchState(new TitleScreen());
@@ -181,9 +192,9 @@ class MainMenuItem extends FlxSprite {
 	}
 
 	public function defineType():String {
-		if (AssetHandler.exists(AssetHandler.getPath('images/menus/options/${name}', XML)))
+		if (sys.FileSystem.exists(AssetHandler.getPath('images/menus/options/${name}', XML)))
 			return "frames-sparrow";
-		else if (AssetHandler.exists(AssetHandler.getPath('images/menus/options/${name}', TXT)))
+		else if (sys.FileSystem.exists(AssetHandler.getPath('images/menus/options/${name}', TXT)))
 			return "frames-packer";
 		return "graphic";
 	}

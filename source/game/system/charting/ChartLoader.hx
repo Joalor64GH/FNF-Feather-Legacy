@@ -48,7 +48,7 @@ class ChartLoader {
 		songName = songName.toLowerCase();
 
 		difficulty = '-${difficulty}';
-		if (!AssetHandler.exists(AssetHandler.getPath('data/songs/${songName}/${songName}${difficulty}', JSON)))
+		if (!sys.FileSystem.exists(AssetHandler.getPath('data/songs/${songName}/${songName}${difficulty}', JSON)))
 			difficulty = '';
 
 		var jsonPath:String = AssetHandler.getAsset('data/songs/${songName}/${songName}${difficulty}', JSON);
@@ -183,7 +183,7 @@ class MusicPlayback {
 		inst = new FlxSound().loadEmbedded(getSoundFile("Inst"));
 		FlxG.sound.list.add(inst);
 
-		if (AssetHandler.exists(AssetHandler.getPath('data/songs/${songName}/Voices', SOUND))) {
+		if (sys.FileSystem.exists(AssetHandler.getPath('data/songs/${songName}/Voices', SOUND))) {
 			vocals = new FlxSound().loadEmbedded(getSoundFile('Voices'));
 			FlxG.sound.list.add(vocals);
 		}

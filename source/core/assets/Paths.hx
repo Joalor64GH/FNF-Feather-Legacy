@@ -8,11 +8,11 @@ import openfl.media.Sound;
  * Compatibility with Base Game
  */
 class Paths {
-	public static inline function getPath(path:String, ?type:AssetType):String
-		return AssetHandler.getPath(path, type);
+	public static inline function getPath(path:String, ?type:AssetType, ?disregardMods:Bool = false):String
+		return AssetHandler.getPath(path, type, disregardMods);
 
-	public static inline function getPreloadPath(path:String, ?type:AssetType):String
-		return getPath(path, type);
+	public static inline function getPreloadPath(path:String, ?type:AssetType, ?disregardMods:Bool = false):String
+		return getPath(path, type, disregardMods);
 
 	public static inline function image(image:String):FlxGraphic
 		return AssetHandler.getAsset('images/${image}', IMAGE);
@@ -30,7 +30,7 @@ class Paths {
 		return AssetHandler.getAsset('data/songs/${song}/Inst', SOUND);
 
 	public static inline function vocals(song:String):Sound {
-		if (AssetHandler.exists(AssetHandler.getPath('data/songs/audio/${song}/Voices', SOUND)))
+		if (sys.FileSystem.exists(AssetHandler.getPath('data/songs/audio/${song}/Voices', SOUND)))
 			return AssetHandler.getAsset('data/songs/${song}/Voices', SOUND);
 		return null;
 	}

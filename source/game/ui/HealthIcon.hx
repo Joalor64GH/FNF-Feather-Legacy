@@ -34,10 +34,10 @@ class HealthIcon extends FlxSprite {
 		if (char.contains('-'))
 			subString = char.substring(0, char.indexOf('-'));
 
-		if (!AssetHandler.exists(Paths.getPath('images/characters/${char}/icon', IMAGE)))
+		if (!sys.FileSystem.exists(Paths.getPath('images/characters/${char}/icon', IMAGE)))
 			char = "face";
 
-		if (AssetHandler.exists(Paths.getPath('images/characters/${char}/icon', XML))) {
+		if (sys.FileSystem.exists(Paths.getPath('images/characters/${char}/icon', XML))) {
 			frames = Paths.getSparrowAtlas('characters/${char}/icon');
 			animation.addByPrefix("idle", "idle", 24, true);
 			animation.addByPrefix("losing", "losing", 24, true);

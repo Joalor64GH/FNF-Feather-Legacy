@@ -19,7 +19,7 @@ class ChartEvents {
 
 		var eventsFolder:String = 'data/songs/${songName.toLowerCase()}/events.json';
 
-		if (AssetHandler.exists(AssetHandler.getPath(eventsFolder, JSON))) {
+		if (sys.FileSystem.exists(AssetHandler.getPath(eventsFolder, JSON))) {
 			var jsonPath:String = AssetHandler.getAsset(eventsFolder, JSON);
 
 			tempEvents = cast tjson.TJSON.parse(jsonPath);

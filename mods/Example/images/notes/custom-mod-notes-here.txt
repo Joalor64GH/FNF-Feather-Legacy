@@ -1,0 +1,9 @@
+Check this same folder on the assets folder in case of curiosity regardling which files can be overridden
+
+Folder Structure:
+
+folderName	>
+	| NOTE_assets.png
+	| NOTE_assets.xml
+	| NOTE_splashes.png (OPTIONAL)
+	| NOTE_splashes.xml (OPTIONAL)

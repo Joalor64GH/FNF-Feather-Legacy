@@ -158,7 +158,7 @@ class Utils {
 	 */
 	@:keep public static inline function getUIAsset(asset:String, type:AssetType = IMAGE, skin:String = 'default'):Dynamic {
 		var path:String = AssetHandler.getPath('images/ui/${skin}/${asset}', type);
-		if (!AssetHandler.exists(path))
+		if (!sys.FileSystem.exists(path))
 			skin = 'default';
 
 		return AssetHandler.getAsset('images/ui/${skin}/${asset}', type);
@@ -172,7 +172,7 @@ class Utils {
 	 */
 	@:keep public static inline function getUISound(sound:String, skin:String = 'default'):Sound {
 		var path:String = AssetHandler.getPath('sounds/${skin}/${sound}', SOUND);
-		if (!AssetHandler.exists(path))
+		if (!sys.FileSystem.exists(path))
 			skin = 'default';
 
 		return AssetHandler.getAsset('sounds/${skin}/${sound}', SOUND);

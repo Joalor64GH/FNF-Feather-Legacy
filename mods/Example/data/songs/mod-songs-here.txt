@@ -1,0 +1,18 @@
+Check this same folder on the assets folder in case of curiosity regardling which files can be overridden
+
+Songs require a special file called "freeplay.json" in order to be added to the Freeplay Menu without attaching said song to a week
+the contents of said file goes as follows:
+
+{
+	"name": "SONG NAME",
+	"opponent": "character name",
+	"color": "#HEXCODE"
+}
+
+as for the folder structure, it goes as follows:
+
+song	>
+	| Inst.ogg (REQUIRED)
+	| Voices.ogg (OPTIONAL)
+	| song-difficulty.json (e.g: test-hard.json)
+	| song.json (fallback chart for this song, not necessarily required but always good to have)

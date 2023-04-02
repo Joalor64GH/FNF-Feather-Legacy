@@ -1,16 +1,36 @@
 package core.assets;
 
 import flixel.graphics.frames.FlxAtlasFrames;
+import sys.FileSystem;
+import sys.io.File;
 
 class AssetHandler {
-	public static function getPath(?folder:String, ?type:AssetType):String {
+	public static function getPath(?folder:String, ?type:AssetType, ?disregardMods:Bool = false):String {
 		if (folder != null)
 			folder = '/${folder}';
-		return type.cycleExtensions('assets${folder}');
+
+		var returnPath:String = type.cycleExtensions('assets${folder}');
+
+		// prioritize mod assets
+		#if MODDING_ENABLED
+		if (!disregardMods) {
+			if (ModHandler.activeMod != null) // prioritize the active mod
+				if (FileSystem.exists(ModHandler.getPath('${ModHandler.activeMod}${folder}', type)))
+					returnPath = ModHandler.getPath('${ModHandler.activeMod}${folder}', type);
+
+			if (ModHandler.modFolders.length > 0) { // else just try and search everywhere
+				for (i in 0...ModHandler.modFolders.length)
+					if (FileSystem.exists(ModHandler.getPath('${ModHandler.modFolders[i]}${folder}', type)))
+						returnPath = ModHandler.getPath('${ModHandler.modFolders[i]}${folder}', type);
+			}
+		}
+		#end
+
+		return returnPath;
 	}
 
-	public static function getAsset(folder:String, ?type:AssetType):Dynamic {
-		var finalPath:String = getPath(folder, type);
+	public static function getAsset(folder:String, ?type:AssetType, ?disregardMods:Bool = false):Dynamic {
+		var finalPath:String = getPath(folder, type, disregardMods);
 
 		return switch (type) {
 			case IMAGE: CacheHandler.getGraphicData(finalPath);
@@ -18,7 +38,7 @@ class AssetHandler {
 			case XML: FlxAtlasFrames.fromSparrow(getPath(folder, IMAGE), getPath(folder, XML));
 			case TXT: FlxAtlasFrames.fromSpriteSheetPacker(getPath(folder, IMAGE), getPath(folder, TXT));
 			case JSON:
-				var json = AssetHandler.getContent(finalPath);
+				var json = sys.io.File.getContent(finalPath);
 				while (!json.endsWith("}"))
 					json = json.substr(0, json.length - 1);
 				json;
@@ -33,12 +53,6 @@ class AssetHandler {
 			default:
 		}
 	}
-
-	public static function exists(path:String):Bool
-		return sys.FileSystem.exists(path);
-
-	public static function getContent(path:String):String
-		return sys.io.File.getContent(path);
 }
 
 enum abstract AssetType(String) to String from String {
@@ -53,7 +67,7 @@ enum abstract AssetType(String) to String from String {
 	public function cycleExtensions(path:String):String {
 		if (getExtension() != null) {
 			for (i in getExtension())
-				if (AssetHandler.exists('${path}${i}'))
+				if (sys.FileSystem.exists('${path}${i}'))
 					return '${path}${i}';
 		}
 

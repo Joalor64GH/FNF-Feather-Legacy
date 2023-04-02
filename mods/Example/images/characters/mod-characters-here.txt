@@ -1,0 +1,9 @@
+Check this same folder on the assets folder in case of curiosity regardling which files can be overridden
+
+Folder Structure:
+
+characterName:
+	| characterName.json (same as folder)
+	| IMAGE.png (any name)
+	| IMAGE.xml / IMAGE.txt (any name)
+	| icon.png (optional)
