@@ -55,7 +55,7 @@ class HealthIcon extends FlxSprite {
 		loadGraphic(icon); // get file size
 		loadGraphic(icon, true, Std.int(icon.width / constWidth), icon.height);
 
-		animation.add('idle', [0], 0, false);
+		animation.add('idle', [for (i in 0...frames.frames.length) i], 0, false);
 		animation.add('losing', [1], 0, false);
 	}
 
