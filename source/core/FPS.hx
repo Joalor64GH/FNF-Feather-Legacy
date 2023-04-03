@@ -48,7 +48,7 @@ class FPS extends Sprite {
 			var lastField:TextField = childrenFields[childrenFields.length - 1];
 			bg.scaleX = lastField.x + lastField.width + 15;
 			// this is genuinely stupid, will figure out a better way later
-			bg.scaleY = Math.floor(lastField.text.length / lastField.textHeight) + 0.5;
+			bg.scaleY = Math.floor(lastField.text.length / lastField.textHeight) + #if debug 0.5 #else 0 #end;
 		});
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, function(e:KeyboardEvent):Void {
