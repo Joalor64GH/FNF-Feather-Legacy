@@ -53,6 +53,10 @@ class Main extends Sprite {
 			CacheHandler.purge(true);
 		});
 
+		FlxG.signals.postStateSwitch.add(function():Void {
+			CacheHandler.purge(false);
+		});
+
 		openfl.Lib.current.stage.application.onExit.add(function(code:Int):Void {
 			Controls.destroy();
 		});

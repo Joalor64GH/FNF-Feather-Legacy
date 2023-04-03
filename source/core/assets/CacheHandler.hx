@@ -56,39 +56,50 @@ class CacheHandler {
 	}
 
 	public static function purge(stored:Bool = false):Void {
-		_purgeUnused();
 		if (stored)
 			_purgeStored();
-		gcRun(true);
+		_purgeSounds();
+		_purgeUnused();
 	}
 
 	static function _purgeStored():Void {
 		@:privateAccess {
 			for (data in FlxG.bitmap._cache.keys()) {
-				if (OpenFLAssets.cache.hasBitmapData(data) && !trackedIDs.contains(data)) {
+				if (!trackedIDs.contains(data)) {
+					var dataGraphic:FlxGraphic = FlxG.bitmap._cache.get(data);
+					OpenFLAssets.cache.removeBitmapData(data);
 					OpenFLAssets.cache.clear(data);
 					FlxG.bitmap._cache.remove(data);
+					dataGraphic.destroy();
 				}
 			}
 		}
-
-		for (data in cachedSounds.keys()) {
-			if (OpenFLAssets.cache.hasSound(data) && !trackedIDs.contains(data)) {
-				OpenFLAssets.cache.clear(data);
-				cachedSounds.remove(data);
-			}
-		}
-
 		trackedIDs = [];
 	}
 
 	static function _purgeUnused():Void {
 		for (data in cachedGraphics.keys()) {
-			if (OpenFLAssets.cache.hasBitmapData(data)) {
-				OpenFLAssets.cache.clear(data);
-				@:privateAccess FlxG.bitmap._cache.remove(data);
+			@:privateAccess
+			{
+				if (!trackedIDs.contains(data)) {
+					var dataGraphic:FlxGraphic = cachedGraphics.get(data);
+					OpenFLAssets.cache.removeBitmapData(data);
+					OpenFLAssets.cache.clear(data);
+					FlxG.bitmap._cache.remove(data);
+					cachedGraphics.remove(data);
+					dataGraphic.destroy();
+				}
 			}
-			cachedGraphics.remove(data);
+		}
+		gcRun(true);
+	}
+
+	static function _purgeSounds():Void {
+		for (data in cachedSounds.keys()) {
+			if (!trackedIDs.contains(data)) {
+				OpenFLAssets.cache.clear(data);
+				cachedSounds.remove(data);
+			}
 		}
 	}
 
