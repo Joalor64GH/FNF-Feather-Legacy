@@ -34,7 +34,7 @@ class Main extends Sprite {
 		var baseGame:CustomGame = new CustomGame(1280, 720, game.menus.MainMenu, 60, 60, true, false);
 		addChild(baseGame);
 
-		fpsCounter = new FPS(10, 5, FlxColor.WHITE);
+		fpsCounter = new FPS(/*10, 5, FlxColor.WHITE*/);
 		addChild(fpsCounter);
 
 		CacheHandler.gcEnable();

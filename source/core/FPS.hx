@@ -3,6 +3,7 @@ package core;
 import flixel.FlxG;
 import flixel.util.FlxStringUtil;
 import haxe.Timer;
+import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.system.System;
@@ -10,49 +11,81 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.ui.Keyboard;
 
-/**
-	Debug Info class for displaying Framerate and Memory information on screen,
-	based on this tutorial https://keyreal-code.github.io/haxecoder-tutorials/17_displaying_fps_and_memory_usage_using_openfl.html
-**/
-class FPS extends TextField {
-	public var times:Array<Float> = [];
+class FPS extends Sprite {
+	public var bg:Sprite;
+	public var fps:FPSField;
 
-	public var curFPS:Float = 0;
-	public var curMEM:Float = 0;
+	#if cpp
+	public var mem:MemoryField;
+	#if debug public var deb:DebugField; #end
+	#end
+	var childrenFields:Array<TextField> = [];
 
-	private final textBorder:BorderField;
-
-	/**
-	 * Creates a new instance of the FPS Counter
-	 * if allowed, may also have a instance of `BorderField`, which is a outline subclass
-	 * along with it
-	 * @param useOutline whether to enable the fps outline border
-	**/
-	public function new(x:Float = 10, y:Float = 5, color:Int = -1, ?useOutline:Bool = true):Void {
+	public function new():Void {
 		super();
 
-		this.x = x;
-		this.y = y;
+		bg = new Sprite();
+		bg.graphics.beginFill(0);
+		bg.graphics.drawRect(0, 0, 1, 50);
+		bg.graphics.endFill();
+		bg.alpha = 0.5;
+		addChild(bg);
 
-		autoSize = LEFT;
-		selectable = false;
-		visible = true;
+		fps = new FPSField();
+		addField(fps);
 
-		defaultTextFormat = new TextFormat(Paths.font('vcr'), 16, color);
-		text = "";
+		#if cpp
+		mem = new MemoryField();
+		addField(mem);
 
-		width = FlxG.width;
+		#if debug
+		deb = new DebugField();
+		addField(deb);
+		#end
+		#end
 
-		if (useOutline) {
-			textBorder = new BorderField(this, 1.5, 0xFF000000);
-			textBorder.addChildren();
-		}
+		addEventListener(Event.ENTER_FRAME, function(_:Event):Void {
+			var lastField:TextField = childrenFields[childrenFields.length - 1];
+			bg.scaleX = lastField.x + lastField.width + 15;
+			// this is genuinely stupid, will figure out a better way later
+			bg.scaleY = Math.floor(lastField.text.length / lastField.textHeight) + 0.5;
+		});
 
-		addEventListener(Event.ENTER_FRAME, update);
-		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, debugKeys);
+		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, function(e:KeyboardEvent):Void {
+			switch (e.keyCode) {
+				case Keyboard.F3:
+					visible = !visible;
+			}
+		});
 	}
 
-	public var separator:String = ' | ';
+	public function addField(field:TextField):Void {
+		var lastField:TextField = childrenFields[childrenFields.length - 1];
+		var yAdd:Float = 10;
+		if (lastField == fps)
+			yAdd = 15;
+
+		field.x = 5;
+		field.autoSize = LEFT;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(Paths.font('vcr'), field == fps ? 20 : 16, -1);
+
+		if (lastField != null)
+			field.y = lastField.y + lastField.height + yAdd;
+
+		childrenFields.push(field);
+		addChild(field);
+	}
+}
+
+class FPSField extends TextField {
+	public var times:Array<Float> = [];
+	public var curFPS:Float = 0;
+
+	public function new():Void {
+		super();
+		addEventListener(Event.ENTER_FRAME, update);
+	}
 
 	public function update(_:Event):Void {
 		var now:Float = Timer.stamp();
@@ -64,120 +97,36 @@ class FPS extends TextField {
 		if (curFPS > FlxG.updateFramerate)
 			curFPS = FlxG.updateFramerate;
 
-		text = "";
-		if (visible) {
-			text += '[FPS: ${curFPS}';
-			#if cpp
-			curMEM = System.totalMemory;
-			text += separator + 'MEMORY: ${FlxStringUtil.formatBytes(curMEM)}';
-			text += ']\n';
-
-			text += '[STATE: ${Type.getClassName(Type.getClass(FlxG.state))}';
-			text += separator + 'OBJS: ${FlxG.state.countLiving()} - DEAD: ${FlxG.state.countDead()}';
-			#end
-
-			text += ']\n';
-		}
-	}
-
-	public function debugKeys(e:KeyboardEvent):Void {
-		switch (e.keyCode) {
-			case Keyboard.F3:
-				visible = !visible;
-		}
+		if (visible)
+			text = '${curFPS} FPS';
 	}
 }
 
-/**
- * Code originally from sayofthelor's Lore Engine
- * https://github.com/sayofthelor/lore-engine
- *
- * changed for ease of use and more reliability
- */
-class BorderField extends TextField {
-	public var parentField:TextField;
-	public var children:Array<TextField> = [];
+class MemoryField extends TextField {
+	public var curMEM:Float = 0;
+	public var peakMEM:Float = 0;
 
-	public var size:Float = 1.5;
-
-	/**
-	 * Creates a new instance of a Border for a parent `TextField`
-	 * @param parentField              the attached field to this border
-	 * @param size [OPTIONAL]          the border's size, defaults to 2
-	 * @param borderColor [OPTIONAL]   the border's color, defaults to black
-	 */
-	public function new(parentField:TextField, size:Float = 1.5, borderColor:Int = 0):Void {
+	public function new():Void {
 		super();
+		addEventListener(Event.ENTER_FRAME, function(_:Event):Void {
+			curMEM = System.totalMemory;
+			if (curMEM > peakMEM)
+				peakMEM = curMEM;
 
-		this.parentField = parentField;
-		this.size = size;
-
-		for (i in 0...8) {
-			children.push(new TextField());
-
-			copyParent(children[i]);
-			children[i].textColor = borderColor;
-		}
-
-		addEventListener(Event.ENTER_FRAME, update);
+			if (visible)
+				text = '${FlxStringUtil.formatBytes(curMEM)} / ${FlxStringUtil.formatBytes(peakMEM)}';
+		});
 	}
+}
 
-	public function update(_:Event):Void {
-		if (parentField != null) {
-			this.x = parentField.x;
-			this.y = parentField.y;
-
-			for (i in 0...children.length) {
-				var border:TextField = children[i];
-				border.text = parentField.text;
-				border.visible = parentField.visible;
-
-				if ([0, 4, 6].contains(i))
-					border.x = this.x - size;
-				else if ([1, 2, 4, 7].contains(i))
-					border.x = this.x + size;
-				else
-					border.x = this.x;
-
-				if ([0, 1, 2].contains(i))
-					border.y = this.y - size;
-				else if ([5, 6, 7].contains(i))
-					border.y = this.y + size;
-				else
-					border.y = this.y;
+class DebugField extends TextField {
+	public function new():Void {
+		super();
+		addEventListener(Event.ENTER_FRAME, function(_:Event):Void {
+			if (visible) {
+				text = '${Type.getClassName(Type.getClass(FlxG.state))}';
+				appendText('\nOBJS: ${FlxG.state.countLiving()} - DEAD: ${FlxG.state.countDead()}');
 			}
-		}
-	}
-
-	public function copyParent(field:TextField):Void {
-		if (parentField != null) {
-			field.x = parentField.x;
-			field.y = parentField.y;
-
-			field.autoSize = parentField.autoSize;
-			field.selectable = parentField.selectable;
-			field.mouseEnabled = parentField.mouseEnabled;
-			field.visible = parentField.visible;
-
-			field.defaultTextFormat = parentField.defaultTextFormat;
-			field.width = parentField.width;
-			field.height = parentField.height;
-		}
-	}
-
-	/**
-	 * Adds the created border instances below the parent field on `Main.hx`
-	 */
-	public function addChildren():Void {
-		for (i in 0...children.length)
-			Main.self.addChild(children[i]);
-	}
-
-	/**
-	 * Removes all the created border instances below the parent field on `Main.hx`
-	 */
-	public function killChildren():Void {
-		for (i in 0...children.length)
-			Main.self.removeChild(children[i]);
+		});
 	}
 }

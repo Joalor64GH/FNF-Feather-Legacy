@@ -10,7 +10,7 @@ import game.system.Conductor;
 class GameplayUI extends FlxSpriteGroup {
 	final game:PlayState = PlayState.self;
 
-	var fakeHealth:Float = 1;
+	var healthLerp:Float = 1;
 
 	public var healthBG:FlxSprite;
 	public var healthBar:FlxBar;
@@ -35,7 +35,7 @@ class GameplayUI extends FlxSpriteGroup {
 		healthBG.screenCenter(X);
 		add(healthBG);
 
-		healthBar = new FlxBar(healthBG.x + 4, healthBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBG.width - 8), Std.int(healthBG.height - 8), this, 'fakeHealth');
+		healthBar = new FlxBar(healthBG.x + 4, healthBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBG.width - 8), Std.int(healthBG.height - 8), this, 'healthLerp');
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		add(healthBar);
 
@@ -89,10 +89,10 @@ class GameplayUI extends FlxSpriteGroup {
 		super.update(elapsed);
 
 		healthBar.percent = game.currentStat.health * 50;
-		fakeHealth = FlxMath.lerp(fakeHealth, game.currentStat.health, FlxMath.bound(elapsed * 20, 0, 1));
+		healthLerp = FlxMath.lerp(healthLerp, game.currentStat.health, FlxMath.bound(elapsed * 20, 0, 1));
 
 		var iconOffset:Int = 26;
-		var percent:Float = 1 - (fakeHealth / 2);
+		var percent:Float = 1 - (healthLerp / 2);
 		iconPL.x = healthBar.x + (healthBar.width * percent) + (150 * iconPL.scale.x - 150) / 2 - iconOffset;
 		iconOPP.x = healthBar.x + (healthBar.width * percent) - (150 * iconOPP.scale.x) / 2 - iconOffset * 2;
 
