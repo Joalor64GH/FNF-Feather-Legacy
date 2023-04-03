@@ -1,4 +1,5 @@
 // default imports
+import core.ScriptHandler;
 import core.assets.AssetHandler;
 import core.assets.Paths;
 import flixel.FlxG;

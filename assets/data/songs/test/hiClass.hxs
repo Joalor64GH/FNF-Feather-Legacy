@@ -1,0 +1,21 @@
+import game.PlayState;
+
+class Hi
+{
+	function create(post:Bool):Void
+	{
+		if (!post) // do once
+			trace("Hi from a HScript Class!");
+	}
+}
+
+class Hello extends Hi
+{
+	override function create(post:Bool):Void
+	{
+		super.create();
+
+		if (post) // do after
+			trace("Hello from a extended HScript Class!");
+	}
+}

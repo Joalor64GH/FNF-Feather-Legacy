@@ -5,8 +5,11 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 
 class CrashState extends FlxUIState {
-	private var textGroup:FlxTypedGroup<FlxText>;
-	private var lastState:Class<Dynamic> = null;
+	var textGroup:FlxTypedGroup<FlxText>;
+	var lastState:Class<Dynamic> = null;
+
+	var _error:String;
+	var _catch:String;
 
 	public function new(error:String, ?caught:String, ?lastState:Class<Dynamic>):Void {
 		super();
@@ -14,7 +17,13 @@ class CrashState extends FlxUIState {
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
+		_error = error;
+		_catch = caught;
 		this.lastState = lastState;
+	}
+
+	public override function create():Void {
+		super.create();
 
 		textGroup = new FlxTypedGroup<FlxText>();
 		add(textGroup);
@@ -23,13 +32,13 @@ class CrashState extends FlxUIState {
 		errorText.color = 0xFFBDBDBD;
 		textGroup.add(errorText);
 
-		if (caught != null) {
-			var errorCatch:FlxText = new FlxText(0, errorText.y + errorText.height, Math.floor(errorText.width + 25), '[${caught}]', 32);
+		if (_catch != null) {
+			var errorCatch:FlxText = new FlxText(0, errorText.y + errorText.height, Math.floor(errorText.width + 25), '[${_catch}]', 32);
 			errorCatch.color = 0xFFBDBDBD;
 			textGroup.add(errorCatch);
 		}
 
-		var errorInfo:FlxText = new FlxText(0, errorText.y + errorText.height + 100, 0, error, 32);
+		var errorInfo:FlxText = new FlxText(0, errorText.y + errorText.height + 100, 0, _error, 32);
 		errorInfo.color = 0xFFAAAAAA;
 		textGroup.add(errorInfo);
 
@@ -56,8 +65,8 @@ class CrashState extends FlxUIState {
 	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		// if (FlxG.keys.justPressed.SPACE)
-		//	openURL('https://github.com/BeastlyGabi/FNF-Feather');
+		if (FlxG.keys.justPressed.SPACE)
+			Utils.openURL('https://github.com/BeastlyGabi/FNF-Feather');
 		if (FlxG.keys.justPressed.ESCAPE) {
 			// force switching
 			@:privateAccess {

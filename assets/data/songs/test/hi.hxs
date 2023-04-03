@@ -1,0 +1,5 @@
+function create(post:Bool):Void
+{
+	if (!post) // do once
+		trace("Hello from HScript!");
+}

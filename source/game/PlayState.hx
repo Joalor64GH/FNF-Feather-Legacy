@@ -128,6 +128,25 @@ class PlayState extends MusicBeatState {
 
 		persistentUpdate = persistentDraw = true;
 
+		// parse haxe scripts that exist within the folders
+		for (i in AssetHandler.getExtensionsFor(SCRIPT)) {
+			if (sys.FileSystem.exists(AssetHandler.getPath("data/scripts"))) {
+				for (script in sys.FileSystem.readDirectory(AssetHandler.getPath("data/scripts")))
+					if (script != null && script.contains('.') && script.endsWith(i))
+						globals.push(new ScriptHandler(AssetHandler.getAsset('data/scripts/${script}')));
+			}
+
+			for (songScript in sys.FileSystem.readDirectory(AssetHandler.getPath('data/songs/${song.name}')))
+				if (songScript != null && songScript.contains('.') && songScript.endsWith(i))
+					globals.push(new ScriptHandler(AssetHandler.getAsset('data/songs/${song.name}/${songScript}')));
+		}
+
+		callFn("create", [false]);
+
+		setVar("curBeat", curBeat);
+		setVar("curStep", curStep);
+		setVar("curSec", curSec);
+
 		// create the stage
 		gameStage = switch (song.metadata.stage) {
 			/*
@@ -211,6 +230,8 @@ class PlayState extends MusicBeatState {
 
 		controls.onKeyPressed.add(onKeyPress);
 		controls.onKeyReleased.add(onKeyRelease);
+
+		callFn("create", [true]);
 
 		songCutscene();
 
@@ -333,6 +354,8 @@ class PlayState extends MusicBeatState {
 	public var canPause:Bool = true;
 
 	public override function update(elapsed:Float):Void {
+		callFn("update", [elapsed, false]);
+
 		if (startingSong) {
 			if (startedCountdown && !paused) {
 				Conductor.songPosition += FlxG.elapsed * 1000;
@@ -433,6 +456,8 @@ class PlayState extends MusicBeatState {
 				});
 			}
 		}
+
+		callFn("update", [elapsed, true]);
 	}
 
 	public override function openSubState(SubState:flixel.FlxSubState):Void {
@@ -468,6 +493,7 @@ class PlayState extends MusicBeatState {
 	public override function onBeat():Void {
 		super.onBeat();
 
+		callFn("beatHit", [curBeat]);
 		charactersDance(curBeat);
 		gameStage.onBeat(curBeat);
 		gameUI.onBeat(curBeat);
@@ -483,12 +509,15 @@ class PlayState extends MusicBeatState {
 	public override function onStep():Void {
 		super.onStep();
 
+		callFn("stepHit", [curStep]);
 		gameStage.onStep(curStep);
 		music.resyncFunction();
 	}
 
 	public override function onSec():Void {
 		super.onSec();
+
+		callFn("secHit", [curSec]);
 		gameStage.onSec(curSec);
 		moveCamera();
 	}
@@ -596,6 +625,8 @@ class PlayState extends MusicBeatState {
 			note.wasGoodHit = true;
 			strum.playAnim('confirm', note.index, true);
 
+			callFn("goodNoteHit", [note.step, note.index, note.type, note.strumline, strum]);
+
 			var animName:String = 'sing${NoteGroup.directions[note.index].toUpperCase()}${strum.character.suffix}';
 			if (song.sections[curSec] != null && song.sections[curSec].animation != null) {
 				// suffix check
@@ -693,6 +724,8 @@ class PlayState extends MusicBeatState {
 			// miss combo numbers
 			currentStat.combo--;
 		}
+
+		callFn("noteMiss", [direction, strum, showMiss]);
 
 		if (music.vocals != null && music.vocals.playing)
 			music.vocals.volume = 0;

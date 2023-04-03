@@ -73,6 +73,9 @@ class AssetHandler {
 			default:
 		}
 	}
+
+	public static function getExtensionsFor(type:AssetType):Array<String>
+		return type.getExtension();
 }
 
 enum abstract AssetType(String) to String from String {
@@ -82,6 +85,7 @@ enum abstract AssetType(String) to String from String {
 	// TEXT TYPES
 	var XML:AssetType = 'xml';
 	var JSON:AssetType = 'json';
+	var SCRIPT:AssetType = 'script';
 	var TXT:AssetType = 'txt';
 
 	public function cycleExtensions(path:String):String {
@@ -98,6 +102,7 @@ enum abstract AssetType(String) to String from String {
 		return switch (this) {
 			case IMAGE: ['.png', '.jpg', '.bmp'];
 			case SOUND: ['.mp3', '.ogg', '.wav'];
+			case SCRIPT: ['.hx', '.hxs', '.hxc', '.hscript', '.hxclass'];
 			case FONT: ['.ttf', '.otf'];
 			case TXT: ['.txt'];
 			case XML: ['.xml'];
@@ -110,7 +115,7 @@ enum abstract AssetType(String) to String from String {
 		return switch (this) {
 			case IMAGE: openfl.utils.AssetType.IMAGE;
 			case SOUND: openfl.utils.AssetType.SOUND;
-			case TXT | XML | JSON: openfl.utils.AssetType.TEXT;
+			case TXT | XML | JSON | SCRIPT: openfl.utils.AssetType.TEXT;
 			case FONT: openfl.utils.AssetType.FONT;
 			default: openfl.utils.AssetType.BINARY;
 		}

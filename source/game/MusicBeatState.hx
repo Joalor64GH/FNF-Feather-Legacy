@@ -6,6 +6,8 @@ import flixel.addons.ui.FlxUIState;
 import game.system.Conductor;
 
 class MusicBeatState extends FlxUIState implements IMusicFunctions {
+	public var globals:Array<ScriptHandler> = [];
+
 	public var controls(get, never):Controls;
 
 	function get_controls():Controls
@@ -25,6 +27,18 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions {
 
 	function get_curStep():Int
 		return beatContainer.stepPos;
+
+	public function setVar(varString:String, varLue:Dynamic):Void {
+		if (globals.length > 0)
+			for (i in 0...globals.length)
+				globals[i].set(varString, varLue);
+	}
+
+	public function callFn(fn:String, parameters:Array<Dynamic>):Void {
+		if (globals.length > 0)
+			for (i in 0...globals.length)
+				globals[i].call(fn, parameters);
+	}
 
 	public function new():Void {
 		super();

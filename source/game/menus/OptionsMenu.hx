@@ -4,50 +4,45 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import game.MusicBeatState.MusicBeatSubState;
 import game.system.Option;
+import game.system.OptionCategory;
 import game.system.OptionList;
 
 class OptionsMenu extends MusicBeatSubState {
 	public var curSelection:Int = 0;
+	public var curHorizontal:Int = 0;
 
-	public var pageBG:FlxSprite;
-	public var pageGroup:FlxTypedGroup<FlxText>;
+	public var blackBG:FlxSprite;
 	public var descriptionHolder:FlxText;
 
-	public var options:Array<Option> = [];
+	public var selectedText:FlxText;
+	public var curCategory:OptionCategory;
+	public var curOption:Option;
+
+	public var options:Array<OptionCategory> = [];
 	public var onPause:Bool = false;
 
 	public function new(onPause:Bool = false):Void {
 		super();
 		this.onPause = onPause;
-		options = OptionList.get();
 	}
 
 	public override function create():Void {
 		super.create();
 
-		pageBG = new FlxSprite().makeGraphic(Std.int(FlxG.width / 1.3), Std.int(FlxG.height / 1.1), FlxColor.BLACK);
-		pageBG.screenCenter(XY);
-		pageBG.alpha = 0;
-		add(pageBG);
+		blackBG = new FlxSprite().makeGraphic(Std.int(FlxG.width / 1.3), Std.int(FlxG.height / 1.1), FlxColor.BLACK);
+		blackBG.screenCenter(XY);
+		blackBG.alpha = 0;
+		add(blackBG);
 
-		pageGroup = new FlxTypedGroup<FlxText>();
+		options.push(new OptionCategory(blackBG.x, blackBG.y + 10, "Main", OptionList.get()));
+		for (i in 0...options.length)
+			add(options[i].optionObjects);
 
-		for (i in 0...options.length) {
-			var name:FlxText = new FlxText(pageBG.x + 10, (40 * i) + pageBG.y + 10, pageBG.width, '${options[i].name}: ${getValueText(i)}');
-			name.setFormat(Paths.font('vcr'), 32, (onPause && options[i].lockOnPause) ? 0xFFFFFF00 : 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-			name.alpha = 0;
-			name.ID = i;
-			pageGroup.add(name);
-
-			FlxTween.tween(name, {alpha: 0.6}, 0.4);
-		}
-		add(pageGroup);
-
-		descriptionHolder = new FlxText(pageBG.x + 10, pageBG.height, pageBG.width, '');
+		descriptionHolder = new FlxText(blackBG.x + 10, blackBG.height, blackBG.width, '');
 		descriptionHolder.setFormat(Paths.font('vcr'), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(descriptionHolder);
 
-		FlxTween.tween(pageBG, {alpha: 0.6}, 0.6, {
+		FlxTween.tween(blackBG, {alpha: 0.6}, 0.6, {
 			onComplete: function(twn:FlxTween):Void {
 				lockedMovement = false;
 				updateSelection();
@@ -83,11 +78,14 @@ class OptionsMenu extends MusicBeatSubState {
 						updateSelection((timerCalc - timerCalcPost) * (controls.pressed("down") ? -1 : 1));
 				}
 
+				if (controls.anyJustPressed(["left", "right"]))
+					updateCategory(controls.justPressed("left") ? -1 : 1);
+
 				if (controls.justPressed("back"))
 					close();
 
 				if (controls.justPressed("accept")) {
-					if (onPause && options[curSelection].lockOnPause)
+					if (onPause && curOption.lockOnPause)
 						return;
 
 					FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -95,34 +93,35 @@ class OptionsMenu extends MusicBeatSubState {
 				}
 			} else {
 				if (controls.anyJustPressed(["left", "right"])) {
-					var option:Option = options[curSelection];
-					switch (option.type) {
+					updateCategory();
+
+					switch (curOption.type) {
 						case Checkmark:
-							option.value = !option.value;
+							curOption.value = !curOption.value;
 
 						case StringList:
 							var storedValue:Int = 0;
-							for (i in 0...option.optionsList.length) {
-								if (option.optionsList[i] == getValueText(curSelection))
+							for (i in 0...curOption.optionsList.length) {
+								if (curOption.optionsList[i] == getValueText(curSelection))
 									storedValue = i;
 
-								option.maximum = option.optionsList.length - 1;
+								curOption.maximum = curOption.optionsList.length - 1;
 							}
 
 							var nextValue:Int = controls.justPressed("left") ? -1 : 1;
-							var wrapValue:Int = FlxMath.wrap(storedValue + nextValue, option.minimum, option.maximum);
-							option.value = option.optionsList[wrapValue];
+							var wrapValue:Int = FlxMath.wrap(storedValue + nextValue, curOption.minimum, curOption.maximum);
+							curOption.value = curOption.optionsList[wrapValue];
 
 						case Number:
 							var nextValue:Int = controls.justPressed("left") ? -1 : 1;
-							var keyValue:Int = Settings.get(option.apiKey) + option.decimals * nextValue;
-							if (keyValue < option.minimum || keyValue > option.maximum)
-								keyValue = Settings.get(option.apiKey) + nextValue;
+							var keyValue:Int = Settings.get(curOption.apiKey) + curOption.decimals * nextValue;
+							if (keyValue < curOption.minimum || keyValue > curOption.maximum)
+								keyValue = Settings.get(curOption.apiKey) + nextValue;
 
-							option.value = FlxMath.wrap(keyValue, option.minimum, option.maximum);
+							curOption.value = FlxMath.wrap(keyValue, curOption.minimum, curOption.maximum);
 					}
 
-					pageGroup.members[curSelection].text = '${option.name}: ${getValueText(curSelection)}';
+					selectedText.text = '${curOption.name}: ${getValueText(curSelection)}';
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 				}
 
@@ -137,29 +136,43 @@ class OptionsMenu extends MusicBeatSubState {
 	}
 
 	public function getValueText(index:Int):String {
-		return switch (options[index].value) {
+		return switch (curCategory.options[index].value) {
 			case "true": "ON";
 			case "false": "OFF";
-			default: options[index].value;
+			default: curCategory.options[index].value;
 		}
 	}
 
 	public function updateSelection(newSelection:Int = 0):Void {
-		if (pageGroup.members != null && pageGroup.members.length > 0)
-			curSelection = FlxMath.wrap(curSelection + newSelection, 0, Std.int(pageGroup.members.length - 1));
+		updateCategory();
 
+		curSelection = FlxMath.wrap(curSelection + newSelection, 0, Std.int(curCategory.options.length - 1));
 		if (newSelection != 0)
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 
-		var pauseLock:Bool = onPause && options[curSelection].lockOnPause;
-		descriptionHolder.text = pauseLock ? 'This option cannot be changed while on the Pause Menu.' : options[curSelection].description;
-		descriptionHolder.color = pageGroup.members[curSelection].color;
+		if (onPause && curOption.lockOnPause) {
+			selectedText.color = 0xFFFFFF00;
+			descriptionHolder.text = 'This option cannot be changed while on the Pause Menu.';
+		} else
+			descriptionHolder.text = curOption.description;
+
+		descriptionHolder.color = selectedText.color;
 
 		var ascendingIndex:Int = 0;
-		for (option in pageGroup) {
+		for (option in curCategory.optionObjects) {
 			option.ID = ascendingIndex - curSelection;
 			option.alpha = option.ID == 0 ? 1 : 0.6;
 			++ascendingIndex;
 		}
+	}
+
+	public function updateCategory(newCategory:Int = 0):Void {
+		if (options != null && options[curHorizontal] != null) {
+			curCategory = options[curHorizontal];
+			curOption = options[curHorizontal].options[curSelection];
+			selectedText = options[curHorizontal].optionObjects.members[curSelection];
+		}
+
+		curHorizontal = FlxMath.wrap(curHorizontal + newCategory, 0, options.length - 1);
 	}
 }

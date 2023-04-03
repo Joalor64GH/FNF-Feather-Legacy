@@ -38,6 +38,7 @@
 	<!-- _______ Custom Defines _______ -->
 
 	<define name="MODDING_ENABLED" />
+	<define name="SCRIPTING_ENABLED" />
 
 	<!-- _______ Paths _______ -->
 
@@ -53,7 +54,7 @@
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
-
+	<haxelib name="SScript" if="SCRIPTING_ENABLED" />
 	<haxelib name="tjson" />
 
 	<!-- _______ Defines _______ -->
@@ -74,6 +75,9 @@
 	<!-- Always enable Null Object Reference check -->
 	<haxedef name="HXCPP_CHECK_POINTER" />
 	<haxedef name="HXCPP_STACK_LINE" />
+
+	<!-- Error Handling at Runtime for Scripts -->
+	<haxedef name="hscriptPos" if="SCRIPTING_ENABLED" />
 
 	<!-- _______ Custom _______ -->
 </project>
