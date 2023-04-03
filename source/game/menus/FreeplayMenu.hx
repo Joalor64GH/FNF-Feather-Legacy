@@ -129,7 +129,7 @@ class FreeplayMenu extends MenuBase {
 				FlxG.switchState(new ChartEditor(parameters));
 			else {
 				FlxG.sound.play(Paths.sound("confirmMenu"));
-				FlxFlicker.flicker(optionsGroup.members[curSelection], 0.5, false, true, (flick:FlxFlicker) -> FlxG.switchState(new PlayState(parameters)));
+				FlxFlicker.flicker(optionsGroup.members[curSelection], 0.5, true, false, (flick:FlxFlicker) -> FlxG.switchState(new PlayState(parameters)));
 			}
 		}
 

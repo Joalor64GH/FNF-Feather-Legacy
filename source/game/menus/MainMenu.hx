@@ -14,7 +14,7 @@ class MainMenu extends MusicBeatState {
 		{name: 'story mode', callback: /*function():Void FlxG.switchState(new StoryMenu())*/ null},
 		{name: 'freeplay', callback: function():Void FlxG.switchState(new FreeplayMenu())},
 		{name: 'credits', callback: function():Void FlxG.switchState(new CreditsMenu())},
-		{name: 'options', callback: function():Void FlxG.switchState(new OptionsMenu())}
+		{name: 'options', callback: function():Void FlxG.state.openSubState(new OptionsMenu())}
 	];
 
 	var bg:FlxSprite;
@@ -122,7 +122,7 @@ class MainMenu extends MusicBeatState {
 							onComplete: function(twn:FlxTween):Void spr.kill()
 						});
 					} else {
-						FlxFlicker.flicker(spr, 1, 0.10, false, false, function(flick:FlxFlicker):Void {
+						FlxFlicker.flicker(spr, 1, 0.10, optionsList[curSelection].name == 'options', false, function(flick:FlxFlicker):Void {
 							if (optionsList[curSelection].callback != null)
 								optionsList[curSelection].callback();
 							else
@@ -160,6 +160,21 @@ class MainMenu extends MusicBeatState {
 				if (spr.selectItem != null)
 					spr.selectItem();
 		});
+	}
+
+	public override function closeSubState():Void {
+		optionsGroup.forEach(function(spr:MainMenuItem):Void {
+			spr.revive();
+
+			FlxTween.tween(spr, {alpha: 1}, 0.4, {
+				ease: FlxEase.cubeOut,
+				onComplete: function(twn:FlxTween):Void {
+					lockedMovement = false;
+					updateSelection();
+				}
+			});
+		});
+		super.closeSubState();
 	}
 }
 
