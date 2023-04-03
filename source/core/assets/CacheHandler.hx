@@ -14,9 +14,6 @@ import java.vm.Gc;
 import neko.vm.Gc;
 #end
 
-/**
- * fuck
- */
 enum abstract PurgeDefinition(String) to String {
 	var STORED_IMAGES:PurgeDefinition = 'stored_images';
 	var UNUSED_IMAGES:PurgeDefinition = 'unused_images';
