@@ -4,6 +4,26 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import sys.FileSystem;
 import sys.io.File;
 
+enum EngineOrigin {
+	/**
+	 * Characters: JSON
+	 * Charts: heavily modified base
+	 */
+	PSYCH_ENGINE;
+
+	/**
+	 * Characters: Scripts (hscript)
+	 * Charts: Same as base
+	 */
+	FOREVER_ENGINE;
+
+	/**
+	 * Characters: JSON
+	 * Charts: unique format
+	 */
+	CROW_ENGINE;
+}
+
 class AssetHandler {
 	public static function getPath(?folder:String, ?type:AssetType, ?disregardMods:Bool = false):String {
 		if (folder != null)

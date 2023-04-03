@@ -14,10 +14,10 @@ import java.vm.Gc;
 import neko.vm.Gc;
 #end
 
-enum abstract PurgeDefinition(String) to String {
-	var STORED_IMAGES:PurgeDefinition = 'stored_images';
-	var UNUSED_IMAGES:PurgeDefinition = 'unused_images';
-	var CACHED_SOUNDS:PurgeDefinition = 'cached_sounds';
+enum PurgeDefinition {
+	STORED_IMAGES;
+	UNUSED_IMAGES;
+	CACHED_SOUNDS;
 }
 
 class CacheHandler {
