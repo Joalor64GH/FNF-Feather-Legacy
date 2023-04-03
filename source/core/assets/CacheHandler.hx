@@ -14,6 +14,15 @@ import java.vm.Gc;
 import neko.vm.Gc;
 #end
 
+/**
+ * fuck
+ */
+enum abstract PurgeDefinition(String) to String {
+	var STORED_IMAGES:PurgeDefinition = 'stored_images';
+	var UNUSED_IMAGES:PurgeDefinition = 'unused_images';
+	var CACHED_SOUNDS:PurgeDefinition = 'cached_sounds';
+}
+
 class CacheHandler {
 	public static var cachedGraphics:Map<String, FlxGraphic> = new Map<String, FlxGraphic>();
 	public static var cachedSounds:Map<String, Sound> = new Map<String, Sound>();
@@ -55,11 +64,23 @@ class CacheHandler {
 		return null;
 	}
 
-	public static function purge(stored:Bool = false):Void {
-		if (stored)
-			_purgeStored();
-		_purgeSounds();
-		_purgeUnused();
+	public static function purge(?definitions:Array<PurgeDefinition>):Void {
+		// definitions are optional
+		if (definitions == null)
+			definitions = [UNUSED_IMAGES, CACHED_SOUNDS];
+
+		var funcsToExec:Array<Void->Void> = [];
+
+		if (definitions.contains(STORED_IMAGES))
+			funcsToExec.push(_purgeStored);
+		if (definitions.contains(CACHED_SOUNDS))
+			funcsToExec.push(_purgeSounds);
+		if (definitions.contains(UNUSED_IMAGES))
+			funcsToExec.push(_purgeUnused);
+
+		if (funcsToExec.length > 0)
+			for (i in 0...funcsToExec.length)
+				funcsToExec[i]();
 	}
 
 	static function _purgeStored():Void {

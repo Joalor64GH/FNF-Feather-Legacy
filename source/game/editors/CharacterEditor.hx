@@ -1,12 +1,15 @@
 package game.editors;
 
 import flixel.FlxObject;
+import flixel.group.FlxGroup;
+import flixel.text.FlxText;
 import game.gameplay.Character;
 
 class CharacterEditor extends MusicBeatState {
 	public var character:Character;
 
 	public var cameraObject:FlxObject;
+	public var textGroup:FlxTypedGroup<FlxText>;
 
 	public var characterName:String;
 	public var isPlayer:Bool;
@@ -26,6 +29,7 @@ class CharacterEditor extends MusicBeatState {
 		add(character);
 
 		cameraObject = new FlxObject(0, 0, 1, 1);
+		cameraObject.screenCenter();
 		FlxG.camera.follow(cameraObject);
 	}
 
@@ -35,24 +39,34 @@ class CharacterEditor extends MusicBeatState {
 		if (FlxG.keys.justPressed.ESCAPE)
 			FlxG.switchState(new game.menus.MainMenu());
 
+		if (FlxG.keys.justPressed.Q || FlxG.keys.justPressed.E) {
+			var mult:Float = FlxG.keys.justPressed.Q ? -0.25 : 0.25;
+			FlxG.camera.zoom += mult;
+
+			if (FlxG.camera.zoom > 3)
+				FlxG.camera.zoom = 3;
+			if (FlxG.camera.zoom < 0.5)
+				FlxG.camera.zoom = 0.5;
+		}
+
 		var cameraControlsArray:Array<Bool> = [
-			FlxG.keys.pressed.J,
-			FlxG.keys.pressed.K,
-			FlxG.keys.pressed.I,
-			FlxG.keys.pressed.L
+			FlxG.keys.pressed.J, // LEFT
+			FlxG.keys.pressed.K, // DOWN
+			FlxG.keys.pressed.I, // UP
+			FlxG.keys.pressed.L // RIGHT
 		];
 
 		if (cameraControlsArray.contains(true)) {
 			for (i in 0...cameraControlsArray.length) {
-				cameraObject.x += switch (i) {
-					case 0: 10;
-					case 3: -10;
+				cameraObject.velocity.x += switch (i) {
+					case 0: 90;
+					case 3: -90;
 					default: 0;
 				}
 
-				cameraObject.y += switch (i) {
-					case 1: -10;
-					case 2: 10;
+				cameraObject.velocity.y += switch (i) {
+					case 1: -90;
+					case 2: 90;
 					default: 0;
 				}
 			}

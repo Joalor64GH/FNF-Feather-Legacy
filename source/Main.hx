@@ -21,8 +21,8 @@ class Main extends Sprite {
 	public static var self:Main;
 
 	// don't set "branch" as null, set it to "" instead!!!
-	public static var featherVer:VersionScheme = {number: "1.0.0", branch: "POSTBETA"};
-	public static var fnfVer:VersionScheme = {number: "0.2.8", branch: "DEMO"};
+	public static var featherVer:VersionScheme = {number: "1.0.0", branch: "BETA"};
+	public static var fnfVer:VersionScheme = {number: "0.2.8", branch: ""};
 
 	public var fpsCounter:FPS;
 
@@ -50,7 +50,7 @@ class Main extends Sprite {
 		FlxG.mouse.visible = false;
 
 		FlxG.signals.preStateSwitch.add(function():Void {
-			CacheHandler.purge(true);
+			CacheHandler.purge([STORED_IMAGES, UNUSED_IMAGES, CACHED_SOUNDS]);
 		});
 
 		openfl.Lib.current.stage.application.onExit.add(function(code:Int):Void {
