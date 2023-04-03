@@ -57,31 +57,6 @@ class ChartLoader {
 		if (fnfSong != null && fnfSong.notes != null) {
 			parsedType = 'FNF LEGACY/HYBRID';
 
-			// yikes, retrocompatibility
-			if (fnfSong.stage == null) {
-				fnfSong.stage = switch (fnfSong.song) {
-					case 'ugh', 'guns', 'stress': 'military-zone';
-					case 'thorns': 'school-glitch';
-					case 'senpai', 'roses': 'school';
-					case 'winter-horrorland': 'red-mall';
-					case 'cocoa', 'eggnog': 'mall';
-					case 'satin-panties', 'high', 'milf': 'highway';
-					case 'pico', 'philly', 'blammed': 'philly-city';
-					case 'spookeez', 'south', 'mounster': 'haunted-house';
-					default: 'stage';
-				}
-			}
-
-			if (fnfSong.gfVersion == null) {
-				fnfSong.gfVersion = switch (fnfSong.stage) {
-					case 'tank', 'military-zone': 'gf-tankmen';
-					case 'school', 'schoolEvil', 'school-glitch': 'gf-pixel';
-					case 'mall', 'mallEvil', 'red-mall': 'gf-christmas';
-					case 'highway', 'limo': 'gf-car';
-					default: 'gf';
-				}
-			}
-
 			tempSong =
 				{
 					name: fnfSong.song,
@@ -154,9 +129,13 @@ class ChartLoader {
 					for (event in fnfSong.events) {}
 				}
 			}
-		} else { // parse as feather format
+		} else // parse as feather format
 			tempSong = cast tjson.TJSON.parse(jsonPath);
-		}
+
+		if (tempSong.metadata.stage == null)
+			tempSong.metadata.stage = getStageVersion(tempSong.name);
+		if (tempSong.metadata.crowd == null)
+			tempSong.metadata.crowd = getCrowdVersion(tempSong.metadata.stage);
 
 		if (tempSong.metadata.strumlines < 1)
 			tempSong.metadata.strumlines = 1;
@@ -164,6 +143,31 @@ class ChartLoader {
 			tempSong.metadata.strumlines = 4;
 
 		return tempSong;
+	}
+
+	public static function getStageVersion(song:String):String {
+		// yikes, retrocompatibility
+		return switch (song.toLowerCase()) {
+			case 'ugh', 'guns', 'stress': 'military-zone';
+			case 'thorns': 'school-glitch';
+			case 'senpai', 'roses': 'school';
+			case 'winter-horrorland': 'red-mall';
+			case 'cocoa', 'eggnog': 'mall';
+			case 'satin-panties', 'high', 'milf': 'highway';
+			case 'pico', 'philly', 'blammed': 'philly-city';
+			case 'spookeez', 'south', 'mounster': 'haunted-house';
+			default: 'stage';
+		}
+	}
+
+	public static function getCrowdVersion(stage:String):String {
+		return switch (stage.toLowerCase()) {
+			case 'tank', 'military-zone': 'gf-tankmen';
+			case 'school', 'schoolEvil', 'school-glitch': 'gf-pixel';
+			case 'mall', 'mallEvil', 'red-mall': 'gf-christmas';
+			case 'highway', 'limo': 'gf-car';
+			default: 'gf';
+		}
 	}
 }
 

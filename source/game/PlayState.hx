@@ -131,15 +131,15 @@ class PlayState extends MusicBeatState {
 		// create the stage
 		gameStage = switch (song.metadata.stage) {
 			/*
-				case 'tank', 'military-zone': new military-zone();
-				case 'schoolEvil', 'school-glitch': new SchoolGlitch();
+				case 'military-zone': new military-zone();
+				case 'school-glitch': new SchoolGlitch();
 				case 'school': new School();
-				case 'mallEvil', 'red-mall': new RedMall();
+				case 'red-mall': new RedMall();
 				case 'mall': new Mall();
-				case 'highway', 'limo': new Highway();
+				case 'highway': new Highway();
 			 */
-			case 'philly', 'philly-city': new PhillyCity();
-			case 'spooky', 'haunted-house': new HauntedHouse();
+			case 'philly-city': new PhillyCity();
+			case 'haunted-house': new HauntedHouse();
 			default: new Stage();
 		}
 		add(gameStage);
