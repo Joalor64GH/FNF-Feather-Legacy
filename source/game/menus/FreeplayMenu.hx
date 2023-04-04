@@ -226,7 +226,7 @@ class FreeplayMenu extends MenuBase {
 					if (curThread == curSelection && playbackActive) {
 						mutex.acquire();
 						FlxG.sound.playMusic(Paths.inst(Utils.removeForbidden(songList[curSelection].name)));
-						FlxG.sound.music.fadeIn(0.8);
+						// FlxG.sound.music.fadeIn(0.8);
 						mutex.release();
 					}
 				}
