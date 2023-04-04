@@ -29,6 +29,17 @@ class FNFSprite extends FlxSprite implements ISpriteOffset {
 		offsets[anim] = newOffset;
 	}
 
+	/*
+	 * ...
+	 * @author Yoshubs
+	**/
+	public function resizeOffsets(?newScale:Float):Void {
+		if (newScale == null)
+			newScale = scale.x;
+		for (i in offsets.keys())
+			offsets[i] = [offsets[i][0] * newScale, offsets[i][1] * newScale];
+	}
+
 	public function new(x:Float = 0, y:Float = 0):Void {
 		super(x, y);
 	}

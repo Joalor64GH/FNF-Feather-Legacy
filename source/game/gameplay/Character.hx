@@ -12,6 +12,7 @@ enum DanceType {
 typedef CharacterFormat = {
 	var image:String;
 	var flipX:Null<Bool>;
+	var size:Null<Float>;
 	var animations:Array<FNFAnimation>;
 	var singDuration:Null<Float>;
 	var characterOffset:Array<Float>;
@@ -66,8 +67,9 @@ class Character extends FNFSprite {
 		super(x, y);
 	}
 
-	public function loadChar(name:String = "bf", isPlayer:Bool = false):Character {
-		this.name = name;
+	public function loadChar(_name:String = "bf", _isPlayer:Bool = false):Character {
+		name = _name;
+		isPlayer = _isPlayer;
 
 		antialiasing = Settings.get("antialiasing") && !name.endsWith("-pixel");
 
@@ -107,6 +109,15 @@ class Character extends FNFSprite {
 				if (sys.FileSystem.exists(AssetHandler.getPath('images/characters/${name}/${name}', JSON))) {
 					var file:CharacterFormat = cast tjson.TJSON.parse(AssetHandler.getAsset('images/characters/${name}/${name}', JSON));
 					if (file != null) {
+						if (file.image != null)
+							frames = getFrames(file.image);
+						else
+							frames = getFrames(name);
+
+						// todo: per-player animations
+						for (anim in file.animations)
+							addAnim(anim.name, anim.prefix, anim.animOffsets, anim.framerate, anim.looped, anim.indices, anim.flipX, anim.flipY);
+
 						if (file.flipX != null)
 							flipX = file.flipX;
 						if (file.characterOffset != null)
@@ -116,14 +127,10 @@ class Character extends FNFSprite {
 						if (file.singDuration != null)
 							singDuration = file.singDuration;
 
-						if (file.image != null)
-							frames = getFrames(file.image);
-						else
-							frames = getFrames(name);
-
-						// todo: per-player animations
-						for (anim in file.animations)
-							addAnim(anim.name, anim.prefix, anim.animOffsets, anim.framerate, anim.looped, anim.indices, anim.flipX, anim.flipY);
+						if (file.size != null) {
+							setGraphicSize(Std.int(width * file.size));
+							resizeOffsets(file.size);
+						}
 					}
 				} else
 					loadChar("face", isPlayer);

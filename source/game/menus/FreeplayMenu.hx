@@ -17,11 +17,12 @@ import sys.thread.Thread;
 class FreeplayMenu extends MenuBase {
 	static var lastSelection:Int = -1;
 
-	var iconList:Array<HealthIcon> = [];
-
 	var bg:FlxSprite;
 	var curDifficulty:Int = 1;
+
 	var songList:Array<ListableSong> = [];
+	var iconList:Array<HealthIcon> = [];
+	var existingSongs:Array<String> = [];
 
 	// ui objects
 	var scoreBG:FlxSprite;
@@ -50,6 +51,7 @@ class FreeplayMenu extends MenuBase {
 				if (week.songs[i].color == null)
 					week.songs[i].color = 0xFFFFFFFF;
 				songList.push(week.songs[i]);
+				existingSongs.push(week.songs[i].name);
 			}
 		}
 
@@ -58,8 +60,10 @@ class FreeplayMenu extends MenuBase {
 			if (FileSystem.exists(AssetHandler.getPath(path, JSON))) {
 				var data:ListableSong = cast tjson.TJSON.parse(AssetHandler.getAsset(path, JSON, true));
 				data.color = FlxColor.fromString(Std.string(data.color));
-				if (!songList.contains(data))
+				if (!existingSongs.contains(data.name)) {
 					songList.push(data);
+					existingSongs.push(data.name);
+				}
 			}
 		}
 
@@ -70,8 +74,10 @@ class FreeplayMenu extends MenuBase {
 				if (FileSystem.exists(core.assets.ModHandler.getPath(path, JSON))) {
 					var data:ListableSong = cast tjson.TJSON.parse(sys.io.File.getContent(core.assets.ModHandler.getPath(path, JSON)));
 					data.color = FlxColor.fromString(Std.string(data.color));
-					if (!songList.contains(data))
+					if (!existingSongs.contains(data.name)) {
 						songList.push(data);
+						existingSongs.push(data.name);
+					}
 				}
 			}
 		}
