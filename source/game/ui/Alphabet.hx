@@ -56,13 +56,12 @@ class Alphabet extends FlxSpriteGroup {
 			if (txt == " " || txt == "_")
 				textSpaces++;
 
-			var letter:Bool = Letter.charsStruct.letters.indexOf(txt.toLowerCase()) != 1;
-			var number:Bool = Letter.charsStruct.numbers.indexOf(txt.toLowerCase()) != 1;
-			var symbol:Bool = Letter.charsStruct.symbols.indexOf(txt.toLowerCase()) != 1;
+			var letter:Bool = Letter.chars.letters.indexOf(txt.toLowerCase()) != 1;
+			var number:Bool = Letter.chars.numbers.indexOf(txt.toLowerCase()) != 1;
+			var symbol:Bool = Letter.chars.symbols.indexOf(txt.toLowerCase()) != 1;
 
-			var lastLetter:Letter = storedLetters[storedLetters.length - 1];
-
-			if (letter || number || symbol) {
+			if ((letter || number || symbol) && txt.toLowerCase() != ' ') {
+				var lastLetter:Letter = storedLetters[storedLetters.length - 1];
 				if (lastLetter != null)
 					offsetX = lastLetter.x + lastLetter.width;
 
@@ -71,8 +70,6 @@ class Alphabet extends FlxSpriteGroup {
 				textSpaces = 0;
 
 				var newLetter:Letter = new Letter(offsetX, 0, size);
-				if (symbol)
-					newLetter.createSymbol(txt);
 				newLetter.createSprite(txt, !bold, false);
 				add(newLetter);
 
@@ -124,11 +121,11 @@ class Alphabet extends FlxSpriteGroup {
 }
 
 class Letter extends FNFSprite {
-	public static var charsStruct:Dynamic =
+	public static var chars:Dynamic =
 		{
 			letters: "abcdefghijklmnopqrstuvwxyz",
 			numbers: "0123456789",
-			symbols: "!@#$%&*()[]{}`´~^.,;:/|\\?<>+-_="
+			symbols: "!@#$%&*()[]{}'`´~^.,;:/|\\?<>+-_=<>"
 		};
 
 	public var size(default, set):Float = 1;
@@ -143,10 +140,6 @@ class Letter extends FNFSprite {
 	public function new(x:Float, y:Float, ?bold:Bool = false, ?size:Float = 1):Void {
 		super(x, y);
 
-		/*
-		 * not using "FeatherUI.getUIAsset" here because I"m prioritizing
-		 * making this work beforehand, then make it customizable later
-		 */
 		frames = AssetHandler.getAsset("images/ui/default/alphabet", XML);
 		antialiasing = Settings.get("antialiasing");
 		this.size = size;
@@ -164,32 +157,8 @@ class Letter extends FNFSprite {
 		}
 	}
 
-	public function createSprite(char:String, bold:Bool = false, isNumber:Bool = false):Void {
-		var animName:String = char;
-		if (!isNumber) {
-			animName = char + " lowercase";
-			if (bold) {
-				char = char.toUpperCase();
-				animName = char + " bold";
-			} else if (char.toLowerCase() != char)
-				animName = char + " capital";
-		}
-
-		addAnim(char, animName, null, 24);
-		playAnim(char);
-
-		if (!bold) {
-			y = (110 - height);
-			y += row * 60;
-		}
-		updateHitbox();
-	}
-
-	public function createSymbol(symbol:String):Void {
-		if (symbol == "" && symbol == " " && symbol == null)
-			return;
-
-		var animName:String = switch (symbol) {
+	public function createSprite(char:String, bold:Bool = false, special:Bool = false):Void {
+		var animName:String = switch (char) {
 			case "$": "dollarsign ";
 			case "<": "lessThan";
 			case ">": "greaterThan";
@@ -199,18 +168,31 @@ class Letter extends FNFSprite {
 			case "?": "question mark";
 			case "!": "exclamation point";
 			case "#": "hashtag ";
-			default: symbol;
+			default: char;
+		};
+
+		if (!special) {
+			animName = char + " lowercase";
+			if (bold)
+				animName = char.toUpperCase() + " bold";
+			else if (char.toLowerCase() != char)
+				animName = char + " capital";
 		}
 
-		y += switch (symbol) {
+		y += switch (char) {
 			case ".": 50;
 			case "-": 25;
 			case ",": 35;
 			default: 0;
 		};
 
-		addAnim(symbol, animName, null, 24);
-		playAnim(symbol);
+		addAnim(char, animName, null, 24);
+		playAnim(char);
 		updateHitbox();
+
+		if (!bold) {
+			y = (110 - height);
+			y += row * 60;
+		}
 	}
 }
