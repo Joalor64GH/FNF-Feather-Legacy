@@ -1,0 +1,9 @@
+{
+	"songs": [
+		{"name": "Cocoa", "opponent": "parents", "color": "#A0D1FF"},
+		{"name": "Eggnog", "opponent": "parents", "color": "#A0D1FF"},
+		{"name": "Winter-Horrorland", "opponent": "lemon-monster", "color": "#A0D1FF"}
+	],
+	"chars": ["parents", "bf", "gf"],
+	"label": "RED SNOW"
+}

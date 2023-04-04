@@ -17,6 +17,38 @@ typedef TransitionState = flixel.addons.transition.FlxTransitionableState;
 
 class Utils {
 	/**
+	 * Reads through a specified file and returns an array of written information, separated by a line break
+	 * @param path the Path to look for the file
+	 * @return Array<String>
+	 */
+	@:keep public static inline function readText(path:String):Array<String> {
+		if (!sys.FileSystem.exists(path)) {
+			trace('[UTILS]: "${path}" does not exist.');
+			return [];
+		}
+
+		var lineList:Array<String> = sys.io.File.getContent(path).trim().split('\n');
+		return [for (i in 0...lineList.length) lineList[i].trim()];
+	}
+
+	/**
+	 * Returns an array with all the subfolders that existing on the specified folder
+	 * @param folder folder to look for directories
+	 * @return Array<String>
+	 */
+	@:keep public static inline function readFoldersIn(folder:String):Array<String> {
+		var subFolders:Array<String> = [];
+		var folderExists:Bool = sys.FileSystem.exists(Paths.getPath(folder));
+
+		if (folderExists)
+			for (directory in sys.FileSystem.readDirectory(Paths.getPath(folder)))
+				subFolders.push(directory);
+
+		trace('Folder ${folder} - ' + (folderExists ? 'Sub Count: ${subFolders.length}' : 'Exists: ${folderExists}'));
+		return subFolders;
+	}
+
+	/**
 	 * Sets the volume keys to new ones, each parameter is optional, as setting them to null results in the default keys
 	 * 
 	 * @param keysUp        the Volume UP (+) Keys, e.g [FlxKey.NUMPADPLUS, FlxKey.PLUS]

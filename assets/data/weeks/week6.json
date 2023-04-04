@@ -1,0 +1,9 @@
+{
+	"songs": [
+		{"name": "Senpai", "opponent": "senpai", "color": "#FF78BF"},
+		{"name": "Roses", "opponent": "senpai", "color": "#FF78BF"},
+		{"name": "Thorns", "opponent": "spirit", "color": "#FF78BF"}
+	],
+	"chars": ["senpai", "bf", "gf"],
+	"label": "Hating Simulator ft. Moawling"
+}

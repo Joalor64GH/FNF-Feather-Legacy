@@ -1,0 +1,9 @@
+{
+	"songs": [
+		{"name": "Ugh", "opponent": "tankman", "color": "#F6B604"},
+		{"name": "Guns", "opponent": "tankman", "color": "#F6B604"},
+		{"name": "Stress", "opponent": "tankman", "color": "#F6B604"}
+	],
+	"chars": ["tankman", "bf", "gf"],
+	"label": "TANKMAN"
+}

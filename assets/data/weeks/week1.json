@@ -1,0 +1,9 @@
+{
+	"songs": [
+		{"name": "Bopeebo", "opponent": "dad", "color": "#9271FD"},
+		{"name": "Fresh", "opponent": "dad", "color": "#9271FD"},
+		{"name": "Dadbattle", "opponent": "dad", "color": "#9271FD"}
+	],
+	"chars": ["dad", "bf", "gf"],
+	"label": "Daddy Dearest"
+}

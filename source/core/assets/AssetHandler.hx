@@ -33,17 +33,9 @@ class AssetHandler {
 
 		// prioritize mod assets
 		#if MODDING_ENABLED
-		if (!disregardMods) {
-			if (ModHandler.activeMod != null) // prioritize the active mod
-				if (FileSystem.exists(ModHandler.getPath('${ModHandler.activeMod}${folder}', type)))
-					returnPath = ModHandler.getPath('${ModHandler.activeMod}${folder}', type);
-
-			if (ModHandler.modFolders.length > 0) { // else just try and search everywhere
-				for (i in 0...ModHandler.modFolders.length)
-					if (FileSystem.exists(ModHandler.getPath('${ModHandler.modFolders[i]}${folder}', type)))
-						returnPath = ModHandler.getPath('${ModHandler.modFolders[i]}${folder}', type);
-			}
-		}
+		if (!disregardMods)
+			if (FileSystem.exists(ModHandler.getPath(folder, type)))
+				returnPath = ModHandler.getPath(folder, type);
 		#end
 
 		return returnPath;

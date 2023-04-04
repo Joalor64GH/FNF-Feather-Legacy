@@ -26,7 +26,7 @@ class MainMenu extends MusicBeatState {
 		#if MODDING_ENABLED
 		core.assets.ModHandler.scanMods();
 		#end
-
+		game.system.Levels.loadLevels();
 		Utils.resetMusic();
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menus/menuBG'));

@@ -1,0 +1,9 @@
+{
+	"songs": [
+		{"name": "Spookeez", "opponent": "spooky-kids", "color": "#223344"},
+		{"name": "South", "opponent": "spooky-kids", "color": "#223344"},
+		{"name": "Monster", "opponent": "lemon-monster", "color": "#223344"}
+	],
+	"chars": ["spooky-kids", "bf", "gf"],
+	"label": "Spooky Month"
+}

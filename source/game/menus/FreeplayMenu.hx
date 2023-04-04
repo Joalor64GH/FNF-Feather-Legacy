@@ -56,10 +56,26 @@ class FreeplayMenu extends MenuBase {
 		for (folder in FileSystem.readDirectory(AssetHandler.getPath("data/songs", true))) {
 			var path:String = 'data/songs/${folder}/freeplay';
 			if (FileSystem.exists(AssetHandler.getPath(path, JSON))) {
-				var data:ListableSong = cast tjson.TJSON.parse(AssetHandler.getAsset(path, JSON));
-				songList.push({name: data.name, opponent: data.opponent, color: FlxColor.fromString(Std.string(data.color))});
+				var data:ListableSong = cast tjson.TJSON.parse(AssetHandler.getAsset(path, JSON, true));
+				data.color = FlxColor.fromString(Std.string(data.color));
+				if (!songList.contains(data))
+					songList.push(data);
 			}
 		}
+
+		#if MODDING_ENABLED
+		if (FileSystem.exists(core.assets.ModHandler.getPath('data/songs'))) {
+			for (modFolder in FileSystem.readDirectory(core.assets.ModHandler.getPath('data/songs'))) {
+				var path:String = 'data/songs/${modFolder}/freeplay';
+				if (FileSystem.exists(core.assets.ModHandler.getPath(path, JSON))) {
+					var data:ListableSong = cast tjson.TJSON.parse(sys.io.File.getContent(core.assets.ModHandler.getPath(path, JSON)));
+					data.color = FlxColor.fromString(Std.string(data.color));
+					if (!songList.contains(data))
+						songList.push(data);
+				}
+			}
+		}
+		#end
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menus/shared/menuDesat'));
 		bg.color = 0xFFFFFFFF;
