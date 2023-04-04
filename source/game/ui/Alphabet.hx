@@ -70,7 +70,14 @@ class Alphabet extends FlxSpriteGroup {
 				textSpaces = 0;
 
 				var newLetter:Letter = new Letter(offsetX, 0, size);
-				newLetter.createSprite(txt, !bold, false);
+				if (symbol)
+					newLetter.createSym(txt);
+				if (number) {
+					newLetter.addAnim(txt, txt, null, 24);
+					newLetter.playAnim(txt);
+					newLetter.updateHitbox();
+				}
+				newLetter.createSprite(txt, !bold);
 				add(newLetter);
 
 				storedLetters.push(newLetter);
@@ -157,7 +164,25 @@ class Letter extends FNFSprite {
 		}
 	}
 
-	public function createSprite(char:String, bold:Bool = false, special:Bool = false):Void {
+	public function createSprite(char:String, bold:Bool = false):Void {
+		var animName:String = '';
+		animName = char + " lowercase";
+		if (bold)
+			animName = char.toUpperCase() + " bold";
+		else if (char.toLowerCase() != char)
+			animName = char + " capital";
+
+		addAnim(char, animName, null, 24);
+		playAnim(char);
+		updateHitbox();
+
+		if (!bold) {
+			y = (110 - height);
+			y += row * 60;
+		}
+	}
+
+	public function createSym(char:String):Void {
 		var animName:String = switch (char) {
 			case "$": "dollarsign ";
 			case "<": "lessThan";
@@ -169,30 +194,17 @@ class Letter extends FNFSprite {
 			case "!": "exclamation point";
 			case "#": "hashtag ";
 			default: char;
-		};
-
-		if (!special) {
-			animName = char + " lowercase";
-			if (bold)
-				animName = char.toUpperCase() + " bold";
-			else if (char.toLowerCase() != char)
-				animName = char + " capital";
 		}
+
+		addAnim(char, animName, null, 24);
+		playAnim(char);
+		updateHitbox();
 
 		y += switch (char) {
 			case ".": 50;
 			case "-": 25;
 			case ",": 35;
 			default: 0;
-		};
-
-		addAnim(char, animName, null, 24);
-		playAnim(char);
-		updateHitbox();
-
-		if (!bold) {
-			y = (110 - height);
-			y += row * 60;
 		}
 	}
 }
