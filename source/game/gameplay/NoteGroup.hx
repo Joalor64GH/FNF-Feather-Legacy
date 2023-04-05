@@ -171,8 +171,11 @@ class NoteGroup extends FlxGroup {
 	}
 
 	public override function add(Object:FlxBasic):FlxBasic {
-		if (Object is Note)
-			noteSprites.add(cast(Object, Note));
+		if (Object is Note) {
+			var noteObject:Note = cast(Object, Note);
+			if (noteObject != null)
+				noteSprites.add(noteObject);
+		}
 		return super.add(Object);
 	}
 

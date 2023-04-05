@@ -183,9 +183,9 @@ class Character extends FNFSprite {
 					danced = !danced;
 
 				var direction:String = (danced ? 'Right' : 'Left');
-				animation.play('dance${direction}${suffix}', forced, false, startFrame);
+				playAnim('dance${direction}${suffix}', forced, false, startFrame);
 			default:
-				animation.play('idle${suffix}', forced, false, startFrame);
+				playAnim('idle${suffix}', forced, false, startFrame);
 		}
 	}
 

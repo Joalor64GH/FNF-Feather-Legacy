@@ -91,6 +91,8 @@ class PlayState extends MusicBeatState {
 						song = constructor.songData;
 					else
 						song = ChartLoader.loadSong(constructor.songName, constructor.difficulty);
+
+					// ChartLoader.fillUnspawnList();
 				}
 
 				if (song.metadata.strumlines == 1)
@@ -383,6 +385,100 @@ class PlayState extends MusicBeatState {
 
 		super.update(elapsed);
 
+		if (song != null) {
+			// TODO: preload notes on song start
+			var unspawnNoteList = ChartLoader.rawNoteList;
+
+			if (unspawnNoteList.length > 0) {
+				for (unspawnNote in unspawnNoteList) {
+					if (unspawnNote.step - Conductor.songPosition > 2000)
+						break;
+
+					var type:String = 'default';
+					if (unspawnNote.type != null)
+						type = unspawnNote.type;
+
+					var strum:NoteGroup = lines.members[unspawnNote.strumline];
+					if (strum != null) {
+						var prevNote:Note = null;
+						if (strum.noteSprites.members.length > 0)
+							prevNote = strum.noteSprites.members[strum.noteSprites.members.length - 1];
+
+						var spawnedNote:Note = new Note(unspawnNote.step, unspawnNote.index, false, type, prevNote);
+						spawnedNote.downscroll = Settings.get("scrollType") == "DOWN";
+						spawnedNote.sustainTime = unspawnNote.sustainTime;
+						spawnedNote.strumline = unspawnNote.strumline;
+						strum.add(spawnedNote);
+
+						if (unspawnNote.sustainTime > 0) {
+							for (noteSustain in 0...Math.floor(unspawnNote.sustainTime / Conductor.stepCrochet)) {
+								var sustainStep:Float = unspawnNote.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
+
+								var spawnedSustain:Note = new Note(sustainStep, unspawnNote.index, true, type, prevNote);
+								spawnedSustain.downscroll = Settings.get("scrollType") == "DOWN";
+								spawnedSustain.strumline = unspawnNote.strumline;
+								if (unspawnNote.sustainTime == noteSustain - 1)
+									spawnedSustain.isEnd = true;
+
+								spawnedSustain.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(spawnedNote));
+								prevNote = spawnedSustain;
+							}
+						}
+					}
+
+					unspawnNoteList.splice(unspawnNoteList.indexOf(unspawnNote), 1);
+				}
+			}
+
+			if (!paused) {
+				parseEvents(ChartLoader.unspawnEventList);
+				bumpCamera(elapsed);
+
+				if (currentStat.health <= 0 && !playerStrums.cpuControlled) {
+					music.cease();
+					player.stunned = true;
+					paused = true;
+
+					persistentUpdate = persistentDraw = false;
+					openSubState(new GameOverSubState(player.getGraphicMidpoint().x, player.getGraphicMidpoint().y));
+				}
+
+				for (strum in lines) {
+					strum.noteSprites.forEachAlive(function(note:Note):Void {
+						note.speed = Math.abs(song.metadata.speed);
+
+						if (strum.cpuControlled) {
+							if (!note.wasGoodHit && note.step <= Conductor.songPosition)
+								goodNoteHit(note, strum);
+						} // sustain note inputs
+						else if (!playerStrums.cpuControlled) {
+							if (notesPressed[note.index] && (note.isSustain && note.canHit && note.strumline == playerStrumline))
+								goodNoteHit(note, playerStrums);
+						}
+
+						var rangeReached:Bool = note.downscroll ? note.y > FlxG.height : note.y < -note.height;
+						var sustainHit:Bool = note.isSustain && note.wasGoodHit && note.step <= Conductor.songPosition - note.hitboxEarly;
+
+						if (Conductor.songPosition > note.killDelay + note.step) {
+							if (rangeReached || sustainHit) {
+								if (rangeReached && !note.wasGoodHit && !note.ignorable && !note.isMine)
+									if (note.strumline == playerStrumline)
+										noteMiss(note.index, strum);
+
+								strum.remove(note, true);
+							}
+						}
+					});
+				}
+
+				if (player != null
+					&& player.holdTimer > Conductor.stepCrochet * player.singDuration * 0.001
+					&& !notesPressed.contains(true))
+					if (player.isSinging() && !player.isMissing())
+						player.dance();
+			}
+		}
+
 		if (canPause && controls.justPressed("pause")) {
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -426,56 +522,6 @@ class PlayState extends MusicBeatState {
 			FlxG.switchState(new CharacterEditor(char.name, char.isPlayer));
 		}
 		#end
-
-		if (song != null && !paused) {
-			spawnNotes();
-			parseEvents(ChartLoader.eventList);
-			bumpCamera(elapsed);
-
-			if (currentStat.health <= 0 && !playerStrums.cpuControlled) {
-				music.cease();
-				player.stunned = true;
-				paused = true;
-
-				persistentUpdate = persistentDraw = false;
-				openSubState(new GameOverSubState(player.getGraphicMidpoint().x, player.getGraphicMidpoint().y));
-			}
-
-			for (strum in lines) {
-				if (strum == null)
-					return;
-
-				strum.noteSprites.forEachAlive(function(note:Note):Void {
-					note.speed = Math.abs(song.metadata.speed);
-
-					if (strum.cpuControlled) {
-						if (!note.wasGoodHit && note.step <= Conductor.songPosition)
-							goodNoteHit(note, strum);
-					} else if (!playerStrums.cpuControlled) // sustain note inputs
-					{
-						if (notesPressed[note.index] && (note.isSustain && note.canHit && note.strumline == playerStrumline))
-							goodNoteHit(note, playerStrums);
-					}
-
-					var rangeReached:Bool = note.downscroll ? note.y > FlxG.height : note.y < -note.height;
-					var sustainHit:Bool = note.isSustain && note.wasGoodHit && note.step <= Conductor.songPosition - note.hitboxEarly;
-
-					if (Conductor.songPosition > note.killDelay + note.step) {
-						if (rangeReached || sustainHit) {
-							if (rangeReached && !note.wasGoodHit && !note.ignorable && !note.isMine)
-								if (note.strumline == playerStrumline)
-									noteMiss(note.index, strum);
-
-							strum.remove(note, true);
-						}
-					}
-				});
-			}
-
-			if (player != null && player.holdTimer > Conductor.stepCrochet * player.singDuration * 0.001 && !notesPressed.contains(true))
-				if (player.isSinging() && !player.isMissing())
-					player.dance();
-		}
 
 		callFn("update", [elapsed, true]);
 	}
@@ -580,54 +626,6 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public function spawnNotes():Void {
-		while (ChartLoader.noteList[0] != null && ChartLoader.noteList[0].step - Conductor.songPosition < 2000) {
-			var note = ChartLoader.noteList[0];
-			if (note.strumline == null || note.strumline < 0)
-				note.strumline = 0;
-
-			var strum:NoteGroup = lines.members[note.strumline];
-
-			var type:String = 'default';
-			if (note.type != null)
-				type = note.type;
-
-			if (strum != null) {
-				var newNote:Note = strum.noteSprites.recycle(Note, function():Note {
-					var spawnedNote:Note = new Note(note.step, note.index, false, type);
-					spawnedNote.sustainTime = note.sustainTime;
-					spawnedNote.strumline = note.strumline;
-					return spawnedNote;
-				});
-				newNote.downscroll = Settings.get("scrollType") == "DOWN";
-				if (!strum.noteSprites.members.contains(newNote))
-					strum.add(newNote);
-
-				if (note.sustainTime > 0) {
-					var prevNote:Note = strum.noteSprites.members[strum.noteSprites.members.length - 1];
-
-					for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
-						var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
-						var newSustain:Note = strum.noteSprites.recycle(Note, function():Note {
-							var spawnedSustain:Note = new Note(sustainStep, note.index, true, type, prevNote);
-							spawnedSustain.strumline = note.strumline;
-							return spawnedSustain;
-						});
-						newSustain.downscroll = Settings.get("scrollType") == "DOWN";
-						if (note.sustainTime == noteSustain - 1)
-							newSustain.isEnd = true;
-
-						if (!strum.noteSprites.members.contains(newSustain))
-							newSustain.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(newNote));
-						prevNote = newSustain;
-					}
-				}
-			}
-
-			ChartLoader.noteList.shift();
-		}
-	}
-
 	public function parseEvents(list:Array<EventLine>, stepDelay:Float = 0):Void {
 		if (list.length > 0) {
 			while (list[curSec] != null) {
@@ -644,7 +642,7 @@ class PlayState extends MusicBeatState {
 
 	public function eventTrigger(event:EventLine):Void {
 		switch (event.name) {}
-		// gameStage.onEventDispatch(event, args);
+		gameStage.onEventDispatch(event.name, event.args);
 	}
 
 	public function goodNoteHit(note:Note, strum:NoteGroup):Void {
@@ -800,7 +798,6 @@ class PlayState extends MusicBeatState {
 	public override function destroy():Void {
 		controls.onKeyPressed.remove(onKeyPress);
 		controls.onKeyReleased.remove(onKeyRelease);
-
 		super.destroy();
 	}
 }

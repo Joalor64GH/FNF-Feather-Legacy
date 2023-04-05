@@ -162,8 +162,6 @@ class ChartEditor extends MusicBeatState {
 
 			var state:flixel.FlxState = new game.menus.FreeplayMenu();
 			if (FlxG.keys.justPressed.ESCAPE) {
-				ChartLoader.noteList = [];
-
 				state = new PlayState({
 					songName: const.songName,
 					difficulty: const.difficulty,
@@ -171,9 +169,7 @@ class ChartEditor extends MusicBeatState {
 					gamemode: CHARTING
 				});
 
-				for (i in 0...song.sections.length)
-					for (j in song.sections[i].notes)
-						ChartLoader.noteList.push(j);
+				ChartLoader.fillRawList(song);
 			}
 
 			FlxG.switchState(state);
