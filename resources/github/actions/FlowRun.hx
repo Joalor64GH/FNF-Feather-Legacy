@@ -11,7 +11,7 @@ typedef Library = {
 	var url:String;
 }
 
-class Main {
+class FlowRun {
 	public static function main():Void {
 		// To prevent messing with currently installed libs
 		if (!FileSystem.exists('.haxelib'))
