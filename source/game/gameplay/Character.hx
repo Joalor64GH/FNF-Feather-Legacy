@@ -163,7 +163,7 @@ class Character extends FNFSprite {
 				// looping hair anims after idle finished
 				if (animation.getByName("idleHair") != null)
 					if (!animation.curAnim.name.startsWith('sing') && animation.curAnim.finished)
-						playAnim('idleHair');
+						animation.play('idleHair');
 
 				if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
 					playAnim('danceRight');
@@ -183,9 +183,9 @@ class Character extends FNFSprite {
 					danced = !danced;
 
 				var direction:String = (danced ? 'Right' : 'Left');
-				playAnim('dance${direction}${suffix}', forced, false, startFrame);
+				animation.play('dance${direction}${suffix}', forced, false, startFrame);
 			default:
-				playAnim('idle${suffix}', forced, false, startFrame);
+				animation.play('idle${suffix}', forced, false, startFrame);
 		}
 	}
 
