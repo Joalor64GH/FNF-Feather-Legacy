@@ -61,6 +61,8 @@ class Highscore {
 		[100, 85, 60, -30, -50] // accuracy
 	];
 
+	public var breakRating:String = MISS;
+
 	public var gottenRatings:Map<String, Int> = [];
 
 	// game variables

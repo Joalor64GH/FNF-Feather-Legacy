@@ -35,8 +35,12 @@ class ModHandler {
 	public static var ignoreFolders:Array<String> = [];
 
 	public static function getPath(?folder:String, ?type:AssetType):String {
-		if (folder != null)
+		var pathBase:String = 'mods';
+		if (folder != null) {
+			if (folder.startsWith("mods"))
+				pathBase = '';
 			folder = '/${folder}';
+		}
 
 		var modFolder:String = null;
 		if (dominantMod != null) {
@@ -54,7 +58,7 @@ class ModHandler {
 		if (modFolder != null)
 			folder = '/${modFolder}${folder}';
 
-		return type.cycleExtensions('mods${folder}');
+		return type.cycleExtensions('${pathBase}${folder}');
 	}
 
 	public static function scanMods():Void {

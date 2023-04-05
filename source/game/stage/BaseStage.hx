@@ -35,16 +35,38 @@ class BaseStage extends FlxGroup {
 	 */
 	public var displayCrowd:Bool = true;
 
+	#if SCRIPTING_ENABLED
+	/**
+	 * a Stage Script, usually ran (or tried to) when loading a stage that doesn't exist
+	 */
+	public var bgScript:ScriptHandler = null;
+	#end
+
 	public var playerOffset:FlxPoint = new FlxPoint(0, 0);
 	public var opponentOffset:FlxPoint = new FlxPoint(0, 0);
 	public var crowdOffset:FlxPoint = new FlxPoint(0, 0);
+
+	public var camPosition:FlxPoint = new FlxPoint(Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY);
 
 	/**
 	 * Use this to create your stage objects
 	 * remember to always call `super();`
 	 */
-	public function new():Void {
+	public function new(?curStage:String):Void {
 		super();
+
+		#if SCRIPTING_ENABLED
+		var newBase:String = '${pathBase}/${curStage}';
+		if (sys.FileSystem.exists(AssetHandler.getPath('${newBase}/${curStage}', SCRIPT))) {
+			var localPath:String = AssetHandler.getPath('${newBase}');
+			bgScript = new ScriptHandler(AssetHandler.getAsset('${newBase}/${curStage}', SCRIPT), localPath);
+			bgScript.set('stage', this);
+			bgScript.set('remove', remove);
+			bgScript.set('add', add);
+
+			bgScript.call('create', []);
+		}
+		#end
 	}
 
 	/**
@@ -63,50 +85,100 @@ class BaseStage extends FlxGroup {
 	 */
 	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
+
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('update', [elapsed]);
+		#end
 	}
 
 	/**
 	 * Called whenever the Countdown begins
 	 */
-	public function onCountdownStart():Void {}
+	public function onCountdownStart():Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onCountdownStart', []);
+		#end
+	}
 
 	/**
 	 * Called whenever the Countdown is ticking
 	 */
-	public function onCountdownTick(position:Int):Void {}
+	public function onCountdownTick(position:Int):Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onCountdownTick', [position]);
+		#end
+	}
 
 	/**
 	 * Called whenever the Song starts
 	 */
-	public function onSongStart():Void {}
+	public function onSongStart():Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onSongStart', []);
+		#end
+	}
 
 	/**
 	 * Called whenever the song ends
 	 */
-	public function onSongEnd():Void {}
+	public function onSongEnd():Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onSongEnd', []);
+		#end
+	}
 
 	/**
 	 * Called whenever a event is activated
 	 */
-	public function onEventDispatch(event:String, args:Array<Dynamic>):Void {}
+	public function onEventDispatch(event:String, args:Array<Dynamic>):Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onEventDispatch', [event, args]);
+		#end
+	}
 
 	/**
 	 * Called when pausing the game
 	**/
-	public function onPauseDispatch(paused:Bool):Void {}
+	public function onPauseDispatch(paused:Bool):Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onPauseDispatch', [paused]);
+		#end
+	}
 
 	/**
 	 * Called whenever a beat is hit
 	 */
-	public function onBeat(curBeat:Int):Void {}
+	public function onBeat(curBeat:Int):Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onBeat', [curBeat]);
+		#end
+	}
 
 	/**
 	 * Called whenever a step is reached
 	 */
-	public function onStep(curStep:Int):Void {}
+	public function onStep(curStep:Int):Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onStep', [curStep]);
+		#end
+	}
 
 	/**
 	 * Called whenever a section is reached
 	 */
-	public function onSec(curSec:Int):Void {}
+	public function onSec(curSec:Int):Void {
+		#if SCRIPTING_ENABLED
+		if (bgScript != null)
+			bgScript.call('onSec', [curSec]);
+		#end
+	}
 }

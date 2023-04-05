@@ -29,15 +29,19 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions {
 		return beatContainer.stepPos;
 
 	public function setVar(varString:String, varLue:Dynamic):Void {
+		#if SCRIPTING_ENABLED
 		if (globals.length > 0)
 			for (i in 0...globals.length)
 				globals[i].set(varString, varLue);
+		#end
 	}
 
 	public function callFn(fn:String, parameters:Array<Dynamic>):Void {
+		#if SCRIPTING_ENABLED
 		if (globals.length > 0)
 			for (i in 0...globals.length)
 				globals[i].call(fn, parameters);
+		#end
 	}
 
 	public function new():Void {

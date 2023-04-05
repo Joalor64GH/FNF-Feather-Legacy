@@ -75,10 +75,10 @@ class ChartEditor extends MusicBeatState {
 	var cellSize:Int = 40;
 
 	function generateCheckerboard():Void {
-		var checkerSprite:FlxSprite = FlxGridOverlay.create(cellSize, cellSize, cellSize * 2, cellSize * 2, true, 0xFFD8AC9C, 0xFF947566);
+		var checkerBit:openfl.display.BitmapData = FlxGridOverlay.createGrid(cellSize, cellSize, cellSize * 2, cellSize * 2, true, 0xFFD8AC9C, 0xFF947566);
 
 		checkerboard = new FlxTiledSprite(null, cellSize * getTotalStrumlines(), cellSize);
-		checkerboard.loadGraphic(checkerSprite.graphic.bitmap);
+		checkerboard.loadGraphic(checkerBit);
 		checkerboard.screenCenter(X);
 		// extend the checkerboard until the song ends, how accurate is this?
 		checkerboard.height = (music.inst.length / Conductor.stepCrochet) * cellSize;

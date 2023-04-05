@@ -128,18 +128,20 @@ class PlayState extends MusicBeatState {
 
 		persistentUpdate = persistentDraw = true;
 
+		#if SCRIPTING_ENABLED
 		// parse haxe scripts that exist within the folders
 		for (i in AssetHandler.getExtensionsFor(SCRIPT)) {
 			if (sys.FileSystem.exists(AssetHandler.getPath("data/scripts"))) {
 				for (script in sys.FileSystem.readDirectory(AssetHandler.getPath("data/scripts")))
-					if (script != null && script.contains('.') && script.endsWith(i))
-						globals.push(new ScriptHandler(AssetHandler.getAsset('data/scripts/${script}')));
+					if (script.endsWith(i))
+						globals.push(new ScriptHandler(AssetHandler.getAsset('data/scripts/${script}', SCRIPT)));
 			}
 
 			for (songScript in sys.FileSystem.readDirectory(AssetHandler.getPath('data/songs/${song.name}')))
-				if (songScript != null && songScript.contains('.') && songScript.endsWith(i))
-					globals.push(new ScriptHandler(AssetHandler.getAsset('data/songs/${song.name}/${songScript}')));
+				if (songScript.endsWith(i))
+					globals.push(new ScriptHandler(AssetHandler.getAsset('data/songs/${song.name}/${songScript}', SCRIPT)));
 		}
+		#end
 
 		callFn("create", [false]);
 
@@ -159,7 +161,8 @@ class PlayState extends MusicBeatState {
 			 */
 			case 'philly-city': new PhillyCity();
 			case 'haunted-house': new HauntedHouse();
-			default: new Stage();
+			case 'stage': new Stage();
+			default: new BaseStage(song.metadata.stage);
 		}
 		add(gameStage);
 
@@ -184,8 +187,12 @@ class PlayState extends MusicBeatState {
 		add(opponent);
 		add(player);
 
-		camFollow.setPosition(Math.floor(opponent.getMidpoint().x + FlxG.width / 4), Math.floor(opponent.getGraphicMidpoint().y - FlxG.height / 2));
+		if (gameStage.camPosition.x == Math.NEGATIVE_INFINITY)
+			gameStage.camPosition.x = Math.floor(opponent.getMidpoint().x + FlxG.width / 4);
+		if (gameStage.camPosition.y == Math.NEGATIVE_INFINITY)
+			gameStage.camPosition.y = Math.floor(opponent.getGraphicMidpoint().y - FlxG.height / 2);
 
+		camFollow.setPosition(gameStage.camPosition.x, gameStage.camPosition.y);
 		camGame.follow(camFollow, LOCKON, 0.04);
 		camGame.focusOn(camFollow.getPosition());
 
@@ -232,6 +239,15 @@ class PlayState extends MusicBeatState {
 		controls.onKeyReleased.add(onKeyRelease);
 
 		callFn("create", [true]);
+
+		#if SCRIPTING_ENABLED
+		if (gameStage.bgScript != null) {
+			gameStage.bgScript.call('createPost', []);
+			gameStage.bgScript.set('player', player);
+			gameStage.bgScript.set('opponent', opponent);
+			gameStage.bgScript.set('crowd', crowd);
+		}
+		#end
 
 		songCutscene();
 
@@ -455,6 +471,10 @@ class PlayState extends MusicBeatState {
 					}
 				});
 			}
+
+			if (player != null && player.holdTimer > Conductor.stepCrochet * player.singDuration * 0.001 && !notesPressed.contains(true))
+				if (player.isSinging() && !player.isMissing())
+					player.dance();
 		}
 
 		callFn("update", [elapsed, true]);
@@ -573,25 +593,32 @@ class PlayState extends MusicBeatState {
 				type = note.type;
 
 			if (strum != null) {
-				var newNote:Note = new Note(note.step, note.index, false, type);
-				newNote.sustainTime = note.sustainTime;
-				newNote.strumline = note.strumline;
+				var newNote:Note = strum.noteSprites.recycle(Note, function():Note {
+					var spawnedNote:Note = new Note(note.step, note.index, false, type);
+					spawnedNote.sustainTime = note.sustainTime;
+					spawnedNote.strumline = note.strumline;
+					return spawnedNote;
+				});
 				newNote.downscroll = Settings.get("scrollType") == "DOWN";
-				strum.add(newNote);
+				if (!strum.noteSprites.members.contains(newNote))
+					strum.add(newNote);
 
 				if (note.sustainTime > 0) {
 					var prevNote:Note = strum.noteSprites.members[strum.noteSprites.members.length - 1];
 
 					for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
 						var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
-						var newSustain:Note = new Note(sustainStep, note.index, true, type, prevNote);
-
+						var newSustain:Note = strum.noteSprites.recycle(Note, function():Note {
+							var spawnedSustain:Note = new Note(sustainStep, note.index, true, type, prevNote);
+							spawnedSustain.strumline = note.strumline;
+							return spawnedSustain;
+						});
 						newSustain.downscroll = Settings.get("scrollType") == "DOWN";
-						newSustain.strumline = note.strumline;
 						if (note.sustainTime == noteSustain - 1)
 							newSustain.isEnd = true;
 
-						newSustain.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(newNote));
+						if (!strum.noteSprites.members.contains(newSustain))
+							newSustain.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(newNote));
 						prevNote = newSustain;
 					}
 				}
@@ -652,10 +679,13 @@ class PlayState extends MusicBeatState {
 
 					rating = currentStat.judgeNote(note.step);
 					currentStat.gottenRatings.set(rating, currentStat.gottenRatings.get(rating) + 1);
-
 					ratingUI.popRating(rating);
+					ratingUI.popCombo();
 					if (rating == SICK && note.doSplash)
 						strum.doSplash(note.index, note.type);
+
+					if (currentStat.breakRating == rating)
+						noteMiss(note.index, strum, false);
 
 					gameUI.updateScore();
 				}
@@ -758,12 +788,7 @@ class PlayState extends MusicBeatState {
 		if (action != null && NoteGroup.directions.contains(action)) {
 			var index:Int = NoteGroup.directions.indexOf(action);
 			notesPressed[index] = false;
-
 			playerStrums.playAnim('static', NoteGroup.directions.indexOf(action));
-
-			if (player != null && player.holdTimer > Conductor.stepCrochet * player.singDuration * 0.001 && !notesPressed.contains(true))
-				if (player.isSinging() && !player.isMissing())
-					player.dance();
 		}
 	}
 

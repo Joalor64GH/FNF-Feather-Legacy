@@ -14,16 +14,17 @@ class RatingPopup {
 		numberGroup = new FlxTypedGroup<FNFSprite>();
 
 		popRating('sick', true);
+		popCombo(true);
 	}
+
+	var ratingLast:FNFSprite;
 
 	public function popRating(name:String, preload:Bool = false):Void {
 		var rating:FNFSprite = ratingGroup.recycle(FNFSprite, function():FNFSprite {
 			var sprite:FNFSprite = new FNFSprite(0, 0);
-
 			sprite.frames = Utils.getUIAsset('ratingSheet', XML);
 			for (i in 0...Highscore.RATINGS[0].length)
 				sprite.addAnim(Highscore.RATINGS[0][i], Highscore.RATINGS[0][i]);
-
 			return sprite;
 		});
 
@@ -48,26 +49,54 @@ class RatingPopup {
 			onComplete: (twn:FlxTween) -> rating.kill(),
 			startDelay: ((Conductor.beatCrochet + Conductor.stepCrochet * 2) / 1000)
 		});
-
+		ratingLast = rating;
 		ratingGroup.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
 	}
 
 	public function popCombo(preload:Bool = false):Void {
-		var split:Array<String> = Std.string(PlayState.self.currentStat.combo).split("");
-		for (i in 0...split.length) {
-			var numScore:FNFSprite = numberGroup.recycle(FNFSprite, function():FNFSprite {
-				var combo:FNFSprite = new FNFSprite();
-				return combo;
-			});
+		var combo:Int = PlayState.self.currentStat.combo;
+		var scoreSeparated:Array<Int> = [];
 
-			numScore.depth = -Conductor.songPosition;
-			numScore.alpha = preload ? 0.000001 : 1;
-			numScore.antialiasing = Settings.get("antialiasing");
-			numScore.scale.set(1, 1);
-
-			if (preload)
-				FlxG.state.add(numberGroup);
+		while (combo != 0) {
+			scoreSeparated.push(combo % 10);
+			combo = Std.int(combo / 10);
 		}
+		while (scoreSeparated.length < 3)
+			scoreSeparated.push(0);
+
+		/*
+			for (i in 0...scoreSeparated.length) {
+				var numScore:FNFSprite = numberGroup.recycle(FNFSprite, function():FNFSprite {
+					var combo:FNFSprite = new FNFSprite(0, 0);
+					combo.loadGraphic(Utils.getUIAsset('comboNumbers', IMAGE), true, 110, 131);
+					for (i in 0...10)
+						combo.animation.add('${i}', [i]);
+					return combo;
+				});
+
+				numScore.depth = -Conductor.songPosition;
+				numScore.alpha = preload ? 0.000001 : 1;
+				numScore.antialiasing = Settings.get("antialiasing");
+				numScore.screenCenter();
+				numScore.x = ratingLast.x - (35 * i);
+				numScore.playAnim('${scoreSeparated[i]}');
+
+				numScore.setGraphicSize(Std.int(numScore.frameWidth * 0.5));
+				// numScore.updateHitbox();
+
+				numScore.acceleration.y = FlxG.random.int(200, 300);
+				numScore.velocity.y -= FlxG.random.int(140, 160);
+				numScore.velocity.x = FlxG.random.float(-5, 5);
+
+				FlxTween.tween(numScore, {alpha: 0}, (Conductor.stepCrochet * 2) / 1000, {
+					onComplete: (twn:FlxTween) -> numScore.kill(),
+					startDelay: (Conductor.beatCrochet) / 1000
+				});
+			}
+		 */
+
+		if (preload)
+			FlxG.state.add(numberGroup);
 
 		numberGroup.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
 	}

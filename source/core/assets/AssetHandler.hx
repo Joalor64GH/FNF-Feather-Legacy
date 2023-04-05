@@ -26,10 +26,14 @@ enum EngineOrigin {
 
 class AssetHandler {
 	public static function getPath(?folder:String, ?type:AssetType, ?disregardMods:Bool = false):String {
-		if (folder != null)
+		var pathBase:String = 'assets';
+		if (folder != null) {
+			if (folder.startsWith("assets"))
+				pathBase = '';
 			folder = '/${folder}';
+		}
 
-		var returnPath:String = type.cycleExtensions('assets${folder}');
+		var returnPath:String = type.cycleExtensions('${pathBase}${folder}');
 
 		// prioritize mod assets
 		#if MODDING_ENABLED
