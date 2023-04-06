@@ -25,12 +25,8 @@ class CreditsMenu extends MusicBeatState {
 
 		var background:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/shared/menuDesat'));
 		background.screenCenter(XY);
+		background.color = 0xFF2C2C2C;
 		add(background);
-
-		var backdrop:FlxBackdrop = new FlxBackdrop(Paths.image('menus/shared/menuGrid'), XY, 0, 0);
-		backdrop.centerOverlay(background, XY);
-		backdrop.alpha = 0.6;
-		add(backdrop);
 
 		cards = new FlxSpriteGroup();
 		cards.screenCenter(XY);

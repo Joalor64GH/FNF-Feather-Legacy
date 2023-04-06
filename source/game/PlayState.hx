@@ -94,9 +94,6 @@ class PlayState extends MusicBeatState {
 
 					// ChartLoader.fillUnspawnList();
 				}
-
-				if (song.metadata.strumlines == 1)
-					playerStrumline = 0;
 			}
 
 			if (constructor.gamemode == null)
@@ -112,21 +109,18 @@ class PlayState extends MusicBeatState {
 		music = new MusicPlayback(constructor.songName, constructor.difficulty);
 
 		camGame = new FlxCamera();
-		FlxG.cameras.reset(camGame);
-
 		camHUD = new FlxCamera();
-		camHUD.bgColor.alpha = 0;
-		FlxG.cameras.add(camHUD, false);
-
 		camOver = new FlxCamera();
-		camOver.bgColor.alpha = 0;
+
+		camHUD.bgColor = FlxColor.TRANSPARENT;
+		camOver.bgColor = FlxColor.TRANSPARENT;
+
+		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOver, false);
 
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
-
-		camFollow = new FlxObject(0, 0, 1, 1);
-		add(camFollow);
 
 		persistentUpdate = persistentDraw = true;
 
@@ -194,6 +188,7 @@ class PlayState extends MusicBeatState {
 		if (gameStage.camPosition.y == Math.NEGATIVE_INFINITY)
 			gameStage.camPosition.y = Math.floor(opponent.getGraphicMidpoint().y - FlxG.height / 2);
 
+		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.setPosition(gameStage.camPosition.x, gameStage.camPosition.y);
 		camGame.follow(camFollow, LOCKON, 0.04);
 		camGame.focusOn(camFollow.getPosition());
@@ -209,13 +204,13 @@ class PlayState extends MusicBeatState {
 
 		ratingUI = new RatingPopup();
 
-		for (i in 0...song.metadata.strumlines) {
+		for (i in 0...2) {
 			var isPlayer:Bool = i == playerStrumline;
 			var spacing:Float = 160 * 0.7;
 
 			var strumInitDist:Float = FlxG.width / 10;
 			var strumDistance:Float = FlxG.width / 2 * i;
-			if (song.metadata.strumlines == 1 || isPlayer && Settings.get("centerScroll")) {
+			if (isPlayer && Settings.get("centerScroll")) {
 				strumInitDist = FlxG.width / 4;
 				strumDistance = 115;
 			}
@@ -227,7 +222,7 @@ class PlayState extends MusicBeatState {
 				default: opponent;
 			};
 
-			if (i == 0 && song.metadata.strumlines > 1)
+			if (i == 0)
 				xPos -= 60;
 
 			var newStrumline:NoteGroup = new NoteGroup(xPos, yPos, character, spacing);

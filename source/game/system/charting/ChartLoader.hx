@@ -53,7 +53,6 @@ class ChartLoader {
 							player: fnfSong.player1,
 							opponent: fnfSong.player2,
 							crowd: fnfSong.gfVersion,
-							strumlines: 2,
 							stage: fnfSong.stage,
 							speed: fnfSong.speed,
 							bpm: fnfSong.bpm
@@ -119,11 +118,6 @@ class ChartLoader {
 			tempSong.metadata.stage = getStageVersion(tempSong.name);
 		if (tempSong.metadata.crowd == null)
 			tempSong.metadata.crowd = getCrowdVersion(tempSong.metadata.stage);
-
-		if (tempSong.metadata.strumlines < 1)
-			tempSong.metadata.strumlines = 1;
-		if (tempSong.metadata.strumlines > 4)
-			tempSong.metadata.strumlines = 4;
 
 		return tempSong;
 	}

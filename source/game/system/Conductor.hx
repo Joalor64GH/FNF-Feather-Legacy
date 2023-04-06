@@ -12,7 +12,6 @@ interface IMusicFunctions {
 	public function onBeat():Void;
 	public function onStep():Void;
 	public function onSec():Void;
-	public function onTick():Void;
 }
 
 class Conductor {
@@ -30,15 +29,12 @@ class Conductor {
 
 	public var stepPos:Int = 0;
 	public var beatPos:Int = 0;
-	public var tickPos:Int = 0;
 	public var secPos:Int = 0;
 
 	public function new(newContainer:IMusicFunctions):Void
 		boundContainer = newContainer;
 
 	public function update(elapsed:Float):Void {
-		tickPos++;
-
 		updateStepPosition();
 		updateSectionPosition();
 		updateBeatPosition();
@@ -81,17 +77,10 @@ class Conductor {
 
 	var stepTemp:Int = -1;
 	var beatTemp:Int = -1;
-	var tickTemp:Int = -1;
 	var secTemp:Int = -1;
 
 	public function updateStepPosition():Void {
-		var registeredEvent:ChangeBPMEvent =
-			{
-				step: 0,
-				time: 0,
-				bpm: 0
-			};
-
+		var registeredEvent:ChangeBPMEvent = {step: 0, time: 0, bpm: 0};
 		for (event in 0...Conductor.bpmChanges.length)
 			if (Conductor.songPosition >= Conductor.bpmChanges[event].time)
 				registeredEvent = Conductor.bpmChanges[event];
@@ -102,11 +91,6 @@ class Conductor {
 			if (stepPos > stepTemp)
 				stepTemp = stepPos;
 			boundContainer.onStep();
-		}
-
-		if (tickPos > tickTemp) {
-			tickTemp = tickPos;
-			boundContainer.onTick();
 		}
 
 		if (stepPos % 4 == 0 && beatPos > beatTemp) {

@@ -1,15 +1,27 @@
 package game.editors;
 
+import core.FNFSprite;
+import flixel.FlxG;
+import flixel.FlxCamera;
 import flixel.FlxObject;
+import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.display.FlxTiledSprite;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
+import flixel.util.FlxGradient;
 import game.PlayState;
 import game.gameplay.Note;
 import game.system.charting.ChartDefs;
 import game.system.charting.ChartLoader;
 import game.system.Conductor;
+import openfl.geom.ColorTransform;
+
+typedef ChartEditorNote = {
+	var arrow:FNFSprite;
+	var sustain:FNFSprite;
+	var end:FNFSprite;
+}
 
 /**
  * State for Editing and Exporting new Charts
@@ -20,17 +32,23 @@ class ChartEditor extends MusicBeatState {
 	public var song:ChartFormat;
 	public var music:MusicPlayback;
 
+	public var sideBar:FlxSprite;
+	public var infoText:FlxText;
+
 	public var renderedNotes:NoteSpriteGroup;
 	public var renderedSustains:NoteSpriteGroup;
 	public var renderedSections:FlxTypedGroup<FlxSprite>;
 	public var renderedLanes:FlxTypedGroup<FlxSprite>;
 
-	public var noteRender:FlxSprite;
-	public var noteCamera:FlxObject;
+	public var chartNotes:Array<ChartEditorNote> = [];
+
+	public var crochetObject:FlxSprite;
+	public var cameraObject:FlxObject;
 
 	public function new(const:PlayStateStruct):Void {
 		super();
 		this.const = const;
+
 		song = ChartLoader.loadChart(const.songName, const.difficulty);
 	}
 
@@ -40,6 +58,7 @@ class ChartEditor extends MusicBeatState {
 		FlxG.mouse.visible = true;
 
 		music = new MusicPlayback(const.songName, const.difficulty);
+		generateBackground();
 
 		// initialize rendering groups
 		renderedNotes = renderedSustains = new NoteSpriteGroup();
@@ -55,19 +74,43 @@ class ChartEditor extends MusicBeatState {
 		add(renderedSustains);
 		add(renderedNotes);
 
-		// camera that objects will follow
-		noteCamera = new FlxObject(0, 0, 1, 1);
-		noteCamera.screenCenter(X);
-
 		// note strumline
-		noteRender = new FlxSprite().makeGraphic(cellSize * getTotalStrumlines(), 5);
-		noteRender.screenCenter(X);
-		add(noteRender);
+		crochetObject = new FlxSprite().makeGraphic(cellSize * getTotalStrumlines(), 5);
+		crochetObject.screenCenter(X);
+		add(crochetObject);
 
 		checkerCursor.makeGraphic(cellSize, cellSize);
 		add(checkerCursor);
 
-		FlxG.camera.follow(noteCamera);
+		loadUI();
+
+		// camera that objects will follow
+		cameraObject = new FlxObject(0, 0, 1, 1);
+		FlxG.camera.follow(cameraObject, LOCKON);
+	}
+
+	var noteBG:FlxBackdrop;
+	var darkGradient:FlxSprite;
+
+	function generateBackground():Void {
+		#if (flixel_addons <= "2.12.1")
+		noteBG = new FlxBackdrop(null, 1, 1, true, false);
+		#else
+		noteBG = new FlxBackdrop(null, XY, 1, 1);
+		#end
+		noteBG.loadGraphic(Paths.image('menus/chart/grid'));
+		noteBG.scrollFactor.set();
+		noteBG.screenCenter();
+		noteBG.alpha = 0;
+		add(noteBG);
+
+		darkGradient = FlxGradient.createGradientFlxSprite(FlxG.width, FlxG.height, [0xFF000000, 0xFFFFFFFF]);
+		darkGradient.scrollFactor.set();
+		darkGradient.alpha = 0;
+		add(darkGradient);
+
+		FlxTween.tween(noteBG, {alpha: 60 / 255}, 0.8, {ease: FlxEase.cubeOut});
+		FlxTween.tween(darkGradient, {alpha: 30 / 255}, 0.6, {ease: FlxEase.cubeOut});
 	}
 
 	var checkerboard:FlxTiledSprite;
@@ -75,7 +118,8 @@ class ChartEditor extends MusicBeatState {
 	var cellSize:Int = 40;
 
 	function generateCheckerboard():Void {
-		var checkerBit:openfl.display.BitmapData = FlxGridOverlay.createGrid(cellSize, cellSize, cellSize * 2, cellSize * 2, true, 0xFFD8AC9C, 0xFF947566);
+		var checkerBit:openfl.display.BitmapData = FlxGridOverlay.createGrid(cellSize, cellSize, cellSize * 2, cellSize * 2, true, 0xFF9AB671, 0xFF549235);
+		checkerBit.colorTransform(checkerBit.rect, new ColorTransform(1, 1, 1, 90 / 255));
 
 		checkerboard = new FlxTiledSprite(null, cellSize * getTotalStrumlines(), cellSize);
 		checkerboard.loadGraphic(checkerBit);
@@ -84,12 +128,10 @@ class ChartEditor extends MusicBeatState {
 		checkerboard.height = (music.inst.length / Conductor.stepCrochet) * cellSize;
 		add(checkerboard);
 
-		if (song.metadata.strumlines > 1) {
-			for (i in 1...song.metadata.strumlines) {
-				var separator:FlxSprite = new FlxSprite().makeGraphic(5, Std.int(checkerboard.height), FlxColor.BLACK);
-				separator.x = checkerboard.x + cellSize * (4 * i);
-				renderedLanes.add(separator);
-			}
+		for (i in 1...2) {
+			var separator:FlxSprite = new FlxSprite().makeGraphic(5, Std.int(checkerboard.height), FlxColor.BLACK);
+			separator.x = checkerboard.x + cellSize * (4 * i);
+			renderedLanes.add(separator);
 		}
 	}
 
@@ -101,20 +143,42 @@ class ChartEditor extends MusicBeatState {
 		}
 	}
 
+	function loadUI():Void {
+		infoText = new FlxText(0, 0, 0, getInfoText());
+		infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, OUTLINE);
+		infoText.setPosition(5, FlxG.height - infoText.height - 5);
+		infoText.scrollFactor.set();
+		infoText.alpha = 0;
+		add(infoText);
+
+		FlxTween.tween(infoText, {alpha: 1}, 0.8, {ease: FlxEase.cubeOut});
+	}
+
+	function getInfoText():String {
+		var curBPM:Float = song.metadata.bpm;
+		if (song.sections[curSec] != null) {
+			if (song.sections[curSec].bpm != null && song.sections[curSec].bpm != curBPM)
+				curBPM = song.sections[curSec].bpm;
+		}
+
+		return '${song.name} - BPM: ${curBPM}\nBEAT: ${curBeat} - STEP: ${curStep} - BAR: ${curSec + 1}';
+	}
+
 	public override function update(elapsed:Float):Void {
 		Conductor.songPosition = music.inst.time;
 
 		super.update(elapsed);
 
-		noteRender.y = getYfromStrum(Conductor.songPosition);
-		noteCamera.y = noteRender.y + (FlxG.height / 2);
+		crochetObject.y = getYFromStep(Conductor.songPosition);
+		cameraObject.screenCenter(X);
+		cameraObject.y = crochetObject.y + (FlxG.height / 2);
 
 		checkerCursor.visible = FlxG.mouse.overlaps(checkerboard);
 
 		if (FlxG.mouse.x > checkerboard.x
 			&& FlxG.mouse.x < checkerboard.x + checkerboard.width
 			&& FlxG.mouse.y > checkerboard.y
-			&& FlxG.mouse.y < checkerboard.y + getYfromStrum(music.inst.length)) {
+			&& FlxG.mouse.y < checkerboard.y + getYFromStep(music.inst.length)) {
 			checkerCursor.x = Math.floor(FlxG.mouse.x / cellSize) * cellSize;
 			if (FlxG.keys.pressed.SHIFT)
 				checkerCursor.y = FlxG.mouse.y;
@@ -125,8 +189,7 @@ class ChartEditor extends MusicBeatState {
 				if (FlxG.mouse.overlaps(renderedNotes)) {
 					renderedNotes.forEach(function(note:Note) {
 						if (FlxG.mouse.overlaps(note)) {
-							if (!FlxG.keys.pressed.CONTROL)
-								deleteNote(note);
+							if (!FlxG.keys.pressed.CONTROL) {}
 						}
 					});
 				} else {
@@ -136,15 +199,10 @@ class ChartEditor extends MusicBeatState {
 			}
 		}
 
-		if (FlxG.keys.pressed.SHIFT) {
-			if (FlxG.keys.justPressed.MINUS || FlxG.keys.justPressed.PLUS) {
-				Utils.setVolKeys([], []);
-
-				var nextValue:Int = FlxG.keys.justPressed.MINUS ? -1 : 1;
-				song.metadata.strumlines = FlxMath.wrap(song.metadata.strumlines + nextValue, 1, 4);
-				reloadSections();
-			} else // reset
-				Utils.setVolKeys();
+		if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.RIGHT) {
+			var nextValue:Int = FlxG.keys.justPressed.LEFT ? -1 : 1;
+			beatContainer.secPos = FlxMath.wrap(curSec + nextValue, 0, song.sections.length - 1);
+			beatContainer.update(elapsed);
 		}
 
 		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S)
@@ -168,12 +226,13 @@ class ChartEditor extends MusicBeatState {
 					songData: song,
 					gamemode: CHARTING
 				});
-
 				ChartLoader.fillRawList(song);
 			}
 
 			FlxG.switchState(state);
 		}
+
+		infoText.text = getInfoText();
 	}
 
 	public override function onStep():Void {
@@ -196,7 +255,6 @@ class ChartEditor extends MusicBeatState {
 		generateSection();
 
 		// regenerate notes
-
 		reloadNotes();
 	}
 
@@ -213,7 +271,7 @@ class ChartEditor extends MusicBeatState {
 	}
 
 	function generateNotes(step:Float, index:Int, sustainTime:Float, ?type:String = "default", ?strumline:Int = 0):Void {
-		var note:Note = new Note(step, index, false, type, null);
+		var note:Note = new Note(step, index % 4, false, type, null);
 		note.debugging = true;
 		note.sustainTime = sustainTime;
 		note.strumline = strumline;
@@ -224,7 +282,7 @@ class ChartEditor extends MusicBeatState {
 		// center
 		note.x -= cellSize * (getTotalStrumlines() / 2) - (cellSize / 2);
 		note.x += Math.floor(getNoteSide(index, strumline) * cellSize);
-		note.y = Math.floor(getYfromStrum(step));
+		note.y = Math.floor(getYFromStep(step));
 
 		renderedNotes.add(note);
 
@@ -272,12 +330,6 @@ class ChartEditor extends MusicBeatState {
 		return sustainSprites;
 	}
 
-	public function exportChart():Void {
-		var json = {"song": song};
-		var data:String = tjson.TJSON.encode(json);
-		Utils.saveData('${song.name.toLowerCase()}.json', data);
-	}
-
 	function addNote(pushNext:Bool = true):Void {
 		var stepTime:Float = getNoteStep(checkerCursor.y);
 		var stepSection:Int = Math.floor(stepTime / (Conductor.stepCrochet * 16));
@@ -306,24 +358,7 @@ class ChartEditor extends MusicBeatState {
 		reloadSections();
 	}
 
-	function deleteNote(note:Note):Void {
-		for (i in 0...song.sections.length) {
-			for (secNote in song.sections[i].notes) {
-				if (note.strumline != secNote.strumline)
-					note.index += 4;
-
-				if (secNote.step == note.step && secNote.index == note.index) {
-					FlxG.log.add('deleted note ${note.index} at ${note.step}');
-					song.sections[curSec].notes.remove(secNote);
-					break;
-				}
-			}
-		}
-
-		reloadSections();
-	}
-
-	function getSectionStart():Float {
+	@:keep inline function getSectionStart():Float {
 		var daBPM:Float = song.metadata.bpm;
 		var daPos:Float = 0;
 		for (i in 0...curSec) {
@@ -334,27 +369,30 @@ class ChartEditor extends MusicBeatState {
 		return daPos;
 	}
 
-	function getNoteStep(yPos:Float):Float {
+	@:keep inline function getNoteStep(yPos:Float):Float
 		return FlxMath.remapToRange(yPos, 0, (music.inst.length / Conductor.stepCrochet) * cellSize, 0, music.inst.length);
-		// return FlxMath.remapToRange(yPos, checkerboard.y, checkerboard.y + checkerboard.height, 0, 16 * Conductor.stepCrochet);
-	}
 
-	function getYfromStrum(stepTime:Float):Float
+	@:keep inline function getYFromStep(stepTime:Float):Float
 		return FlxMath.remapToRange(stepTime, 0, music.inst.length, 0, (music.inst.length / Conductor.stepCrochet) * cellSize);
 
-	function getNoteSide(index:Int, strum:Int):Int {
+	@:keep inline function getNoteSide(index:Int, strum:Int):Int {
 		var ret:Int = index;
-
 		if (strum > 0)
 			for (i in 0...strum) // equation to get correct strumline bs
 				ret = (index + 4) % getTotalStrumlines();
 		return ret;
 	}
 
-	function getTotalStrumlines():Int {
+	@:keep inline function getTotalStrumlines():Int {
 		var value:Int = 0;
-		for (i in 0...song.metadata.strumlines)
+		for (i in 0...2)
 			value += 4;
 		return value;
+	}
+
+	@:keep inline function exportChart():Void {
+		var json = {"song": song};
+		var data:String = tjson.TJSON.encode(json);
+		Utils.saveData('${song.name.toLowerCase()}.json', data);
 	}
 }

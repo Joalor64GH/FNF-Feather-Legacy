@@ -24,7 +24,7 @@
 	<!-- _______ Window _______ -->
 
 	<!-- These window settings apply to all targets -->
-	<window width="1280" height="720" fps="60" background="#008000" hardware="true" vsync="false" />
+	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
 
 	<!-- HTML5-specific -->
 	<window if="html5" resizable="false" />
@@ -42,8 +42,9 @@
 
 	<!-- _______ Paths _______ -->
 
-	<set name="BUILD_DIR" value="export/release" />
+	<set name="BUILD_DIR" value="export" />
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
+	<set name="BUILD_DIR" value="export/release" unless="debug" />
 
 	<source path="source" />
 	<assets path="assets" />
