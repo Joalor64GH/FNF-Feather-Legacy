@@ -49,7 +49,12 @@ class ChartLoader {
 				tempMeta =
 					{
 						name: fnfSong.song,
-						characters: [fnfSong.player1, fnfSong.player2, fnfSong.gfVersion],
+						characters: [
+							fnfSong.player1,
+							fnfSong.player2,
+							(fnfSong.gfVersion != null)
+							? fnfSong.gfVersion : getCrowdVersion(fnfSong.stage)
+						],
 						uiStyle: 'default',
 						origin: parsedType,
 						stage: fnfSong.stage,
