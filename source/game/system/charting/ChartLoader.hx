@@ -140,7 +140,10 @@ class ChartLoader {
 		if (!sys.FileSystem.exists(AssetHandler.getPath('data/songs/${songName}/meta${difficulty}', JSON)))
 			difficulty = '';
 
-		return cast tjson.TJSON.parse(AssetHandler.getAsset('data/songs/${songName}/meta${difficulty}', JSON));
+		if (sys.FileSystem.exists(AssetHandler.getPath('data/songs/${songName}/meta${difficulty}', JSON)))
+			return cast tjson.TJSON.parse(AssetHandler.getAsset('data/songs/${songName}/meta${difficulty}', JSON));
+
+		return null;
 	}
 
 	public static function fillRawList(chart:ChartFormat):Void {
