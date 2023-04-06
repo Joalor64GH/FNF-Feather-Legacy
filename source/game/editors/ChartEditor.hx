@@ -61,8 +61,11 @@ class ChartEditor extends MusicBeatState {
 		generateBackground();
 
 		// initialize rendering groups
-		renderedNotes = renderedSustains = new NoteSpriteGroup();
-		renderedSections = renderedLanes = new FlxTypedGroup<FlxSprite>();
+		renderedNotes = new NoteSpriteGroup();
+		renderedSustains = new NoteSpriteGroup();
+
+		renderedSections = new FlxTypedGroup<FlxSprite>();
+		renderedLanes = new FlxTypedGroup<FlxSprite>();
 
 		// reload all sections
 		reloadSections();
