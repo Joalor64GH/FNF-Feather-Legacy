@@ -22,7 +22,6 @@ class FreeplayMenu extends MenuBase {
 
 	var songList:Array<ListableSong> = [];
 	var iconList:Array<HealthIcon> = [];
-	var existingSongs:Array<String> = [];
 
 	// ui objects
 	var scoreBG:FlxSprite;
@@ -50,8 +49,9 @@ class FreeplayMenu extends MenuBase {
 			for (i in 0...week.songs.length) {
 				if (week.songs[i].color == null)
 					week.songs[i].color = 0xFFFFFFFF;
-				songList.push(week.songs[i]);
-				existingSongs.push(week.songs[i].name);
+
+				if (!songList.contains(week.songs[i]))
+					songList.push(week.songs[i]);
 			}
 		}
 
@@ -60,23 +60,22 @@ class FreeplayMenu extends MenuBase {
 			if (FileSystem.exists(AssetHandler.getPath(path, JSON))) {
 				var data:ListableSong = cast tjson.TJSON.parse(AssetHandler.getAsset(path, JSON, true));
 				data.color = FlxColor.fromString(Std.string(data.color));
-				if (!existingSongs.contains(data.name)) {
+				if (!songList.contains(data))
 					songList.push(data);
-					existingSongs.push(data.name);
-				}
 			}
 		}
 
 		#if MODDING_ENABLED
-		if (FileSystem.exists(core.assets.ModHandler.getPath('data/songs'))) {
-			for (modFolder in FileSystem.readDirectory(core.assets.ModHandler.getPath('data/songs'))) {
-				var path:String = 'data/songs/${modFolder}/freeplay';
-				if (FileSystem.exists(core.assets.ModHandler.getPath(path, JSON))) {
-					var data:ListableSong = cast tjson.TJSON.parse(sys.io.File.getContent(core.assets.ModHandler.getPath(path, JSON)));
-					data.color = FlxColor.fromString(Std.string(data.color));
-					if (!existingSongs.contains(data.name)) {
-						songList.push(data);
-						existingSongs.push(data.name);
+		for (i in 0...core.assets.ModHandler.activeMods.length) {
+			var modName:String = core.assets.ModHandler.activeMods[i].folder;
+			if (FileSystem.exists(core.assets.ModHandler.getFromMod(modName, 'data/songs'))) {
+				for (modFolder in FileSystem.readDirectory(core.assets.ModHandler.getFromMod(modName, 'data/songs'))) {
+					var path:String = 'data/songs/${modFolder}/freeplay';
+					if (FileSystem.exists(core.assets.ModHandler.getFromMod(modName, path, JSON))) {
+						var data:ListableSong = cast tjson.TJSON.parse(sys.io.File.getContent(core.assets.ModHandler.getFromMod(modName, path, JSON)));
+						data.color = FlxColor.fromString(Std.string(data.color));
+						if (!songList.contains(data))
+							songList.push(data);
 					}
 				}
 			}

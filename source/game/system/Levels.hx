@@ -24,18 +24,19 @@ class Levels {
 		}
 
 		#if MODDING_ENABLED
-		for (modWeek in Utils.readText(core.assets.ModHandler.getPath('data/weeks/order', TXT))) {
-			if (modWeek == null)
-				return;
+		for (i in 0...core.assets.ModHandler.activeMods.length) {
+			var modName:String = core.assets.ModHandler.activeMods[i].folder;
 
-			if (FileSystem.exists(core.assets.ModHandler.getPath('data/weeks/${modWeek}', JSON))) {
-				var modWeek:GameWeek = cast tjson.TJSON.parse(File.getContent(core.assets.ModHandler.getPath('data/weeks/${modWeek}', JSON)));
+			for (modWeek in Utils.readText(core.assets.ModHandler.getFromMod(modName, 'data/weeks/order', TXT))) {
+				if (FileSystem.exists(core.assets.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}', JSON))) {
+					var modWeek:GameWeek = cast tjson.TJSON.parse(File.getContent(core.assets.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}', JSON)));
 
-				for (i in 0...modWeek.songs.length)
-					modWeek.songs[i].color = FlxColor.fromString(Std.string(modWeek.songs[i].color));
+					for (i in 0...modWeek.songs.length)
+						modWeek.songs[i].color = FlxColor.fromString(Std.string(modWeek.songs[i].color));
 
-				if (!GAME_LEVELS.contains(modWeek))
-					GAME_LEVELS.push(modWeek);
+					if (!GAME_LEVELS.contains(modWeek))
+						GAME_LEVELS.push(modWeek);
+				}
 			}
 		}
 		#end

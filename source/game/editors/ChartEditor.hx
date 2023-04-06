@@ -17,12 +17,6 @@ import game.system.charting.ChartLoader;
 import game.system.Conductor;
 import openfl.geom.ColorTransform;
 
-typedef ChartEditorNote = {
-	var arrow:FNFSprite;
-	var sustain:FNFSprite;
-	var end:FNFSprite;
-}
-
 /**
  * State for Editing and Exporting new Charts
  */
@@ -35,12 +29,10 @@ class ChartEditor extends MusicBeatState {
 	public var sideBar:FlxSprite;
 	public var infoText:FlxText;
 
-	public var renderedNotes:NoteSpriteGroup;
-	public var renderedSustains:NoteSpriteGroup;
+	public var renderedNotes:FlxTypedGroup<FNFSprite>;
+	public var renderedSustains:FlxTypedGroup<FlxTiledSprite>;
 	public var renderedSections:FlxTypedGroup<FlxSprite>;
 	public var renderedLanes:FlxTypedGroup<FlxSprite>;
-
-	public var chartNotes:Array<ChartEditorNote> = [];
 
 	public var crochetObject:FlxSprite;
 	public var cameraObject:FlxObject;
@@ -56,14 +48,12 @@ class ChartEditor extends MusicBeatState {
 		super.create();
 
 		FlxG.mouse.visible = true;
-
 		music = new MusicPlayback(const.songName, const.difficulty);
 		generateBackground();
 
 		// initialize rendering groups
-		renderedNotes = new NoteSpriteGroup();
-		renderedSustains = new NoteSpriteGroup();
-
+		renderedNotes = new FlxTypedGroup<FNFSprite>();
+		renderedSustains = new FlxTypedGroup<FlxTiledSprite>();
 		renderedSections = new FlxTypedGroup<FlxSprite>();
 		renderedLanes = new FlxTypedGroup<FlxSprite>();
 
@@ -190,7 +180,7 @@ class ChartEditor extends MusicBeatState {
 
 			if (FlxG.mouse.justPressed) {
 				if (FlxG.mouse.overlaps(renderedNotes)) {
-					renderedNotes.forEach(function(note:Note) {
+					renderedNotes.forEach(function(note:FNFSprite) {
 						if (FlxG.mouse.overlaps(note)) {
 							if (!FlxG.keys.pressed.CONTROL) {}
 						}
@@ -274,10 +264,12 @@ class ChartEditor extends MusicBeatState {
 	}
 
 	function generateNotes(step:Float, index:Int, sustainTime:Float, ?type:String = "default", ?strumline:Int = 0):Void {
-		var note:Note = new Note(step, index % 4, false, type, null);
-		note.debugging = true;
-		note.sustainTime = sustainTime;
-		note.strumline = strumline;
+		var noteBase:Note = new Note(step, index % 4, 0, type, null);
+		noteBase.debugging = true;
+		noteBase.sustainTime = sustainTime;
+		noteBase.strumline = strumline;
+
+		var note:FNFSprite = noteBase.arrow;
 		note.setGraphicSize(cellSize, cellSize);
 		note.updateHitbox();
 		note.screenCenter(X);
@@ -286,12 +278,13 @@ class ChartEditor extends MusicBeatState {
 		note.x -= cellSize * (getTotalStrumlines() / 2) - (cellSize / 2);
 		note.x += Math.floor(getNoteSide(index, strumline) * cellSize);
 		note.y = Math.floor(getYFromStep(step));
-
 		renderedNotes.add(note);
 
-		if (note.sustainTime > 0)
-			for (sustain in generateSustainNote(Conductor.stepCrochet, note))
-				renderedSustains.add(sustain);
+		/*
+			if (note.sustainTime > 0)
+				for (sustain in generateSustainNote(Conductor.stepCrochet, note))
+					renderedSustains.add(sustain);
+		 */
 	}
 
 	function generateSustainNote(step:Float, note:Note):Array<Note> {
@@ -303,7 +296,7 @@ class ChartEditor extends MusicBeatState {
 		var previous:Note = note;
 
 		for (i in 0...length + 1) {
-			var sustain:Note = new Note(note.step + (step * i) + step, note.index % 4, true, note.type, previous);
+			var sustain:Note = new Note(note.step + (step * i) + step, note.index % 4, note.sustainTime, note.type, previous);
 			sustain.debugging = true;
 			sustain.setPosition(note.x, previous.y + cellSize);
 			sustain.flipY = false;

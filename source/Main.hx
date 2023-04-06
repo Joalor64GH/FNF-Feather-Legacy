@@ -49,6 +49,9 @@ class Main extends Sprite {
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 
+		// FlxG.console.registerClass(game.gameplay.notes.Note);
+		FlxG.console.registerClass(game.gameplay.Note);
+
 		FlxG.signals.preStateSwitch.add(function():Void {
 			CacheHandler.purge([STORED_IMAGES, UNUSED_IMAGES, CACHED_SOUNDS]);
 		});

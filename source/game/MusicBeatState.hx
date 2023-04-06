@@ -64,7 +64,6 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions {
 			FlxG.watch.add(this, "curBeat", "Song Beat:");
 			FlxG.watch.add(this, "curStep", "Song Step:");
 			FlxG.watch.add(this, "curSec", "Song Section:");
-			FlxG.watch.add(beatContainer, "tickPos", "Song Tick:");
 		}
 	}
 

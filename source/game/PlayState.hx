@@ -45,13 +45,13 @@ class PlayState extends MusicBeatState {
 	public var difficulty:String = 'normal';
 
 	// Gameplay
-	public var lines:FlxTypedGroup<NoteGroup>;
+	public var noteFields:FlxTypedGroup<Notefield>;
 
 	public var playerStrumline:Int = 1;
-	public var playerStrums(get, never):NoteGroup;
+	public var playerNotefield(get, never):Notefield;
 
-	@:keep inline function get_playerStrums():NoteGroup
-		return lines.members[playerStrumline];
+	@:keep inline function get_playerNotefield():Notefield
+		return noteFields.members[playerStrumline];
 
 	public var gameUI:GameplayUI;
 	public var ratingUI:RatingPopup;
@@ -199,8 +199,8 @@ class PlayState extends MusicBeatState {
 		gameUI = new GameplayUI();
 		addOnHUD(gameUI);
 
-		lines = new FlxTypedGroup<NoteGroup>();
-		addOnHUD(lines);
+		noteFields = new FlxTypedGroup<Notefield>();
+		addOnHUD(noteFields);
 
 		ratingUI = new RatingPopup();
 
@@ -225,11 +225,11 @@ class PlayState extends MusicBeatState {
 			if (i == 0)
 				xPos -= 60;
 
-			var newStrumline:NoteGroup = new NoteGroup(xPos, yPos, character, spacing);
+			var newStrumline:Notefield = new Notefield(xPos, yPos, character, spacing);
 			newStrumline.cpuControlled = !isPlayer;
 			if (Settings.get("centerScroll"))
 				newStrumline.visible = isPlayer;
-			lines.add(newStrumline);
+			noteFields.add(newStrumline);
 		}
 
 		controls.onKeyPressed.add(onKeyPress);
@@ -283,13 +283,13 @@ class PlayState extends MusicBeatState {
 		for (sound in countdownSounds)
 			countdownNoises.push(AssetHandler.getAsset('sounds/game/${sound}', SOUND));
 
-		for (strum in lines) {
-			for (i in 0...strum.babyArrows.members.length) {
-				var startY:Float = strum.babyArrows.members[i].y;
-				strum.babyArrows.members[i].alpha = 0;
-				strum.babyArrows.members[i].y -= 32;
+		for (strum in noteFields) {
+			for (i in 0...strum.receptors.members.length) {
+				var startY:Float = strum.receptors.members[i].y;
+				strum.receptors.members[i].alpha = 0;
+				strum.receptors.members[i].y -= 32;
 
-				FlxTween.tween(strum.babyArrows.members[i], {y: startY, alpha: 1}, (Conductor.beatCrochet * 4) / 1000,
+				FlxTween.tween(strum.receptors.members[i], {y: startY, alpha: 1}, (Conductor.beatCrochet * 4) / 1000,
 					{ease: FlxEase.circOut, startDelay: (Conductor.beatCrochet / 1000) + ((Conductor.stepCrochet / 1000) * i)});
 			}
 		}
@@ -393,32 +393,19 @@ class PlayState extends MusicBeatState {
 					if (unspawnNote.type != null)
 						type = unspawnNote.type;
 
-					var strum:NoteGroup = lines.members[unspawnNote.strumline];
+					var strum:Notefield = noteFields.members[unspawnNote.strumline];
 					if (strum != null) {
 						var prevNote:Note = null;
 						if (strum.noteSprites.members.length > 0)
 							prevNote = strum.noteSprites.members[strum.noteSprites.members.length - 1];
 
-						var spawnedNote:Note = new Note(unspawnNote.step, unspawnNote.index, false, type, prevNote);
+						var spawnedNote:Note = new Note(unspawnNote.step, unspawnNote.index, unspawnNote.sustainTime, type, prevNote);
 						spawnedNote.downscroll = Settings.get("scrollType") == "DOWN";
-						spawnedNote.sustainTime = unspawnNote.sustainTime;
 						spawnedNote.strumline = unspawnNote.strumline;
 						strum.add(spawnedNote);
 
-						if (unspawnNote.sustainTime > 0) {
-							for (noteSustain in 0...Math.floor(unspawnNote.sustainTime / Conductor.stepCrochet)) {
-								var sustainStep:Float = unspawnNote.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
-
-								var spawnedSustain:Note = new Note(sustainStep, unspawnNote.index, true, type, prevNote);
-								spawnedSustain.downscroll = Settings.get("scrollType") == "DOWN";
-								spawnedSustain.strumline = unspawnNote.strumline;
-								if (unspawnNote.sustainTime == noteSustain - 1)
-									spawnedSustain.isEnd = true;
-
-								spawnedSustain.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(spawnedNote));
-								prevNote = spawnedSustain;
-							}
-						}
+						// if (spawnedNote.sustainTime > 0)
+						//	spawnedNote.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(spawnedNote));
 					}
 
 					unspawnNoteList.splice(unspawnNoteList.indexOf(unspawnNote), 1);
@@ -429,7 +416,7 @@ class PlayState extends MusicBeatState {
 				parseEvents(ChartLoader.unspawnEventList);
 				bumpCamera(elapsed);
 
-				if (currentStat.health <= 0 && !playerStrums.cpuControlled) {
+				if (currentStat.health <= 0 && !playerNotefield.cpuControlled) {
 					music.cease();
 					player.stunned = true;
 					paused = true;
@@ -438,7 +425,7 @@ class PlayState extends MusicBeatState {
 					openSubState(new GameOverSubState(player.getGraphicMidpoint().x, player.getGraphicMidpoint().y));
 				}
 
-				for (strum in lines) {
+				for (strum in noteFields) {
 					strum.noteSprites.forEachAlive(function(note:Note):Void {
 						note.speed = Math.abs(song.metadata.speed);
 
@@ -446,12 +433,12 @@ class PlayState extends MusicBeatState {
 							if (!note.wasGoodHit && note.step <= Conductor.songPosition)
 								goodNoteHit(note, strum);
 						} // sustain note inputs
-						else if (!playerStrums.cpuControlled) {
+						else if (!playerNotefield.cpuControlled) {
 							if (notesPressed[note.index] && (note.isSustain && note.canHit && note.strumline == playerStrumline))
-								goodNoteHit(note, playerStrums);
+								goodNoteHit(note, playerNotefield);
 						}
 
-						var rangeReached:Bool = note.downscroll ? note.y > FlxG.height : note.y < -note.height;
+						var rangeReached:Bool = note.downscroll ? note.arrow.y > FlxG.height : note.arrow.y < -note.arrow.height;
 						var sustainHit:Bool = note.isSustain && note.wasGoodHit && note.step <= Conductor.songPosition - note.hitboxEarly;
 
 						if (Conductor.songPosition > note.killDelay + note.step) {
@@ -497,8 +484,8 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (FlxG.keys.justPressed.SIX) {
-			playerStrums.cpuControlled = !playerStrums.cpuControlled;
-			gameUI.cpuText.visible = playerStrums.cpuControlled;
+			playerNotefield.cpuControlled = !playerNotefield.cpuControlled;
+			gameUI.cpuText.visible = playerNotefield.cpuControlled;
 		}
 
 		if (FlxG.keys.justPressed.SEVEN) {
@@ -584,7 +571,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function charactersDance(curBeat:Int):Void {
-		for (strum in lines) {
+		for (strum in noteFields) {
 			if (strum.character != null && curBeat % strum.character.headSpeed == 0)
 				if (!strum.character.isSinging() && !strum.character.isMissing() && !strum.character.stunned)
 					strum.character.dance();
@@ -640,14 +627,14 @@ class PlayState extends MusicBeatState {
 		gameStage.onEventDispatch(event.name, event.args);
 	}
 
-	public function goodNoteHit(note:Note, strum:NoteGroup):Void {
+	public function goodNoteHit(note:Note, strum:Notefield):Void {
 		if (!note.wasGoodHit) {
 			note.wasGoodHit = true;
 			strum.playAnim('confirm', note.index, true);
 
 			callFn("goodNoteHit", [note.step, note.index, note.type, note.strumline, strum]);
 
-			var animName:String = 'sing${NoteGroup.directions[note.index].toUpperCase()}${strum.character.suffix}';
+			var animName:String = 'sing${Notefield.directions[note.index].toUpperCase()}${strum.character.suffix}';
 			if (song.sections[curSec] != null && song.sections[curSec].animation != null) {
 				// suffix check
 				if (song.sections[curSec].animation.startsWith('-'))
@@ -693,17 +680,17 @@ class PlayState extends MusicBeatState {
 	public var notesPressed:Array<Bool> = [];
 
 	public function onKeyPress(key:Int, action:String):Void {
-		if (playerStrums == null || playerStrums.cpuControlled || paused || !startedCountdown)
+		if (playerNotefield == null || playerNotefield.cpuControlled || paused || !startedCountdown)
 			return;
 
-		if (action != null && NoteGroup.directions.contains(action)) {
-			var index:Int = NoteGroup.directions.indexOf(action);
+		if (action != null && Notefield.directions.contains(action)) {
+			var index:Int = Notefield.directions.indexOf(action);
 			notesPressed[index] = true;
 
 			var dumbNotes:Array<Note> = [];
 			var possibleNotes:Array<Note> = [];
 
-			playerStrums.noteSprites.forEachAlive(function(note:Note):Void {
+			playerNotefield.noteSprites.forEachAlive(function(note:Note):Void {
 				if (note.canHit && note.strumline == playerStrumline && !note.wasGoodHit) {
 					if (note.index == index)
 						possibleNotes.push(note);
@@ -717,27 +704,27 @@ class PlayState extends MusicBeatState {
 					for (dumbNote in dumbNotes) {
 						// "dumb" notes are doubles
 						if (Math.abs(note.step - dumbNote.step) < 10)
-							playerStrums.remove(dumbNote, true);
+							playerNotefield.remove(dumbNote, true);
 						else
 							canBeHit = false;
 					}
 
 					if (canBeHit) {
-						goodNoteHit(note, playerStrums);
+						goodNoteHit(note, playerNotefield);
 						dumbNotes.push(note);
 					}
 				}
 			} else {
 				if (!Settings.get("ghostTapping"))
-					noteMiss(index, playerStrums);
+					noteMiss(index, playerNotefield);
 			}
 
-			if (!playerStrums.currentAnim('confirm', NoteGroup.directions.indexOf(action)))
-				playerStrums.playAnim('pressed', NoteGroup.directions.indexOf(action));
+			if (!playerNotefield.currentAnim('confirm', Notefield.directions.indexOf(action)))
+				playerNotefield.playAnim('pressed', Notefield.directions.indexOf(action));
 		}
 	}
 
-	public function noteMiss(direction:Int = 0, ?strum:NoteGroup, ?showMiss:Bool = true):Void {
+	public function noteMiss(direction:Int = 0, ?strum:Notefield, ?showMiss:Bool = true):Void {
 		if (currentStat.combo < 0)
 			currentStat.combo = 0;
 		else {
@@ -756,7 +743,7 @@ class PlayState extends MusicBeatState {
 		currentStat.misses++;
 		FlxG.sound.play(AssetHandler.getAsset('sounds/game/miss' + FlxG.random.int(1, 3), SOUND), FlxG.random.float(0.3, 0.6));
 
-		var animName:String = 'sing${NoteGroup.directions[direction].toUpperCase()}miss${strum.character.suffix}';
+		var animName:String = 'sing${Notefield.directions[direction].toUpperCase()}miss${strum.character.suffix}';
 		if (song.sections[curSec] != null && song.sections[curSec].animation != null) {
 			// suffix check
 			if (song.sections[curSec].animation.startsWith('-'))
@@ -775,13 +762,13 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function onKeyRelease(key:Int, action:String):Void {
-		if (playerStrums == null || playerStrums.cpuControlled || paused || !startedCountdown)
+		if (playerNotefield == null || playerNotefield.cpuControlled || paused || !startedCountdown)
 			return;
 
-		if (action != null && NoteGroup.directions.contains(action)) {
-			var index:Int = NoteGroup.directions.indexOf(action);
+		if (action != null && Notefield.directions.contains(action)) {
+			var index:Int = Notefield.directions.indexOf(action);
 			notesPressed[index] = false;
-			playerStrums.playAnim('static', NoteGroup.directions.indexOf(action));
+			playerNotefield.playAnim('static', Notefield.directions.indexOf(action));
 		}
 	}
 

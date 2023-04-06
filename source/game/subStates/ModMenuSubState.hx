@@ -48,10 +48,9 @@ class ModMenuSubState extends MusicBeatSubState {
 	public function updateSelection(newSelection:Int = 0):Void {
 		if (modGroup.members.length > 0)
 			curSelection = FlxMath.wrap(curSelection + newSelection, 0, modGroup.members.length - 1);
-
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 
-		bgGradient.color = modGroup.members[curSelection].color;
+		bgGradient.color = ModHandler.trackedMods[curSelection].color;
 
 		var ascendingIndex:Int = 0;
 		for (letter in modGroup) {

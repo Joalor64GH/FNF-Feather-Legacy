@@ -61,6 +61,16 @@ class ModHandler {
 		return type.cycleExtensions('${pathBase}${folder}');
 	}
 
+	public static function getFromMod(mod:String, ?folder:String, ?type:AssetType):String {
+		var pathBase:String = 'mods';
+		if (folder != null) {
+			if (folder.startsWith("mods"))
+				pathBase = '';
+			folder = '/${mod}/${folder}';
+		}
+		return type.cycleExtensions('${pathBase}${folder}');
+	}
+
 	public static function scanMods():Void {
 		trackedMods = [];
 		activeMods = [];

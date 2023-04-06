@@ -7,7 +7,7 @@ import flixel.math.FlxRect;
 import game.gameplay.Note.Splash;
 import game.system.Conductor;
 
-class NoteGroup extends FlxGroup {
+class Notefield extends FlxGroup {
 	final game:PlayState = PlayState.self;
 
 	public static final colors:Array<String> = ['purple', 'blue', 'green', 'red'];
@@ -28,7 +28,7 @@ class NoteGroup extends FlxGroup {
 	 */
 	public var cpuControlled:Bool = false;
 
-	public var babyArrows:FlxTypedGroup<FNFSprite> = new FlxTypedGroup<FNFSprite>();
+	public var receptors:FlxTypedGroup<FNFSprite> = new FlxTypedGroup<FNFSprite>();
 	public var noteSprites:FlxTypedGroup<Note> = new FlxTypedGroup<Note>();
 	public var splashSprites:FlxTypedGroup<FNFSprite> = new FlxTypedGroup<FNFSprite>();
 
@@ -43,7 +43,7 @@ class NoteGroup extends FlxGroup {
 
 		generateArrows(x, y);
 
-		add(babyArrows);
+		add(receptors);
 		add(noteSprites);
 		add(splashSprites);
 	}
@@ -52,9 +52,9 @@ class NoteGroup extends FlxGroup {
 	 * Note Regeneration Script
 	 */
 	public function generateArrows(x:Float = 0, y:Float = 0):Void {
-		babyArrows.forEachAlive(function(babyArrow:FlxSprite):Void {
-			babyArrow.kill();
-			babyArrow.destroy();
+		receptors.forEachAlive(function(receptor:FlxSprite):Void {
+			receptor.kill();
+			receptor.destroy();
 		});
 
 		splashSprites.forEachAlive(function(splash:FNFSprite):Void {
@@ -63,33 +63,33 @@ class NoteGroup extends FlxGroup {
 		});
 
 		for (i in 0...keys) {
-			var babyArrow:FNFSprite = new FNFSprite(x, y).loadFrames('images/notes/default/NOTE_assets');
+			var receptor:FNFSprite = new FNFSprite(x, y).loadFrames('images/notes/default/NOTE_assets');
 
-			babyArrow.addAnim('static', 'arrow static ${i}');
-			babyArrow.addAnim('pressed', '${directions[i]} press');
-			babyArrow.addAnim('confirm', '${directions[i]} confirm');
+			receptor.addAnim('static', 'arrow static ${i}');
+			receptor.addAnim('pressed', '${directions[i]} press');
+			receptor.addAnim('confirm', '${directions[i]} confirm');
 
-			babyArrow.x += spacing * i;
-			babyArrow.ID = i;
+			receptor.x += spacing * i;
+			receptor.ID = i;
 
-			babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
-			babyArrow.updateHitbox();
+			receptor.setGraphicSize(Std.int(receptor.width * 0.7));
+			receptor.updateHitbox();
 
-			babyArrow.antialiasing = Settings.get("antialiasing");
+			receptor.antialiasing = Settings.get("antialiasing");
 
-			babyArrow.animation.finishCallback = function(name:String):Void {
+			receptor.animation.finishCallback = function(name:String):Void {
 				if (name == 'confirm') {
-					babyArrow.playAnim(cpuControlled ? 'static' : 'pressed', true);
-					babyArrow.centerOrigin();
-					babyArrow.centerOffsets();
+					receptor.playAnim(cpuControlled ? 'static' : 'pressed', true);
+					receptor.centerOrigin();
+					receptor.centerOffsets();
 				}
 			};
 
-			babyArrow.playAnim('static');
-			babyArrow.centerOrigin();
-			babyArrow.centerOffsets();
+			receptor.playAnim('static');
+			receptor.centerOrigin();
+			receptor.centerOffsets();
 
-			babyArrows.add(babyArrow);
+			receptors.add(receptor);
 		}
 
 		doSplash(0, "default", true);
@@ -99,7 +99,7 @@ class NoteGroup extends FlxGroup {
 		if (!Settings.get("noteSplashes"))
 			return;
 
-		var babyArrow:FNFSprite = babyArrows.members[index];
+		var receptor:FNFSprite = receptors.members[index];
 
 		var splash:FNFSprite = splashSprites.recycle(FNFSprite, function():FNFSprite return new Splash(type));
 		splash.alpha = preload ? 0.000001 : 1;
@@ -107,7 +107,7 @@ class NoteGroup extends FlxGroup {
 
 		splash.antialiasing = Settings.get("antialiasing");
 		splash.depth = -Conductor.songPosition;
-		splash.setPosition(babyArrow.x - babyArrow.width, babyArrow.y - babyArrow.height);
+		splash.setPosition(receptor.x - receptor.width, receptor.y - receptor.height);
 		splash.playAnim('impact ${colors[index]}0' /*+ FlxG.random.int(0, 1)*/);
 		if (preload)
 			splashSprites.add(splash);
@@ -121,23 +121,20 @@ class NoteGroup extends FlxGroup {
 	}
 
 	public override function update(elapsed:Float):Void {
-		if (babyArrows != null) {
+		if (receptors != null) {
 			noteSprites.forEachAlive(function(note:Note):Void {
-				var babyArrow:FlxSprite = babyArrows.members[note.index];
+				var receptor:FlxSprite = receptors.members[note.index];
 
-				if (note != null && babyArrow != null) {
+				if (note != null && receptor != null) {
 					var mustHit:Bool = note.strumline != game.playerStrumline;
-					var center:Float = babyArrow.y + spacing / 2;
+					var center:Float = receptor.y + spacing / 2;
 					var stepY:Float = (Conductor.songPosition - note.step) * (0.45 * FlxMath.roundDecimal(note.speed, 2));
 
-					note.x = babyArrow.x;
+					note.x = receptor.x;
 					if (note.downscroll)
-						note.y = babyArrow.y + stepY;
+						note.arrow.y = receptor.y + stepY;
 					else // I'm gonna throw up.
-						note.y = babyArrow.y - stepY;
-
-					note.x += note.offsetX;
-					note.y += note.offsetY;
+						note.arrow.y = receptor.y - stepY;
 
 					if (note.isSustain) {
 						if (note.downscroll) {
@@ -193,23 +190,23 @@ class NoteGroup extends FlxGroup {
 	}
 
 	public function currentAnim(anim:String, index:Int):Bool {
-		if (babyArrows.members[index] != null) {
-			var babyArrow:FlxSprite = babyArrows.members[index];
-			if (babyArrow.animation.curAnim != null && babyArrow.animation.curAnim.name == anim)
+		if (receptors.members[index] != null) {
+			var receptor:FlxSprite = receptors.members[index];
+			if (receptor.animation.curAnim != null && receptor.animation.curAnim.name == anim)
 				return true;
 		}
 		return false;
 	}
 
 	public function playAnim(anim:String, index:Int, forced:Bool = false, reversed:Bool = false, frame:Int = 0):Void {
-		if (babyArrows.members[index] == null)
+		if (receptors.members[index] == null)
 			return;
 
-		var babyArrow:FNFSprite = babyArrows.members[index];
-		if (babyArrow.animation.getByName(anim) != null)
-			babyArrow.playAnim(anim, forced, reversed, frame);
+		var receptor:FNFSprite = receptors.members[index];
+		if (receptor.animation.getByName(anim) != null)
+			receptor.playAnim(anim, forced, reversed, frame);
 
-		babyArrow.centerOrigin();
-		babyArrow.centerOffsets();
+		receptor.centerOrigin();
+		receptor.centerOffsets();
 	}
 }

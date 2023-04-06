@@ -1,13 +1,20 @@
 package game.gameplay;
 
 import core.FNFSprite;
+import flixel.addons.display.FlxTiledSprite;
+import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxFrame;
+import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.group.FlxSpriteGroup;
 import game.PlayState;
 import game.system.Conductor;
 
-typedef NoteSpriteGroup = flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<Note>;
-
-class Note extends FNFSprite {
+class Note extends FlxSpriteGroup {
 	final game:PlayState = PlayState.self;
+
+	public var arrow:Arrow;
+	public var sustain:Sustain;
+	public var sustainEnd:FNFSprite;
 
 	public var prevNote:Note = null;
 	public var debugging:Bool = false;
@@ -26,10 +33,10 @@ class Note extends FNFSprite {
 	public var speed(default, set):Float = 1.0;
 
 	function set_speed(newSpeed:Float):Float {
-		if (speed != newSpeed) {
+		if (speed != newSpeed)
 			speed = newSpeed;
-			updateSustain();
-		}
+		if (sustain != null)
+			sustain.updateHeight();
 		return speed;
 	}
 
@@ -42,13 +49,10 @@ class Note extends FNFSprite {
 
 	public var downscroll:Bool = false;
 
-	public var offsetX:Float = 0;
-	public var offsetY:Float = 0;
-
 	public var hitboxEarly:Float = 1;
 	public var hitboxLate:Float = 1;
 
-	public function new(step:Float, index:Int, ?isSustain:Bool, ?type:String = "default", ?prevNote:Note):Void {
+	public function new(step:Float, index:Int, ?sustainTime:Float, ?type:String = "default", ?prevNote:Note):Void {
 		super(0, -2000);
 
 		if (prevNote == null)
@@ -56,51 +60,43 @@ class Note extends FNFSprite {
 
 		this.step = step;
 		this.index = index;
-		this.isSustain = isSustain;
+		this.sustainTime = sustainTime;
 		this.type = type;
 		this.prevNote = prevNote;
 		this.moves = false;
 
-		frames = AssetHandler.getAsset('images/notes/${type}/NOTE_assets', XML);
-		addAnim('${NoteGroup.colors[index]} note', '${NoteGroup.colors[index]}0');
-		addAnim('${NoteGroup.colors[index]} end', '${NoteGroup.colors[index]} hold end');
-		addAnim('${NoteGroup.colors[index]} hold', '${NoteGroup.colors[index]} hold piece');
-		setGraphicSize(Std.int(width * 0.7));
-		updateHitbox();
+		hitboxEarly = 1;
 
-		antialiasing = Settings.get("antialiasing");
-
-		if (!isSustain) {
-			hitboxEarly = 1;
-			playAnim('${NoteGroup.colors[index]} note');
-		} else
-			updateSustain();
-	}
-
-	/**
-	 * Don't break on bpm changes Don't break on bpm changes Don't break on bpm changes Don't break on bpm changes
-	 */
-	final noteStepCrochet:Float = Conductor.stepCrochet;
-
-	public function updateSustain():Void {
-		if (isSustain) {
-			flipY = downscroll;
-			hitboxEarly = 0.5;
-			alpha = 0.6;
-
-			playAnim('${NoteGroup.colors[index]} end');
-			updateHitbox();
-
-			offsetX += ((width / 2) - (width / 2)) + 17;
-
-			if (downscroll)
-				offsetY += ((height / 2) - (height / 2)) + 30;
-
-			if (prevNote != null && prevNote.isSustain) {
-				prevNote.playAnim('${NoteGroup.colors[index]} hold');
-				prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((noteStepCrochet / 100) * 1.5 * speed);
-				prevNote.updateHitbox();
+		/*
+			if (sustainTime > 0) {
+				//
+				this.isSustain = true;
+				this.hitboxEarly = 0.5;
+				sustain = new Sustain(this);
+				sustain.alpha = 0.6;
+				add(sustain);
+				//
+			} else if (isSustain && isEnd) {
+				//
+				sustainEnd = new FNFSprite(sustain.x, sustain.y + 10);
+				sustainEnd.loadFrames('images/notes/${type}/NOTE_assets', [{name: 'idle', prefix: '${Notefield.colors[index]} hold end', framerate: 24}]);
+				sustainEnd.playAnim('idle');
+				sustainEnd.updateHitbox();
+				sustainEnd.flipY = downscroll;
+				sustainEnd.alpha = sustain.alpha;
+				add(sustainEnd);
+				//
 			}
+		 */
+
+		arrow = new Arrow(this);
+		add(arrow);
+
+		if (sustain != null) {
+			sustain.x = (arrow.width - sustain.width) / 2;
+			sustain.updateHeight();
+			if (sustainEnd != null)
+				sustainEnd.setPosition(sustain.x, sustain.height - sustain.y);
 		}
 	}
 
@@ -117,19 +113,83 @@ class Note extends FNFSprite {
 	}
 }
 
+/**
+ * Represents a `Note`'s body
+ */
+class Arrow extends FNFSprite {
+	public var note:Note;
+
+	public function new(_note:Note):Void {
+		super();
+		note = _note;
+
+		var atlas:FlxAtlasFrames = Paths.getSparrowAtlas('notes/${note.type}/NOTE_assets');
+		switch (note.type) {
+			default:
+				frames = atlas;
+				addAnim('${Notefield.colors[note.index]} note', '${Notefield.colors[note.index]}0');
+				setGraphicSize(Std.int(width * 0.7));
+				updateHitbox();
+		}
+
+		playAnim('${Notefield.colors[note.index]} note');
+	}
+}
+
+/**
+ * Represents a `Note`'s Tail
+ */
+class Sustain extends FlxTiledSprite {
+	public var note:Note;
+	public var sustainGraphics:Array<FlxGraphic> = [];
+
+	final noteScale:Float = 0.7;
+
+	public function new(_note:Note):Void {
+		super(null, 0, 1);
+		note = _note;
+
+		sustainGraphics.resize(4);
+
+		// alright so since TiledSprite requires graphics
+		// let's convert frames to graphics
+		switch (_note.type) {
+			default:
+				final atlas:FlxAtlasFrames = Paths.getSparrowAtlas('notes/${_note.type}/NOTE_assets');
+				for (prefix in atlas.framesHash.keys()) {
+					if (prefix.endsWith('hold piece')) {
+						var frame:FlxGraphic = FlxGraphic.fromFrame(atlas.framesHash.get(prefix));
+						sustainGraphics.push(frame);
+					}
+				}
+		}
+
+		this.loadGraphic(sustainGraphics[_note.index]);
+		// this.width = sustainGraphics[_note.index].width;
+		this.scale.set(Std.int(width * noteScale), Std.int(width * noteScale));
+		this.antialiasing = Settings.get("antialiasing");
+		this.moves = false;
+	}
+
+	public function updateHeight():Void {
+		var time:Float = Math.floor(note.sustainTime / Conductor.stepCrochet);
+		var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(time)) + Conductor.stepCrochet;
+		this.height = time;
+	}
+}
+
 class Splash extends FNFSprite {
 	public function new(type:String = "default"):Void {
 		super(0, 0);
 		this.loadFrames('images/notes/${type}/NOTE_splashes');
 		for (n in 0...2)
-			for (i in 0...NoteGroup.colors.length)
-				this.addAnim('impact ${NoteGroup.colors[i]}${n}', '${NoteGroup.colors[i]} splash ${n}', null, 24);
+			for (i in 0...Notefield.colors.length)
+				this.addAnim('impact ${Notefield.colors[i]}${n}', '${Notefield.colors[i]} splash ${n}', null, 24);
 		this.moves = false;
 	}
 
 	public override function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame = 0):Void {
 		super.playAnim(name, force, reversed, frame);
-
 		centerOrigin();
 		centerOffsets();
 	}
