@@ -1,4 +1,4 @@
-package game.system;
+package game.system.options;
 
 enum abstract OptionType(Int) to Int {
 	var Checkmark:OptionType = 0xA;

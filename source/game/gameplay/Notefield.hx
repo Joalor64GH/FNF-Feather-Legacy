@@ -179,10 +179,10 @@ class Notefield extends FlxGroup {
 	public override function remove(Object:FlxBasic, Splice:Bool = false):FlxBasic {
 		if (Object is Note) {
 			var note:Note = cast(Object, Note);
-
-			note.kill();
-			note.destroy();
-
+			if (note != null) {
+				note.kill();
+				note.destroy();
+			}
 			noteSprites.remove(note, Splice);
 		}
 

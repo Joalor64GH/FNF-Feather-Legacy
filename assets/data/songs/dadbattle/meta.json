@@ -1,0 +1,8 @@
+{
+    "name": "Dadbattle",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "stage",
+    "uiStyle": "default",
+    "characters": ["bf", "dad", "gf"],
+    "bpm": 180
+}

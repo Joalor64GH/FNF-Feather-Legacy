@@ -1,0 +1,8 @@
+{
+    "name": "Cocoa",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "mall",
+    "uiStyle": "default",
+    "characters": ["bf-christmas", "parents-christmas", "gf-christmas"],
+    "bpm": 100
+}

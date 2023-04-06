@@ -4,7 +4,6 @@ import flixel.system.FlxSound;
 import flixel.util.FlxSort;
 import game.gameplay.Note;
 import game.system.charting.ChartDefs;
-import game.system.charting.ChartEvents;
 import game.system.Conductor;
 import openfl.media.Sound;
 
@@ -12,17 +11,17 @@ import openfl.media.Sound;
  * Class for parsing and loading song charts
  */
 class ChartLoader {
+	public static var songMetadata:ChartMeta;
 	public static var rawNoteList:Array<ChartNote> = [];
 	public static var unspawnNoteList:Array<Note> = [];
-	public static var unspawnEventList:Array<EventLine> = [];
 
 	public static function loadSong(songName:String, difficulty:String = ''):ChartFormat {
 		var loadedData:ChartFormat = loadChart(songName, difficulty);
 		if (loadedData != null)
 			fillRawList(loadedData);
 
-		if (loadedData.metadata != null)
-			Conductor.changeBPM(loadedData.metadata.bpm);
+		if (songMetadata != null)
+			Conductor.changeBPM(songMetadata.bpm);
 		if (loadedData.sections != null)
 			Conductor.getBPMChanges(loadedData);
 
@@ -31,35 +30,33 @@ class ChartLoader {
 
 	public static function loadChart(songName:String, difficulty:String = 'normal'):ChartFormat {
 		var tempSong:ChartFormat = null;
-		var parsedType:String = 'Feather';
-
+		var tempMeta:ChartMeta = null;
+		var parsedType:String = 'FEATHER';
 		songName = songName.toLowerCase();
 
 		difficulty = '-${difficulty}';
 		if (!sys.FileSystem.exists(AssetHandler.getPath('data/songs/${songName}/${songName}${difficulty}', JSON)))
 			difficulty = '';
 
-		var jsonPath:String = AssetHandler.getAsset('data/songs/${songName}/${songName}${difficulty}', JSON);
-		var fnfSong:FNFSong = cast tjson.TJSON.parse(jsonPath).song;
+		var fnfSong:FNFSong = cast tjson.TJSON.parse(AssetHandler.getAsset('data/songs/${songName}/${songName}${difficulty}', JSON)).song;
 
 		if (fnfSong != null && fnfSong.notes != null) {
 			parsedType = 'FNF LEGACY/HYBRID';
 
-			tempSong =
-				{
-					name: fnfSong.song,
-					metadata:
-						{
-							player: fnfSong.player1,
-							opponent: fnfSong.player2,
-							crowd: fnfSong.gfVersion,
-							stage: fnfSong.stage,
-							speed: fnfSong.speed,
-							bpm: fnfSong.bpm
-						},
-					sections: [],
-					generatedFrom: parsedType,
-				};
+			if (getSongMetadata(songName, difficulty) != null)
+				tempMeta = getSongMetadata(songName, difficulty);
+			else {
+				tempMeta =
+					{
+						name: fnfSong.song,
+						characters: [fnfSong.player1, fnfSong.player2, fnfSong.gfVersion],
+						uiStyle: 'default',
+						origin: parsedType,
+						stage: fnfSong.stage,
+						bpm: fnfSong.bpm
+					};
+			}
+			tempSong = {sections: [], speed: fnfSong.speed};
 
 			for (i in 0...fnfSong.notes.length) {
 				var convertedBeats:Float = fnfSong.notes[i].sectionBeats;
@@ -111,15 +108,39 @@ class ChartLoader {
 					for (event in fnfSong.events) {}
 				}
 			}
-		} else // parse as feather format
-			tempSong = cast tjson.TJSON.parse(jsonPath);
+		} else {
+			// feather format
+			tempSong = cast tjson.TJSON.parse(AssetHandler.getAsset('data/songs/${songName}/${songName}${difficulty}', JSON));
+			tempMeta = getSongMetadata(songName, difficulty);
+		}
 
-		if (tempSong.metadata.stage == null)
-			tempSong.metadata.stage = getStageVersion(tempSong.name);
-		if (tempSong.metadata.crowd == null)
-			tempSong.metadata.crowd = getCrowdVersion(tempSong.metadata.stage);
+		if (tempMeta != null) {
+			if (tempMeta.stage == null)
+				tempMeta.stage = getStageVersion(tempMeta.name);
+			if (tempMeta.characters[3] == null)
+				tempMeta.characters[3] = getCrowdVersion(tempMeta.stage);
+
+			songMetadata = tempMeta;
+		} else {
+			songMetadata =
+				{
+					name: songName,
+					origin: "ENGINE FALLBACK HANDLER",
+					stage: "stage",
+					uiStyle: "default",
+					characters: ["face", "face", "face"],
+					bpm: 100
+				};
+		}
 
 		return tempSong;
+	}
+
+	public static function getSongMetadata(songName:String, difficulty:String):ChartMeta {
+		if (!sys.FileSystem.exists(AssetHandler.getPath('data/songs/${songName}/meta${difficulty}', JSON)))
+			difficulty = '';
+
+		return cast tjson.TJSON.parse(AssetHandler.getAsset('data/songs/${songName}/meta${difficulty}', JSON));
 	}
 
 	public static function fillRawList(chart:ChartFormat):Void {

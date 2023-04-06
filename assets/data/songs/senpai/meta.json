@@ -1,0 +1,8 @@
+{
+    "name": "Senpai",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "school",
+    "uiStyle": "pixel",
+    "characters": ["bf-pixel", "senpai", "gf-pixel"],
+    "bpm": 144
+}

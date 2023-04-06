@@ -3,9 +3,9 @@ package game.menus;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import game.MusicBeatState.MusicBeatSubState;
-import game.system.Option;
-import game.system.OptionCategory;
-import game.system.OptionList;
+import game.system.options.Option;
+import game.system.options.OptionCategory;
+import game.system.options.OptionList;
 
 class OptionsMenu extends MusicBeatSubState {
 	public var curSelection:Int = 0;

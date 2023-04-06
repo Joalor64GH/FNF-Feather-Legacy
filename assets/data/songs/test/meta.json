@@ -1,0 +1,8 @@
+{
+    "name": "Test",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "stage",
+    "uiStyle": "default",
+    "characters": ["bf", "bf-pixel", "gf"],
+    "bpm": 150
+}

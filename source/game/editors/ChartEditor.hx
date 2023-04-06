@@ -24,6 +24,8 @@ class ChartEditor extends MusicBeatState {
 	private var const:PlayStateStruct;
 
 	public var song:ChartFormat;
+	public var songMetadata:ChartMeta;
+
 	public var music:MusicPlayback;
 
 	public var sideBar:FlxSprite;
@@ -42,6 +44,7 @@ class ChartEditor extends MusicBeatState {
 		this.const = const;
 
 		song = ChartLoader.loadChart(const.songName, const.difficulty);
+		songMetadata = ChartLoader.songMetadata;
 	}
 
 	public override function create():Void {
@@ -148,13 +151,13 @@ class ChartEditor extends MusicBeatState {
 	}
 
 	function getInfoText():String {
-		var curBPM:Float = song.metadata.bpm;
+		var curBPM:Float = songMetadata.bpm;
 		if (song.sections[curSec] != null) {
 			if (song.sections[curSec].bpm != null && song.sections[curSec].bpm != curBPM)
 				curBPM = song.sections[curSec].bpm;
 		}
 
-		return '${song.name} - BPM: ${curBPM}\nBEAT: ${curBeat} - STEP: ${curStep} - BAR: ${curSec + 1}';
+		return '${songMetadata.name} - BPM: ${curBPM}\nBEAT: ${curBeat} - STEP: ${curStep} - BAR: ${curSec + 1}';
 	}
 
 	public override function update(elapsed:Float):Void {
@@ -355,7 +358,7 @@ class ChartEditor extends MusicBeatState {
 	}
 
 	@:keep inline function getSectionStart():Float {
-		var daBPM:Float = song.metadata.bpm;
+		var daBPM:Float = songMetadata.bpm;
 		var daPos:Float = 0;
 		for (i in 0...curSec) {
 			if (song.sections[i].bpm != daBPM)
@@ -389,6 +392,6 @@ class ChartEditor extends MusicBeatState {
 	@:keep inline function exportChart():Void {
 		var json = {"song": song};
 		var data:String = tjson.TJSON.encode(json);
-		Utils.saveData('${song.name.toLowerCase()}.json', data);
+		Utils.saveData('${songMetadata.name.toLowerCase()}.json', data);
 	}
 }

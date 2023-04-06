@@ -8,8 +8,7 @@ import game.gameplay.*;
 import game.gameplay.Highscore.Rating;
 import game.stage.*;
 import game.subStates.*;
-import game.system.charting.ChartDefs.ChartFormat;
-import game.system.charting.ChartEvents;
+import game.system.charting.ChartDefs;
 import game.system.charting.ChartLoader;
 import game.system.Conductor;
 import game.ui.GameplayUI;
@@ -19,6 +18,16 @@ enum GameplayMode {
 	STORY_MODE;
 	FREEPLAY;
 	CHARTING;
+}
+
+enum GameplayEvent {
+	#if SCRIPTING_ENABLED
+	CustomEvent(name:String, args:Array<Dynamic>, script:String);
+	#end
+	PlayCharacterAnim(char:String, animation:String);
+	ChangeCharacter(char:String, newChar:String);
+	ChangeCameraPosition(section:ChartSection);
+	ChangeZoomBeat(newBeat:Int);
 }
 
 typedef PlayStateStruct = {
@@ -39,6 +48,8 @@ class PlayState extends MusicBeatState {
 
 	// Song
 	public var song:ChartFormat;
+	public var songMetadata:ChartMeta;
+
 	public var music:MusicPlayback;
 
 	public var songName:String = 'test';
@@ -91,7 +102,7 @@ class PlayState extends MusicBeatState {
 						song = constructor.songData;
 					else
 						song = ChartLoader.loadSong(constructor.songName, constructor.difficulty);
-
+					songMetadata = ChartLoader.songMetadata;
 					// ChartLoader.fillUnspawnList();
 				}
 			}
@@ -133,9 +144,9 @@ class PlayState extends MusicBeatState {
 						globals.push(new ScriptHandler(AssetHandler.getAsset('data/scripts/${script}', SCRIPT)));
 			}
 
-			for (songScript in sys.FileSystem.readDirectory(AssetHandler.getPath('data/songs/${song.name}')))
+			for (songScript in sys.FileSystem.readDirectory(AssetHandler.getPath('data/songs/${songMetadata.name}')))
 				if (songScript.endsWith(i))
-					globals.push(new ScriptHandler(AssetHandler.getAsset('data/songs/${song.name}/${songScript}', SCRIPT)));
+					globals.push(new ScriptHandler(AssetHandler.getAsset('data/songs/${songMetadata.name}/${songScript}', SCRIPT)));
 		}
 		#end
 
@@ -146,7 +157,7 @@ class PlayState extends MusicBeatState {
 		setVar("curSec", curSec);
 
 		// create the stage
-		gameStage = switch (song.metadata.stage) {
+		gameStage = switch (songMetadata.stage) {
 			/*
 				case 'military-zone': new military-zone();
 				case 'school-glitch': new SchoolGlitch();
@@ -158,7 +169,7 @@ class PlayState extends MusicBeatState {
 			case 'philly-city': new PhillyCity();
 			case 'haunted-house': new HauntedHouse();
 			case 'stage': new Stage();
-			default: new BaseStage(song.metadata.stage);
+			default: new BaseStage(songMetadata.stage);
 		}
 		add(gameStage);
 
@@ -167,13 +178,13 @@ class PlayState extends MusicBeatState {
 
 		// characters
 		if (gameStage.displayCrowd)
-			crowd = new Character(400 + gameStage.crowdOffset.x, 130 + gameStage.crowdOffset.y).loadChar(song.metadata.crowd);
+			crowd = new Character(400 + gameStage.crowdOffset.x, 130 + gameStage.crowdOffset.y).loadChar(songMetadata.characters[2]);
 
-		opponent = new Character(100 + gameStage.opponentOffset.x, 100 + gameStage.opponentOffset.y).loadChar(song.metadata.opponent);
-		player = new Character(770 + gameStage.playerOffset.x, 450 + gameStage.playerOffset.y).loadChar(song.metadata.player, true);
+		opponent = new Character(100 + gameStage.opponentOffset.x, 100 + gameStage.opponentOffset.y).loadChar(songMetadata.characters[1]);
+		player = new Character(770 + gameStage.playerOffset.x, 450 + gameStage.playerOffset.y).loadChar(songMetadata.characters[0], true);
 
 		if (crowd != null) {
-			if (song.metadata.opponent == song.metadata.crowd) {
+			if (songMetadata.characters[1] == songMetadata.characters[2]) {
 				crowd.visible = false;
 				opponent.setPosition(crowd.x, crowd.y);
 			}
@@ -193,7 +204,7 @@ class PlayState extends MusicBeatState {
 		camGame.follow(camFollow, LOCKON, 0.04);
 		camGame.focusOn(camFollow.getPosition());
 
-		moveCamera();
+		fireEvents(ChangeCameraPosition(song.sections[0]));
 
 		// ui
 		gameUI = new GameplayUI();
@@ -413,7 +424,6 @@ class PlayState extends MusicBeatState {
 			}
 
 			if (!paused) {
-				parseEvents(ChartLoader.unspawnEventList);
 				bumpCamera(elapsed);
 
 				if (currentStat.health <= 0 && !playerNotefield.cpuControlled) {
@@ -427,7 +437,7 @@ class PlayState extends MusicBeatState {
 
 				for (strum in noteFields) {
 					strum.noteSprites.forEachAlive(function(note:Note):Void {
-						note.speed = Math.abs(song.metadata.speed);
+						note.speed = Math.abs(song.speed);
 
 						if (strum.cpuControlled) {
 							if (!note.wasGoodHit && note.step <= Conductor.songPosition)
@@ -508,6 +518,48 @@ class PlayState extends MusicBeatState {
 		callFn("update", [elapsed, true]);
 	}
 
+	var charColumn:Map<String, Map<String, Character>> = [];
+
+	public function preloadEvents(event:GameplayEvent):Void {
+		switch (event) {
+			case ChangeCharacter(name, newChar):
+				// preventing lagspikes rq
+				charColumn.set(name, new Map<String, Character>());
+				charColumn.get(name).set(newChar, new Character().loadChar(newChar));
+			default:
+		}
+	}
+
+	public function fireEvents(event:GameplayEvent):Void {
+		switch (event) {
+			case ChangeCharacter(name, newChar):
+				switch (name) {
+					case 'bf', 'boyfriend', 'player':
+						player.loadChar(charColumn.get(name).get(newChar).name);
+					case 'gf', 'girlfriend', 'crowd':
+						crowd.loadChar(charColumn.get(name).get(newChar).name);
+					case 'dad', 'player2', 'opponent':
+						opponent.loadChar(charColumn.get(name).get(newChar).name);
+				}
+
+			case ChangeCameraPosition(section):
+				if (section != null) {
+					var char:Character = opponent;
+
+					if (section.camPoint == 2 && crowd != null)
+						char = crowd;
+					else
+						char = (section.camPoint == 1) ? player : opponent;
+					if (camFollow.x != char.getMidpoint().x - 100)
+						camFollow.setPosition(char.getMidpoint().x - 100 + char.cameraOffset[0], char.getMidpoint().y - 100 + char.cameraOffset[1]);
+				}
+
+			default:
+		}
+
+		gameStage.onEventDispatch(event);
+	}
+
 	public override function openSubState(SubState:flixel.FlxSubState):Void {
 		if (paused)
 			music.pause();
@@ -567,7 +619,9 @@ class PlayState extends MusicBeatState {
 
 		callFn("secHit", [curSec]);
 		gameStage.onSec(curSec);
-		moveCamera();
+
+		try fireEvents(ChangeCameraPosition(song.sections[curSec])) catch (e:haxe.Exception)
+			trace('failed to parse camera event at section ${curSec}');
 	}
 
 	public function charactersDance(curBeat:Int):Void {
@@ -592,39 +646,6 @@ class PlayState extends MusicBeatState {
 			camGame.zoom = FlxMath.lerp(0, gameStage.cameraZoom, lerpValue);
 			camHUD.zoom = FlxMath.lerp(0, gameStage.hudZoom, lerpValue);
 		}
-	}
-
-	public function moveCamera():Void {
-		var char:Character = opponent;
-
-		if (song.sections[curSec] != null) {
-			if (song.sections[curSec].camPoint == 2 && crowd != null)
-				char = crowd;
-			else
-				char = (song.sections[curSec].camPoint == 1) ? player : opponent;
-
-			if (camFollow.x != char.getMidpoint().x - 100)
-				camFollow.setPosition(char.getMidpoint().x - 100 + char.cameraOffset[0], char.getMidpoint().y - 100 + char.cameraOffset[1]);
-		}
-	}
-
-	public function parseEvents(list:Array<EventLine>, stepDelay:Float = 0):Void {
-		if (list.length > 0) {
-			while (list[curSec] != null) {
-				var event:EventLine = list[curSec];
-
-				if (event != null)
-					if ((event.type == Stepper && event.step >= Conductor.songPosition - stepDelay) || event.type != Stepper)
-						eventTrigger(event);
-
-				list.splice(list.indexOf(list[0]), 1);
-			}
-		}
-	}
-
-	public function eventTrigger(event:EventLine):Void {
-		switch (event.name) {}
-		gameStage.onEventDispatch(event.name, event.args);
 	}
 
 	public function goodNoteHit(note:Note, strum:Notefield):Void {

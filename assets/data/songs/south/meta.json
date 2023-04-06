@@ -1,0 +1,8 @@
+{
+    "name": "South",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "haunted-house",
+    "uiStyle": "default",
+    "characters": ["bf", "spooky", "gf"],
+    "bpm": 165
+}

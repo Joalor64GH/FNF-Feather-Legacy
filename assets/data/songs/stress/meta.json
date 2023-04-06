@@ -1,0 +1,8 @@
+{
+    "name": "Stress",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "military-zone",
+    "uiStyle": "default",
+    "characters": ["bf-holding-gf", "tankman", "pico-speaker"],
+    "bpm": 178
+}

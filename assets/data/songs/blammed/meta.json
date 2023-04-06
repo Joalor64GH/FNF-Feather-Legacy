@@ -1,0 +1,8 @@
+{
+    "name": "Blammed",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "philly-city",
+    "uiStyle": "default",
+    "characters": ["bf", "pico", "gf"],
+    "bpm": 165
+}

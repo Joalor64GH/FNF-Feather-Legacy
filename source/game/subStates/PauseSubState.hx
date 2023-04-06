@@ -82,7 +82,7 @@ class PauseSubState extends MusicBeatSubState {
 
 		var textContents:Array<String> = [
 			'-----------------',
-			'Song: ${PlayState.self.song.name}',
+			'Song: ${PlayState.self.songMetadata.name}',
 			'Difficulty: ${PlayState.self.constructor.difficulty.toUpperCase()}',
 			'-----------------',
 		];

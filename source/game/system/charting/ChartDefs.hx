@@ -1,18 +1,18 @@
 package game.system.charting;
 
+import game.PlayState.GameplayEvent;
+
 typedef ChartFormat = {
-	var name:String;
-	var metadata:ChartMeta;
+	var speed:Float;
 	var sections:Array<ChartSection>;
-	var generatedFrom:String;
 }
 
 typedef ChartMeta = {
-	var player:String;
-	var opponent:String;
-	var ?crowd:String; // defaults to "gf"
+	var name:String;
+	var characters:Array<String>;
+	var origin:String;
+	var uiStyle:String;
 	var ?stage:String; // defaults to "stage"
-	var speed:Float;
 	var bpm:Float;
 }
 

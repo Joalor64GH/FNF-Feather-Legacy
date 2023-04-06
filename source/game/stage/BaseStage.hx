@@ -135,10 +135,10 @@ class BaseStage extends FlxGroup {
 	/**
 	 * Called whenever a event is activated
 	 */
-	public function onEventDispatch(event:String, args:Array<Dynamic>):Void {
+	public function onEventDispatch(event:game.PlayState.GameplayEvent):Void {
 		#if SCRIPTING_ENABLED
 		if (bgScript != null)
-			bgScript.call('onEventDispatch', [event, args]);
+			bgScript.call('onEventDispatch', [event]);
 		#end
 	}
 

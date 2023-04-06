@@ -1,4 +1,4 @@
-package game.system;
+package game.system.options;
 
 import flixel.FlxG;
 import flixel.group.FlxGroup;

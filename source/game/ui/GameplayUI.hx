@@ -54,7 +54,7 @@ class GameplayUI extends FlxSpriteGroup {
 		add(scoreText);
 
 		if (Settings.get("infoText") != 'NONE') {
-			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'SONG' ? '- ${game.song.name} -' : '');
+			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'SONG' ? '- ${game.songMetadata.name} -' : '');
 			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 			infoText.y = downscroll ? FlxG.height - infoText.height - 15 : 15;
 			infoText.screenCenter(X);

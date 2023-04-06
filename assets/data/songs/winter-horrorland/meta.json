@@ -1,0 +1,8 @@
+{
+    "name": "Winter Horrorland",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "red-mall",
+    "uiStyle": "default",
+    "characters": ["bf-christmas", "monster-christmas", "gf-christmas"],
+    "bpm": 159
+}

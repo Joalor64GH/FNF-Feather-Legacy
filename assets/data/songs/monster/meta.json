@@ -1,0 +1,8 @@
+{
+    "name": "Monster",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "haunted-house",
+    "uiStyle": "default",
+    "characters": ["bf", "monster", "gf"],
+    "bpm": 95
+}

@@ -41,13 +41,13 @@ class Conductor {
 	}
 
 	public static function getBPMChanges(song:ChartFormat):Void {
-		var currentBPM:Float = song.metadata.bpm;
+		var currentBPM:Float = bpm;
 		var currentStep:Int = 0;
 		var currentTime:Float = 0.0;
 
 		for (i in 0...song.sections.length) {
 			var changeEvent:Bool = false;
-			if (song.metadata.bpm != currentBPM) {
+			if (bpm != currentBPM) {
 				changeEvent = true;
 
 				currentBPM = song.sections[i].bpm;

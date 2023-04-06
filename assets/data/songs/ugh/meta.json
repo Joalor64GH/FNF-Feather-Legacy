@@ -1,0 +1,8 @@
+{
+    "name": "Guns",
+    "origin": "FNF LEGACY/HYBRID",
+    "stage": "military-zone",
+    "uiStyle": "default",
+    "characters": ["bf", "tankman", "gf-tankmen"],
+    "bpm": 160
+}
