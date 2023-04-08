@@ -1,4 +1,4 @@
-chars: ['', bf ,gf]
+chars: ['', bf, gf]
 songs:
   - color: '#9271FD'
     enemy: gf
