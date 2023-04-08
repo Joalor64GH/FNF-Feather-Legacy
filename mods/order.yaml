@@ -5,4 +5,4 @@
 -
   name: "Example Two" # won't be added as the folder doesn't exist
   active: false
-  # additionally, ignore folders is optional
+  # additionally, ignoreFolders is optional
