@@ -142,30 +142,32 @@ class Notefield extends FlxGroup {
 				else // I'm gonna throw up.
 					note.arrow.y = receptor.y - stepY;
 
-				if (note.isSustain) {
-					if (note.downscroll) {
-						if (note.animation.curAnim != null && note.animation.curAnim.name.endsWith("end")) {
-							if (note.prevNote != null && note.prevNote.isSustain)
-								note.y += Math.ceil(/*note.prevNote.y -*/ note.prevNote.frameHeight);
-						}
+				/*
+					if (note.isSustain) {
+						if (note.downscroll) {
+							if (note.animation.curAnim != null && note.animation.curAnim.name.endsWith("end")) {
+								if (note.prevNote != null && note.prevNote.isSustain)
+									note.y += Math.ceil(/*note.prevNote.y - note.prevNote.frameHeight);
+							}
 
-						if (note.y - note.offset.y * note.scale.y + note.height >= center
-							&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
-							var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
-							swagRect.height = (center - note.y) / note.scale.y;
-							swagRect.y = note.frameHeight - swagRect.height;
-							note.clipRect = swagRect;
-						}
-					} else {
-						if (note.y + note.offset.y * note.scale.y <= center
-							&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
-							var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
-							swagRect.y = (center - note.y) / note.scale.y;
-							swagRect.height -= swagRect.y;
-							note.clipRect = swagRect;
+							if (note.y - note.offset.y * note.scale.y + note.height >= center
+								&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
+								var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
+								swagRect.height = (center - note.y) / note.scale.y;
+								swagRect.y = note.frameHeight - swagRect.height;
+								note.clipRect = swagRect;
+							}
+						} else {
+							if (note.y + note.offset.y * note.scale.y <= center
+								&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
+								var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+								swagRect.y = (center - note.y) / note.scale.y;
+								swagRect.height -= swagRect.y;
+								note.clipRect = swagRect;
+							}
 						}
 					}
-				}
+				 */
 			}
 		});
 	}

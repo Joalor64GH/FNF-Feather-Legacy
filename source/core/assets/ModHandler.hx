@@ -10,7 +10,18 @@ typedef ModFormat = {
 	var ?color:FlxColor;
 }
 
+typedef ModLoadingFormat = {
+	var name:String;
+	var active:Bool;
+	var ignoreFolders:Array<String>; // TODO
+}
+
 class ModHandler {
+	/**
+	 * Map that stores all loaded mod data from the YAML data file
+	**/
+	public static var modMap:Map<String, ModLoadingFormat> = [];
+
 	/**
 	 * a Enabled Mod that has priority over other mods
 	 * usually being the first one on the sorted mod list
@@ -34,7 +45,7 @@ class ModHandler {
 	 */
 	public static var ignoreFolders:Array<String> = [];
 
-	public static function getPath(?folder:String, ?type:AssetType):String {
+	@:keep public static inline function getPath(?folder:String, ?type:AssetType):String {
 		var pathBase:String = 'mods';
 		if (folder != null) {
 			if (folder.startsWith("mods"))
@@ -49,9 +60,10 @@ class ModHandler {
 		} else {
 			if (activeMods.length > 0) {
 				for (i in 0...activeMods.length) {
-					if (!ignoreFolders.contains(activeMods[i].folder))
+					if (!ignoreFolders.contains(activeMods[i].folder)) {
 						if (FileSystem.exists(type.cycleExtensions('mods/${activeMods[i].folder}/${folder}')))
 							modFolder = activeMods[i].folder;
+					}
 				}
 			}
 		}
@@ -63,27 +75,39 @@ class ModHandler {
 
 	public static function getFromMod(mod:String, ?folder:String, ?type:AssetType):String {
 		var pathBase:String = 'mods';
+		var pathExtend:String = '';
 		if (folder != null) {
 			if (folder.startsWith("mods"))
 				pathBase = '';
-			folder = '/${mod}/${folder}';
+			pathExtend = '/${mod}/${folder}';
 		}
-		return type.cycleExtensions('${pathBase}${folder}');
+
+		return type.cycleExtensions('${pathBase}${pathExtend}');
 	}
 
-	public static function scanMods():Void {
+	@:keep private static inline function checkIgnoreList(modData:ModLoadingFormat):Array<String> {
+		var myModFolders:Array<String> = [];
+		if (modData != null && modData.active) {
+			if (modData.ignoreFolders != null)
+				for (i in 0...modData.ignoreFolders.length)
+					myModFolders.push(modData.ignoreFolders[i]);
+		}
+		return myModFolders;
+	}
+
+	@:keep public static inline function scanMods():Void {
+		modMap.clear();
 		trackedMods = [];
 		activeMods = [];
 
 		// read the mods folder
 		if (FileSystem.exists("mods")) {
 			// read the mod order file and see if its enabled
-			var modArray:Array<String> = Utils.readText("mods/order.txt");
-			var modMap:Map<String, Bool> = [];
-			for (i in modArray) {
-				var splitArray:Array<String> = i.split(" : ");
-				modMap.set(splitArray[0], splitArray[1] == 'true');
-			}
+			var modList:Array<ModLoadingFormat> = cast yaml.Yaml.parse(File.getContent('mods/order.yaml'), yaml.Parser.options().useObjects());
+			trace(modList);
+			for (i in 0...modList.length)
+				if (FileSystem.exists('mods/${modList[i].name}'))
+					modMap.set(modList[i].name, modList[i]);
 
 			for (mod in FileSystem.readDirectory("mods")) {
 				if (!ignoreFolders.contains(mod)) {
@@ -98,14 +122,12 @@ class ModHandler {
 							};
 						if (modJson.name == null)
 							newMod.name = mod;
-
 						trackedMods.push(newMod);
-						if (modMap.exists(mod) && modMap.get(mod) == true)
+						if (modMap.exists(mod) && modMap.get(mod).active)
 							activeMods.push(newMod);
 					}
 				}
 			}
-
 			trace('Mods: ${trackedMods.length} - Active: ${activeMods.length}');
 		}
 	}

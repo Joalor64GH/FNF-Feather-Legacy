@@ -46,18 +46,9 @@ class FreeplayMenu extends MenuBase {
 		// get week songs and add them
 		for (i in 0...Levels.GAME_LEVELS.length) {
 			var week:GameWeek = Levels.GAME_LEVELS[i];
-			for (i in 0...week.songs.length) {
-				/*
-					if (week.songs[i].color == null)
-						week.songs[i].color = FlxColor.fromInt(0xFFFFFFFF);
-
-					if (Std.isOfType(week.songs[i].color, String))
-						week.songs[i].color = FlxColor.fromString(week.songs[i].color);
-				 */
-
+			for (i in 0...week.songs.length)
 				if (!songList.contains(week.songs[i]))
 					songList.push(week.songs[i]);
-			}
 		}
 
 		for (folder in FileSystem.readDirectory(AssetHandler.getPath("data/songs", true))) {
