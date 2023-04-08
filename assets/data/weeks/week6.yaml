@@ -1,6 +1,12 @@
 chars: [senpai, bf, gf]
 songs:
-  - {color: '#FF78BF', enemy: senpai, name: Senpai}
-  - {color: '#FF78BF', enemy: senpai, name: Roses}
-  - {color: '#FF78BF', enemy: spirit, name: Thorns}
+  - color: '#FF78BF'
+    enemy: senpai
+    name: Senpai
+  - color: '#FF78BF'
+    enemy: senpai
+    name: Roses
+  - color: '#FF78BF'
+    enemy: spirit
+    name: Thorns
 label: Hating Simulator ft. Moawling

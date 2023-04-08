@@ -1,6 +1,12 @@
 chars: [spooky-kids, bf, gf]
 songs:
-  - {color: '#223344', enemy: spooky-kids, name: Spookeez}
-  - {color: '#223344', enemy: spooky-kids, name: South}
-  - {color: '#223344', enemy: lemon-monster, name: Monster}
+  - color: '#223344'
+    enemy: spooky-kids
+    name: Spookeez
+  - color: '#223344'
+    enemy: spooky-kids
+    name: South
+  - color: '#223344'
+    enemy: lemon-monster
+    name: Monster
 label: Spooky Month

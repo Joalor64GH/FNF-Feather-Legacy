@@ -1,8 +1,6 @@
--
-  name: "Example"
+- name: "Example"
   active: true
   ignoreFolders: []
--
-  name: "Example Two" # won't be added as the folder doesn't exist
+- name: "Example Two" # won't be added as the folder doesn't exist
   active: false
   # additionally, ignoreFolders is optional

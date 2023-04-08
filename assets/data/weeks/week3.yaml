@@ -1,6 +1,12 @@
 chars: [pico, bf, gf]
 songs:
-  - {color: '#941653', enemy: pico, name: Pico}
-  - {color: '#941653', enemy: pico, name: Philly}
-  - {color: '#941653', enemy: pico, name: Blammed}
+  - color: '#941653'
+    enemy: pico
+    name: Pico
+  - color: '#941653'
+    enemy: pico
+    name: Philly
+  - color: '#941653'
+    enemy: pico
+    name: Blammed
 label: PICO

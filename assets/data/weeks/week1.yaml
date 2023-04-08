@@ -1,6 +1,12 @@
 chars: [dad, bf, gf]
 songs:
-  - {color: '#9271FD', enemy: dad, name: Bopeebo}
-  - {color: '#9271FD', enemy: dad, name: Fresh}
-  - {color: '#9271FD', enemy: dad, name: Dadbattle}
+  - color: '#9271FD'
+    enemy: dad
+    name: Bopeebo
+  - color: '#9271FD'
+    enemy: dad
+    name: Fresh
+  - color: '#9271FD'
+    enemy: dad
+    name: Dadbattle
 label: Daddy Dearest
