@@ -106,8 +106,9 @@ class Character extends FNFSprite {
 				flipX = isPlayer;
 
 			default:
-				if (sys.FileSystem.exists(AssetHandler.getPath('images/characters/${name}/${name}', JSON))) {
-					var file:CharacterFormat = cast tjson.TJSON.parse(AssetHandler.getAsset('images/characters/${name}/${name}', JSON));
+				if (sys.FileSystem.exists(AssetHandler.getPath('images/characters/${name}/${name}', YAML))) {
+					var file:CharacterFormat = cast yaml.Yaml.parse(AssetHandler.getAsset('images/characters/${name}/${name}', YAML),
+						yaml.Parser.options().useObjects());
 					if (file != null) {
 						if (file.image != null)
 							frames = getFrames(file.image);
@@ -189,8 +190,17 @@ class Character extends FNFSprite {
 		}
 	}
 
-	public function getFrames(sheetName:String):FlxAtlasFrames
-		return AssetHandler.getAsset('images/characters/${name}/${sheetName}', XML);
+	public function getFrames(sheetName:String):FlxAtlasFrames {
+		var type:AssetType = XML;
+		var sheetPath:String = 'images/characters/${name}/${sheetName}';
+
+		if (sys.FileSystem.exists(AssetHandler.getPath(sheetPath, TXT)))
+			type = TXT;
+		else if (sys.FileSystem.exists(AssetHandler.getPath(sheetPath, JSON)))
+			type = JSON_ATLAS;
+
+		return AssetHandler.getAsset(sheetPath, type);
+	}
 
 	// Animation Helpers
 	public function isSinging():Bool

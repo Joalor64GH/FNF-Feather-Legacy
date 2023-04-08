@@ -56,6 +56,11 @@ class PlayState extends MusicBeatState {
 	public var difficulty:String = 'normal';
 
 	// Gameplay
+	public var localNoteStorage:Array<Note> = [];
+
+	// stores unique notetypes
+	private var uniqueNoteStorage:Array<String> = [];
+
 	public var noteFields:FlxTypedGroup<Notefield>;
 
 	public var playerStrumline:Int = 1;
@@ -103,7 +108,6 @@ class PlayState extends MusicBeatState {
 					else
 						song = ChartLoader.loadSong(constructor.songName, constructor.difficulty);
 					songMetadata = ChartLoader.songMetadata;
-					// ChartLoader.fillUnspawnList();
 				}
 			}
 
@@ -118,6 +122,12 @@ class PlayState extends MusicBeatState {
 		// initialize modules
 		currentStat = new Highscore();
 		music = new MusicPlayback(constructor.songName, constructor.difficulty);
+
+		ChartLoader.fillUnspawnList();
+
+		for (i in ChartLoader.unspawnNoteList)
+			if (!uniqueNoteStorage.contains(i.type))
+				uniqueNoteStorage.push(i.type);
 
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -236,12 +246,22 @@ class PlayState extends MusicBeatState {
 			if (i == 0)
 				xPos -= 60;
 
-			var newStrumline:Notefield = new Notefield(xPos, yPos, character, spacing);
-			newStrumline.cpuControlled = !isPlayer;
+			var newField:Notefield = new Notefield(xPos, yPos, character, spacing);
+			newField.cpuControlled = !isPlayer;
 			if (Settings.get("centerScroll"))
-				newStrumline.visible = isPlayer;
-			noteFields.add(newStrumline);
+				newField.visible = isPlayer;
+			newField.ID = i;
+			noteFields.add(newField);
 		}
+
+		// preload notes
+		for (i in ChartLoader.unspawnNoteList) {
+			i.mustHit = i.strumline == playerStrumline;
+			localNoteStorage.push(i);
+		}
+
+		for (type in uniqueNoteStorage)
+			noteFields.members[0].doSplash(0, type, true);
 
 		controls.onKeyPressed.add(onKeyPress);
 		controls.onKeyReleased.add(onKeyRelease);
@@ -295,12 +315,12 @@ class PlayState extends MusicBeatState {
 			countdownNoises.push(AssetHandler.getAsset('sounds/game/${sound}', SOUND));
 
 		for (strum in noteFields) {
-			for (i in 0...strum.receptors.members.length) {
-				var startY:Float = strum.receptors.members[i].y;
-				strum.receptors.members[i].alpha = 0;
-				strum.receptors.members[i].y -= 32;
+			for (i in 0...strum.receptorObjects.members.length) {
+				var startY:Float = strum.receptorObjects.members[i].y;
+				strum.receptorObjects.members[i].alpha = 0;
+				strum.receptorObjects.members[i].y -= 32;
 
-				FlxTween.tween(strum.receptors.members[i], {y: startY, alpha: 1}, (Conductor.beatCrochet * 4) / 1000,
+				FlxTween.tween(strum.receptorObjects.members[i], {y: startY, alpha: 1}, (Conductor.beatCrochet * 4) / 1000,
 					{ease: FlxEase.circOut, startDelay: (Conductor.beatCrochet / 1000) + ((Conductor.stepCrochet / 1000) * i)});
 			}
 		}
@@ -392,35 +412,16 @@ class PlayState extends MusicBeatState {
 		super.update(elapsed);
 
 		if (song != null) {
-			// TODO: preload notes on song start
-			var unspawnNoteList = ChartLoader.rawNoteList;
+			while (localNoteStorage.length > 0) {
+				var unspawnNote:Note = localNoteStorage[0];
+				var strum:Notefield = noteFields.members[unspawnNote.strumline];
+				if (unspawnNote.step - Conductor.songPosition > 2000)
+					break;
 
-			if (unspawnNoteList.length > 0) {
-				for (unspawnNote in unspawnNoteList) {
-					if (unspawnNote.step - Conductor.songPosition > 2000)
-						break;
+				if (strum != null)
+					strum.add(unspawnNote);
 
-					var type:String = 'default';
-					if (unspawnNote.type != null)
-						type = unspawnNote.type;
-
-					var strum:Notefield = noteFields.members[unspawnNote.strumline];
-					if (strum != null) {
-						var prevNote:Note = null;
-						if (strum.noteSprites.members.length > 0)
-							prevNote = strum.noteSprites.members[strum.noteSprites.members.length - 1];
-
-						var spawnedNote:Note = new Note(unspawnNote.step, unspawnNote.index, unspawnNote.sustainTime, type, prevNote);
-						spawnedNote.downscroll = Settings.get("scrollType") == "DOWN";
-						spawnedNote.strumline = unspawnNote.strumline;
-						strum.add(spawnedNote);
-
-						// if (spawnedNote.sustainTime > 0)
-						//	spawnedNote.addTypedPos(strum.noteSprites, strum.noteSprites.members.indexOf(spawnedNote));
-					}
-
-					unspawnNoteList.splice(unspawnNoteList.indexOf(unspawnNote), 1);
-				}
+				localNoteStorage.splice(localNoteStorage.indexOf(unspawnNote), 1);
 			}
 
 			if (!paused) {
@@ -436,7 +437,7 @@ class PlayState extends MusicBeatState {
 				}
 
 				for (strum in noteFields) {
-					strum.noteSprites.forEachAlive(function(note:Note):Void {
+					strum.noteObjects.forEachAlive(function(note:Note):Void {
 						note.speed = Math.abs(song.speed);
 
 						if (strum.cpuControlled) {
@@ -444,7 +445,7 @@ class PlayState extends MusicBeatState {
 								goodNoteHit(note, strum);
 						} // sustain note inputs
 						else if (!playerNotefield.cpuControlled) {
-							if (notesPressed[note.index] && (note.isSustain && note.canHit && note.strumline == playerStrumline))
+							if (notesPressed[note.index] && (note.isSustain && note.canHit && note.mustHit))
 								goodNoteHit(note, playerNotefield);
 						}
 
@@ -454,7 +455,7 @@ class PlayState extends MusicBeatState {
 						if (Conductor.songPosition > note.killDelay + note.step) {
 							if (rangeReached || sustainHit) {
 								if (rangeReached && !note.wasGoodHit && !note.ignorable && !note.isMine)
-									if (note.strumline == playerStrumline)
+									if (note.mustHit)
 										noteMiss(note.index, strum);
 
 								strum.remove(note, true);
@@ -682,9 +683,9 @@ class PlayState extends MusicBeatState {
 					currentStat.gottenRatings.set(rating, currentStat.gottenRatings.get(rating) + 1);
 					ratingUI.popRating(rating);
 					ratingUI.popCombo();
+
 					if (rating == SICK && note.doSplash)
 						strum.doSplash(note.index, note.type);
-
 					if (currentStat.breakRating == rating)
 						noteMiss(note.index, strum, false);
 
@@ -711,8 +712,8 @@ class PlayState extends MusicBeatState {
 			var dumbNotes:Array<Note> = [];
 			var possibleNotes:Array<Note> = [];
 
-			playerNotefield.noteSprites.forEachAlive(function(note:Note):Void {
-				if (note.canHit && note.strumline == playerStrumline && !note.wasGoodHit) {
+			playerNotefield.noteObjects.forEachAlive(function(note:Note):Void {
+				if (note.canHit && note.mustHit && !note.wasGoodHit) {
 					if (note.index == index)
 						possibleNotes.push(note);
 				}

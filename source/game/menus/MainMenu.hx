@@ -138,6 +138,9 @@ class MainMenu extends MusicBeatState {
 			}
 			#end
 
+			if (FlxG.keys.justPressed.SEVEN)
+				FlxG.switchState(new game.NoteRenderTest());
+
 			/*
 				if (controls.justPressed("back"))
 					FlxG.switchState(new TitleScreen());

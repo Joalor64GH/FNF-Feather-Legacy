@@ -11,6 +11,20 @@ class CrashState extends FlxUIState {
 	var _error:String;
 	var _catch:String;
 
+	var uncaughtErrorStrings:Array<String> = [
+		"UNCAUGHT ERROR",
+		"You died", // @sayofthelor
+		"HELP WHERE AM I", // @WizardMantis441
+		"TROLLED (OOPS)", // @WizardMantis441
+		"FUCK", // FUCK, @sayofthelor
+		"NO SEMICOLON?", // @WizardMantis441
+		"DUG STRAIGHT DOWN", // @sayofthelor
+		"Never gonna give you up", // @DaisyDotHX
+		"GAVE YOU UP LOLOL", // @WizardMantis441
+		"gonna let you down, gonna run around, and desert you", // @DaisyDotHX
+		"THIS GOES OFF SCREEN THIS GOES OFF SCREEN THIS GOES OFF SCREEN THIS GOES OFF SCREEN penis", // @WizardMantis441
+	];
+
 	public function new(error:String, ?caught:String, ?lastState:Class<Dynamic>):Void {
 		super();
 
@@ -25,15 +39,23 @@ class CrashState extends FlxUIState {
 	public override function create():Void {
 		super.create();
 
+		var leText:String = uncaughtErrorStrings[FlxG.random.int(0, uncaughtErrorStrings.length - 1)];
+
+		if (leText == 'You died') {
+			var redGradient:FlxSprite = flixel.util.FlxGradient.createGradientFlxSprite(FlxG.width, FlxG.height, [0xFF000000, 0xFFFF0000]);
+			redGradient.alpha = 0.6;
+			add(redGradient);
+		}
+
 		textGroup = new FlxTypedGroup<FlxText>();
 		add(textGroup);
 
-		var errorText:FlxText = new FlxText(0, 25, 0, '- UNCAUGHT ERROR -', 96);
+		var errorText:FlxText = new FlxText(0, 25, 0, '- ${leText} -', 96);
 		errorText.color = 0xFFBDBDBD;
 		textGroup.add(errorText);
 
 		if (_catch != null) {
-			var errorCatch:FlxText = new FlxText(0, errorText.y + errorText.height, Math.floor(errorText.width + 25), '[${_catch}]', 32);
+			var errorCatch:FlxText = new FlxText(0, errorText.y + errorText.height, FlxG.width, '[${_catch}]', 32);
 			errorCatch.color = 0xFFBDBDBD;
 			textGroup.add(errorCatch);
 		}
@@ -48,9 +70,12 @@ class CrashState extends FlxUIState {
 		textGroup.add(bindsText);
 
 		var finalText:String = '';
-		finalText += 'Log saved at "${Main.CustomGame.logSavePath}"\n';
-		finalText += 'Consider taking a Screenshot and reporting this error';
-		finalText += '\nThank you for your Patience';
+		if (_error != 'FORCED CRASH') {
+			finalText += 'Log saved at "${Main.CustomGame.logSavePath}"\n';
+			finalText += 'Consider taking a Screenshot and reporting this error';
+			finalText += '\nThank you for your Patience';
+		} else
+			finalText = 'This is a forced crash\nyou may wanna simply ignore it and move on.';
 
 		var thxText:FlxText = new FlxText(0, bindsText.y - bindsText.height - 55, 0, finalText, 32);
 		textGroup.add(thxText);

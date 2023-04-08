@@ -17,8 +17,8 @@ class FPS extends Sprite {
 
 	#if cpp
 	public var mem:MemoryField;
-	#if debug public var deb:DebugField; #end
 	#end
+
 	var childrenFields:Array<TextField> = [];
 
 	public function new():Void {
@@ -37,24 +37,27 @@ class FPS extends Sprite {
 		#if cpp
 		mem = new MemoryField();
 		addField(mem);
-
-		#if debug
-		deb = new DebugField();
-		addField(deb);
-		#end
 		#end
 
 		addEventListener(Event.ENTER_FRAME, function(_:Event):Void {
 			var lastField:TextField = childrenFields[childrenFields.length - 1];
-			bg.scaleX = lastField.x + lastField.width + 15;
-			// this is genuinely stupid, will figure out a better way later
-			bg.scaleY = Math.floor(lastField.text.length / lastField.textHeight) + #if debug 0.5 #else 0 #end;
+			bg.scaleX = lastField.x + lastField.width + 5;
+			bg.scaleY = lastField.scaleY / 1.5;
 		});
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, function(e:KeyboardEvent):Void {
 			switch (e.keyCode) {
 				case Keyboard.F3:
 					visible = !visible;
+				case Keyboard.F7:
+					#if debug
+					// die
+					@:privateAccess
+					{
+						FlxG.game._requestedState = new core.CrashState('FORCED CRASH', 'Commited F7', Type.getClass(FlxG.state));
+						FlxG.game.switchState();
+					}
+					#end
 			}
 		});
 	}
@@ -62,13 +65,11 @@ class FPS extends Sprite {
 	public function addField(field:TextField):Void {
 		var lastField:TextField = childrenFields[childrenFields.length - 1];
 		var yAdd:Float = 10;
-		if (lastField == fps)
-			yAdd = 15;
 
 		field.x = 5;
 		field.autoSize = LEFT;
 		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(Paths.font('vcr'), field == fps ? 20 : 16, -1);
+		field.defaultTextFormat = new TextFormat('_sans', 14, -1);
 
 		if (lastField != null)
 			field.y = lastField.y + lastField.height + yAdd;
@@ -98,7 +99,7 @@ class FPSField extends TextField {
 			curFPS = FlxG.updateFramerate;
 
 		if (visible)
-			text = '${curFPS} FPS';
+			text = 'FPS: ${curFPS}';
 	}
 }
 
@@ -114,19 +115,7 @@ class MemoryField extends TextField {
 				peakMEM = curMEM;
 
 			if (visible)
-				text = '${FlxStringUtil.formatBytes(curMEM)} / ${FlxStringUtil.formatBytes(peakMEM)}';
-		});
-	}
-}
-
-class DebugField extends TextField {
-	public function new():Void {
-		super();
-		addEventListener(Event.ENTER_FRAME, function(_:Event):Void {
-			if (visible) {
-				text = '${Type.getClassName(Type.getClass(FlxG.state))}';
-				appendText('\nOBJS: ${FlxG.state.countLiving()} - DEAD: ${FlxG.state.countDead()}');
-			}
+				text = 'RAM: ${FlxStringUtil.formatBytes(curMEM).toLowerCase()} / ${FlxStringUtil.formatBytes(peakMEM).toLowerCase()}';
 		});
 	}
 }

@@ -172,24 +172,25 @@ class ChartLoader {
 
 			var spawnedNote:Note = new Note(note.step, note.index, 0, type);
 			spawnedNote.downscroll = Settings.get("scrollType") == "DOWN";
-			spawnedNote.sustainTime = note.sustainTime;
 			spawnedNote.strumline = note.strumline;
 			unspawnNoteList.push(spawnedNote);
 
-			if (note.sustainTime > 0) {
-				var prevNote:Note = unspawnNoteList[unspawnNoteList.length - 1];
+			/*
+				if (note.sustainTime > 0) {
+					var prevNote:Note = unspawnNoteList[unspawnNoteList.length - 1];
 
-				for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
-					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
-					var spawnedSustain:Note = new Note(sustainStep, note.index, note.sustainTime, type, prevNote);
-					spawnedSustain.downscroll = Settings.get("scrollType") == "DOWN";
-					spawnedSustain.strumline = note.strumline;
-					if (note.sustainTime == noteSustain - 1)
-						spawnedSustain.isEnd = true;
-					unspawnNoteList.insert(0, spawnedSustain);
-					prevNote = spawnedSustain;
+					for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
+						var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
+						var spawnedSustain:Note = new Note(sustainStep, note.index, note.sustainTime, type, prevNote);
+						spawnedSustain.downscroll = Settings.get("scrollType") == "DOWN";
+						spawnedSustain.strumline = note.strumline;
+						if (note.sustainTime == noteSustain - 1)
+							spawnedSustain.isEnd = true;
+						unspawnNoteList.insert(0, spawnedSustain);
+						prevNote = spawnedSustain;
+					}
 				}
-			}
+			 */
 		}
 		unspawnNoteList.sort(function(a:Note, b:Note) return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
 		trace('Song Total Notes: ${unspawnNoteList.length}');

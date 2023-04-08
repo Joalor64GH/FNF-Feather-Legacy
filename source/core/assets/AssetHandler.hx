@@ -53,11 +53,16 @@ class AssetHandler {
 			case SOUND: CacheHandler.getSoundData(finalPath);
 			case XML: FlxAtlasFrames.fromSparrow(getAsset(folder, IMAGE), File.getContent(getPath(folder, XML)));
 			case TXT: FlxAtlasFrames.fromSpriteSheetPacker(getAsset(folder, IMAGE), getPath(folder, TXT));
-			case JSON:
-				var json = sys.io.File.getContent(finalPath);
-				while (!json.endsWith("}"))
-					json = json.substr(0, json.length - 1);
-				json;
+			case JSON | YAML:
+				var file = sys.io.File.getContent(finalPath);
+
+				if (type == JSON)
+					while (!file.endsWith("}"))
+						file = file.substr(0, file.length - 1);
+
+				file;
+			case JSON_ATLAS:
+				return flxanimate.frames.FlxAnimateFrames.fromJson(getAsset(folder, JSON), getAsset(folder, IMAGE));
 			default: finalPath;
 		}
 	}
@@ -81,8 +86,10 @@ enum abstract AssetType(String) to String from String {
 	// TEXT TYPES
 	var XML:AssetType = 'xml';
 	var JSON:AssetType = 'json';
+	var YAML:AssetType = 'yaml';
 	var SCRIPT:AssetType = 'script';
 	var TXT:AssetType = 'txt';
+	var JSON_ATLAS:AssetType = 'json_atlas';
 
 	public function cycleExtensions(path:String):String {
 		if (getExtension() != null) {
@@ -103,6 +110,7 @@ enum abstract AssetType(String) to String from String {
 			case TXT: ['.txt'];
 			case XML: ['.xml'];
 			case JSON: ['.json'];
+			case YAML: ['.yaml', '.yml'];
 			default: null;
 		}
 	}

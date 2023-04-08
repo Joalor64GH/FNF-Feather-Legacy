@@ -28,9 +28,9 @@ class Notefield extends FlxGroup {
 	 */
 	public var cpuControlled:Bool = false;
 
-	public var receptors:FlxTypedGroup<FNFSprite> = new FlxTypedGroup<FNFSprite>();
-	public var noteSprites:FlxTypedGroup<Note> = new FlxTypedGroup<Note>();
-	public var splashSprites:FlxTypedGroup<FNFSprite> = new FlxTypedGroup<FNFSprite>();
+	public var receptorObjects:FlxTypedGroup<FNFSprite>;
+	public var splashObjects:FlxTypedGroup<FNFSprite>;
+	public var noteObjects:FlxTypedGroup<Note>;
 
 	public var character:Character;
 
@@ -41,33 +41,37 @@ class Notefield extends FlxGroup {
 		this.character = character;
 		this.spacing = spacing;
 
+		receptorObjects = new FlxTypedGroup<FNFSprite>();
+		splashObjects = new FlxTypedGroup<FNFSprite>();
+		noteObjects = new FlxTypedGroup<Note>();
+
 		generateArrows(x, y);
 
-		add(receptors);
-		add(noteSprites);
-		add(splashSprites);
+		add(receptorObjects);
+		add(noteObjects);
+		add(splashObjects);
 	}
 
 	/**
 	 * Note Regeneration Script
 	 */
 	public function generateArrows(x:Float = 0, y:Float = 0):Void {
-		receptors.forEachAlive(function(receptor:FlxSprite):Void {
+		receptorObjects.forEachAlive(function(receptor:FlxSprite):Void {
 			receptor.kill();
 			receptor.destroy();
 		});
 
-		splashSprites.forEachAlive(function(splash:FNFSprite):Void {
+		splashObjects.forEachAlive(function(splash:FNFSprite):Void {
 			splash.kill();
 			splash.destroy();
 		});
 
 		for (i in 0...keys) {
-			var receptor:FNFSprite = new FNFSprite(x, y).loadFrames('images/notes/default/NOTE_assets');
+			var receptor:FNFSprite = new FNFSprite(x, y).loadFrames('images/notes/default/NOTE_strum');
 
-			receptor.addAnim('static', 'arrow static ${i}');
-			receptor.addAnim('pressed', '${directions[i]} press');
-			receptor.addAnim('confirm', '${directions[i]} confirm');
+			receptor.addAnim('static', 'arrow${directions[i].toUpperCase()}');
+			receptor.addAnim('pressed', '${directions[i].toLowerCase()} press');
+			receptor.addAnim('confirm', '${directions[i].toLowerCase()} confirm');
 
 			receptor.x += spacing * i;
 			receptor.ID = i;
@@ -89,19 +93,18 @@ class Notefield extends FlxGroup {
 			receptor.centerOrigin();
 			receptor.centerOffsets();
 
-			receptors.add(receptor);
+			receptorObjects.add(receptor);
 		}
-
-		doSplash(0, "default", true);
 	}
 
-	public function doSplash(index:Int, type:String = "default", preload:Bool = false):Void {
-		if (!Settings.get("noteSplashes"))
+	public function doSplash(index:Int, type:String, preload:Bool = false):Void {
+		if (!Settings.get("noteSplashes")
+			|| (Settings.get("noteSplashes") && !sys.FileSystem.exists(Paths.getPath('images/notes/${type}/NOTE_splashes', XML))))
 			return;
 
-		var receptor:FNFSprite = receptors.members[index];
+		var receptor:FNFSprite = receptorObjects.members[index];
 
-		var splash:FNFSprite = splashSprites.recycle(FNFSprite, function():FNFSprite return new Splash(type));
+		var splash:FNFSprite = splashObjects.recycle(FNFSprite, function():FNFSprite return new Splash(index, type));
 		splash.alpha = preload ? 0.000001 : 1;
 		splash.scale.set(1, 1);
 
@@ -110,68 +113,68 @@ class Notefield extends FlxGroup {
 		splash.setPosition(receptor.x - receptor.width, receptor.y - receptor.height);
 		splash.playAnim('impact ${colors[index]}0' /*+ FlxG.random.int(0, 1)*/);
 		if (preload)
-			splashSprites.add(splash);
+			splashObjects.add(splash);
 
 		splash.animation.finishCallback = function(name:String):Void {
 			if (splash.animation != null && splash.animation.curAnim.finished)
 				splash.kill();
 		}
 
-		splashSprites.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
+		splashObjects.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
 	}
 
 	public override function update(elapsed:Float):Void {
-		if (receptors != null) {
-			noteSprites.forEachAlive(function(note:Note):Void {
-				var receptor:FlxSprite = receptors.members[note.index];
+		super.update(elapsed);
 
-				if (note != null && receptor != null) {
-					var mustHit:Bool = note.strumline != game.playerStrumline;
-					var center:Float = receptor.y + spacing / 2;
-					var stepY:Float = (Conductor.songPosition - note.step) * (0.45 * FlxMath.roundDecimal(note.speed, 2));
+		if (receptorObjects == null || noteObjects == null || noteObjects.members.length < 1)
+			return;
 
-					note.x = receptor.x;
-					if (note.downscroll)
-						note.arrow.y = receptor.y + stepY;
-					else // I'm gonna throw up.
-						note.arrow.y = receptor.y - stepY;
+		noteObjects.forEachAlive(function(note:Note):Void {
+			var receptor:FlxSprite = receptorObjects.members[note.index];
 
-					if (note.isSustain) {
-						if (note.downscroll) {
-							if (note.animation.curAnim != null && note.animation.curAnim.name.endsWith("end")) {
-								if (note.prevNote != null && note.prevNote.isSustain)
-									note.y += Math.ceil(/*note.prevNote.y -*/ note.prevNote.frameHeight);
-							}
+			if (note != null && receptor != null) {
+				var center:Float = receptor.y + spacing / 2;
+				var stepY:Float = (Conductor.songPosition - note.step) * (0.45 * FlxMath.roundDecimal(note.speed, 2));
 
-							if (note.y - note.offset.y * note.scale.y + note.height >= center
-								&& (mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
-								var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
-								swagRect.height = (center - note.y) / note.scale.y;
-								swagRect.y = note.frameHeight - swagRect.height;
-								note.clipRect = swagRect;
-							}
-						} else {
-							if (note.y + note.offset.y * note.scale.y <= center
-								&& (mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
-								var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
-								swagRect.y = (center - note.y) / note.scale.y;
-								swagRect.height -= swagRect.y;
-								note.clipRect = swagRect;
-							}
+				note.x = receptor.x;
+				if (note.downscroll)
+					note.arrow.y = receptor.y + stepY;
+				else // I'm gonna throw up.
+					note.arrow.y = receptor.y - stepY;
+
+				if (note.isSustain) {
+					if (note.downscroll) {
+						if (note.animation.curAnim != null && note.animation.curAnim.name.endsWith("end")) {
+							if (note.prevNote != null && note.prevNote.isSustain)
+								note.y += Math.ceil(/*note.prevNote.y -*/ note.prevNote.frameHeight);
+						}
+
+						if (note.y - note.offset.y * note.scale.y + note.height >= center
+							&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
+							var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
+							swagRect.height = (center - note.y) / note.scale.y;
+							swagRect.y = note.frameHeight - swagRect.height;
+							note.clipRect = swagRect;
+						}
+					} else {
+						if (note.y + note.offset.y * note.scale.y <= center
+							&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
+							var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+							swagRect.y = (center - note.y) / note.scale.y;
+							swagRect.height -= swagRect.y;
+							note.clipRect = swagRect;
 						}
 					}
 				}
-			});
-		}
-
-		super.update(elapsed);
+			}
+		});
 	}
 
 	public override function add(Object:FlxBasic):FlxBasic {
 		if (Object is Note) {
 			var noteObject:Note = cast(Object, Note);
 			if (noteObject != null)
-				noteSprites.add(noteObject);
+				noteObjects.add(noteObject);
 		}
 		return super.add(Object);
 	}
@@ -183,15 +186,15 @@ class Notefield extends FlxGroup {
 				note.kill();
 				note.destroy();
 			}
-			noteSprites.remove(note, Splice);
+			noteObjects.remove(note, Splice);
 		}
 
 		return super.remove(Object, Splice);
 	}
 
 	public function currentAnim(anim:String, index:Int):Bool {
-		if (receptors.members[index] != null) {
-			var receptor:FlxSprite = receptors.members[index];
+		if (receptorObjects.members[index] != null) {
+			var receptor:FlxSprite = receptorObjects.members[index];
 			if (receptor.animation.curAnim != null && receptor.animation.curAnim.name == anim)
 				return true;
 		}
@@ -199,10 +202,10 @@ class Notefield extends FlxGroup {
 	}
 
 	public function playAnim(anim:String, index:Int, forced:Bool = false, reversed:Bool = false, frame:Int = 0):Void {
-		if (receptors.members[index] == null)
+		if (receptorObjects.members[index] == null)
 			return;
 
-		var receptor:FNFSprite = receptors.members[index];
+		var receptor:FNFSprite = receptorObjects.members[index];
 		if (receptor.animation.getByName(anim) != null)
 			receptor.playAnim(anim, forced, reversed, frame);
 

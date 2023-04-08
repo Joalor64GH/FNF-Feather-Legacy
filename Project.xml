@@ -55,7 +55,17 @@
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
+
+	<!-- Custom Made HScript library with class support and such, needed for scripts -->
 	<haxelib name="SScript" if="SCRIPTING_ENABLED" />
+
+	<!-- Adobe Animate Atlas Support -->
+	<haxelib name="flxAnimate" />
+
+	<!-- Needed for Characters -->
+	<haxelib name="yaml" />
+
+	<!-- for faster JSON Parsing -->
 	<haxelib name="tjson" />
 
 	<!-- _______ Defines _______ -->
