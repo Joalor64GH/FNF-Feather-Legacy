@@ -141,9 +141,13 @@ class SustainObj extends FlxTiledSprite {
 		note = _note;
 
 		final atlas:FlxAtlasFrames = AssetHandler.getAsset('images/notes/${_note.type}/NOTE_assets', XML);
-		for (prefix in atlas.framesHash.keys())
-			if (prefix.endsWith('hold piece0000'))
-				graphicsStored.push(FlxGraphic.fromFrame(atlas.framesHash.get(prefix)));
+		for (prefix in atlas.framesHash.keys()) {
+			if (prefix.endsWith('hold piece0000')) {
+				var frameGraphic:FlxGraphic = FlxGraphic.fromFrame(atlas.framesHash.get(prefix));
+				if (!graphicsStored.contains(frameGraphic))
+					graphicsStored.push(frameGraphic);
+			}
+		}
 
 		loadGraphic(graphicsStored[_note.index]);
 		width = graphicsStored[_note.index].width * 0.7;
