@@ -1,1 +1,1 @@
-Example||true
+Example : true

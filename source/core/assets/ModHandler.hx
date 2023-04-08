@@ -81,7 +81,7 @@ class ModHandler {
 			var modArray:Array<String> = Utils.readText("mods/order.txt");
 			var modMap:Map<String, Bool> = [];
 			for (i in modArray) {
-				var splitArray:Array<String> = i.split("||");
+				var splitArray:Array<String> = i.split(" : ");
 				modMap.set(splitArray[0], splitArray[1] == 'true');
 			}
 

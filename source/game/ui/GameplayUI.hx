@@ -44,7 +44,7 @@ class GameplayUI extends FlxSpriteGroup {
 		iconPL.scrollFactor.set();
 		add(iconPL);
 
-		iconOPP = new HealthIcon(game.opponent.icon, false);
+		iconOPP = new HealthIcon(game.enemy.icon, false);
 		iconOPP.y = healthBar.y - (iconOPP.height / 2);
 		iconOPP.scrollFactor.set();
 		add(iconOPP);

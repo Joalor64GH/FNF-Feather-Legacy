@@ -14,6 +14,7 @@ class Note extends FlxSpriteGroup {
 
 	public var arrow:NoteObj;
 	public var sustain:SustainObj;
+	public var sustainEnd:FNFSprite;
 
 	public var prevNote:Note = null;
 	public var debugging:Bool = false;
@@ -63,11 +64,11 @@ class Note extends FlxSpriteGroup {
 		this.step = step;
 		this.index = index;
 		this.sustainTime = sustainTime;
-		if (sustainTime > 0)
-			this.isSustain = true;
 		this.type = type;
 		this.prevNote = prevNote;
-		this.moves = false;
+
+		if (this.sustainTime > 0)
+			this.isSustain = true;
 
 		hitboxEarly = 1;
 
@@ -78,7 +79,21 @@ class Note extends FlxSpriteGroup {
 			hitboxEarly = 0.5;
 			sustain = new SustainObj(this);
 			sustain.centerOverlay(arrow, X);
+			sustain.height = sustainTime;
+			sustain.visible = true;
+			arrow.visible = false;
 			add(sustain);
+
+			if (isEnd) {
+				sustainEnd = new FNFSprite().loadFrames('images/notes/${type}/NOTE_assets', [{name: 'end', prefix: '${Notefield.colors[index]} hold end'}]);
+				sustainEnd.antialiasing = Settings.get("antialiasing");
+				sustainEnd.setGraphicSize(Std.int(sustainEnd.width * 0.7));
+				sustainEnd.updateHitbox();
+				sustainEnd.playAnim('end');
+				sustainEnd.visible = true;
+				// sustainEnd.setPosition(sustain.x, 10 + arrow.y + sustainTime);
+				add(sustainEnd);
+			}
 		}
 	}
 
@@ -110,37 +125,44 @@ class NoteObj extends FNFSprite {
 		updateHitbox();
 
 		playAnim('${Notefield.colors[_note.index]} note');
+		antialiasing = Settings.get("antialiasing");
+		moves = false;
 	}
 }
 
 class SustainObj extends FlxTiledSprite {
 	public var note:Note;
-	public var framesStored:Array<FlxFrame> = [];
+
+	var graphicsStored:Array<FlxGraphic> = [];
 
 	public function new(_note:Note):Void {
 		super(null, 0, 1);
 
 		note = _note;
 
-		final atlas:FlxAtlasFrames = Paths.getSparrowAtlas('notes/${_note.type}/NOTE_assets');
+		final atlas:FlxAtlasFrames = AssetHandler.getAsset('images/notes/${_note.type}/NOTE_assets', XML);
 		for (prefix in atlas.framesHash.keys())
 			if (prefix.endsWith('hold piece0000'))
-				framesStored.push(atlas.framesHash.get(prefix));
+				graphicsStored.push(FlxGraphic.fromFrame(atlas.framesHash.get(prefix)));
 
-		loadFrame(framesStored[_note.index]);
+		loadGraphic(graphicsStored[_note.index]);
+		width = graphicsStored[_note.index].width * 0.7;
 		setGraphicSize(Std.int(width * 0.7));
-		updateHitbox();
+		// updateHitbox();
+
+		antialiasing = Settings.get("antialiasing");
+		moves = false;
 	}
 }
 
 class Splash extends FNFSprite {
 	public function new(index:Int, type:String = "default"):Void {
 		super(0, 0);
-		this.loadFrames('images/notes/${type}/NOTE_splashes');
+		loadFrames('images/notes/${type}/NOTE_splashes');
 		for (n in 0...2)
 			for (i in 0...Notefield.colors.length)
-				this.addAnim('impact ${Notefield.colors[i]}${n}', '${Notefield.colors[i]} splash ${n}', null, 24);
-		this.moves = false;
+				addAnim('impact ${Notefield.colors[i]}${n}', '${Notefield.colors[i]} splash ${n}', null, 24);
+		moves = false;
 	}
 
 	public override function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame = 0):Void {

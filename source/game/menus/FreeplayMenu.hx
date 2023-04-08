@@ -6,7 +6,7 @@ import game.PlayState.PlayStateStruct;
 import game.editors.ChartEditor;
 import game.gameplay.Highscore;
 import game.system.Levels;
-import game.system.charting.ChartLoader;
+import game.system.ChartLoader;
 import game.ui.Alphabet;
 import game.ui.HealthIcon;
 import sys.FileSystem;
@@ -47,8 +47,13 @@ class FreeplayMenu extends MenuBase {
 		for (i in 0...Levels.GAME_LEVELS.length) {
 			var week:GameWeek = Levels.GAME_LEVELS[i];
 			for (i in 0...week.songs.length) {
-				if (week.songs[i].color == null)
-					week.songs[i].color = 0xFFFFFFFF;
+				/*
+					if (week.songs[i].color == null)
+						week.songs[i].color = FlxColor.fromInt(0xFFFFFFFF);
+
+					if (Std.isOfType(week.songs[i].color, String))
+						week.songs[i].color = FlxColor.fromString(week.songs[i].color);
+				 */
 
 				if (!songList.contains(week.songs[i]))
 					songList.push(week.songs[i]);
@@ -57,8 +62,8 @@ class FreeplayMenu extends MenuBase {
 
 		for (folder in FileSystem.readDirectory(AssetHandler.getPath("data/songs", true))) {
 			var path:String = 'data/songs/${folder}/freeplay';
-			if (FileSystem.exists(AssetHandler.getPath(path, JSON))) {
-				var data:ListableSong = cast tjson.TJSON.parse(AssetHandler.getAsset(path, JSON, true));
+			if (FileSystem.exists(AssetHandler.getPath(path, YAML))) {
+				var data:ListableSong = cast yaml.Yaml.parse(AssetHandler.getAsset(path, YAML, true), yaml.Parser.options().useObjects());
 				data.color = FlxColor.fromString(Std.string(data.color));
 				if (!songList.contains(data))
 					songList.push(data);
@@ -71,8 +76,9 @@ class FreeplayMenu extends MenuBase {
 			if (FileSystem.exists(core.assets.ModHandler.getFromMod(modName, 'data/songs'))) {
 				for (modFolder in FileSystem.readDirectory(core.assets.ModHandler.getFromMod(modName, 'data/songs'))) {
 					var path:String = 'data/songs/${modFolder}/freeplay';
-					if (FileSystem.exists(core.assets.ModHandler.getFromMod(modName, path, JSON))) {
-						var data:ListableSong = cast tjson.TJSON.parse(sys.io.File.getContent(core.assets.ModHandler.getFromMod(modName, path, JSON)));
+					if (FileSystem.exists(core.assets.ModHandler.getFromMod(modName, path, YAML))) {
+						var data:ListableSong = cast yaml.Yaml.parse(sys.io.File.getContent(core.assets.ModHandler.getFromMod(modName, path, YAML)),
+							yaml.Parser.options().useObjects());
 						data.color = FlxColor.fromString(Std.string(data.color));
 						if (!songList.contains(data))
 							songList.push(data);
@@ -94,7 +100,7 @@ class FreeplayMenu extends MenuBase {
 			newSong.groupIndex = i;
 			optionsGroup.add(newSong);
 
-			var songIcon:HealthIcon = new HealthIcon(songList[i].opponent);
+			var songIcon:HealthIcon = new HealthIcon(songList[i].enemy);
 			songIcon.canBounce = false;
 			songIcon.sprTracker = newSong;
 			songIcon.ID = i;

@@ -3,8 +3,8 @@ package game;
 import game.gameplay.Note;
 import game.gameplay.Notefield;
 import game.system.Conductor;
-import game.system.charting.ChartDefs;
-import game.system.charting.ChartLoader;
+import game.system.ChartDefs;
+import game.system.ChartLoader;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
 class NoteRenderTest extends MusicBeatState {

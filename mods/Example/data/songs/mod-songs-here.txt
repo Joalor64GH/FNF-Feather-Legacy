@@ -5,7 +5,7 @@ the contents of said file goes as follows:
 
 {
 	"name": "SONG NAME",
-	"opponent": "character name",
+	"enemy": "character name",
 	"color": "#HEXCODE"
 }
 

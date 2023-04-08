@@ -22,7 +22,7 @@ class PhillyCity extends BaseStage {
 		cameraZoom = 1.08;
 
 		playerOffset.set(140, 0);
-		opponentOffset.set(120, 0);
+		enemyOffset.set(120, 0);
 		crowdOffset.set(130, 0);
 
 		lightShader = new BuildingShaders();

@@ -12,8 +12,8 @@ import flixel.text.FlxText;
 import flixel.util.FlxGradient;
 import game.PlayState;
 import game.gameplay.Note;
-import game.system.charting.ChartDefs;
-import game.system.charting.ChartLoader;
+import game.system.ChartDefs;
+import game.system.ChartLoader;
 import game.system.Conductor;
 import openfl.geom.ColorTransform;
 

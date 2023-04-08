@@ -62,7 +62,7 @@
 	<!-- Adobe Animate Atlas Support -->
 	<haxelib name="flxanimate" />
 
-	<!-- Needed for Characters -->
+	<!-- Needed for some of the custom data -->
 	<haxelib name="yaml" />
 
 	<!-- for faster JSON Parsing -->

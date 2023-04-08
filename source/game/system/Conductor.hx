@@ -1,6 +1,6 @@
 package game.system;
 
-import game.system.charting.ChartDefs.ChartFormat;
+import game.system.ChartDefs.ChartFormat;
 
 typedef ChangeBPMEvent = {
 	var step:Int;

@@ -1,0 +1,6 @@
+chars: [parents, bf, gf]
+songs:
+  - {color: '#A0D1FF', enemy: parents, name: Cocoa}
+  - {color: '#A0D1FF', enemy: parents, name: Eggnog}
+  - {color: '#A0D1FF', enemy: lemon-monster, name: Winter-Horrorland}
+label: RED SNOW

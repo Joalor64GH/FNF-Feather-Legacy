@@ -1,9 +1,0 @@
-{
-	"songs": [
-		{"name": "Pico", "opponent": "pico", "color": "#941653"},
-		{"name": "Philly", "opponent": "pico", "color": "#941653"},
-		{"name": "Blammed", "opponent": "pico", "color": "#941653"}
-	],
-	"chars": ["pico", "bf", "gf"],
-	"label": "PICO"
-}

@@ -8,8 +8,8 @@ import game.gameplay.*;
 import game.gameplay.Highscore.Rating;
 import game.stage.*;
 import game.subStates.*;
-import game.system.charting.ChartDefs;
-import game.system.charting.ChartLoader;
+import game.system.ChartDefs;
+import game.system.ChartLoader;
 import game.system.Conductor;
 import game.ui.GameplayUI;
 import game.ui.RatingPopup;
@@ -84,7 +84,7 @@ class PlayState extends MusicBeatState {
 	public var gameStage:BaseStage = null;
 
 	public var player:Character;
-	public var opponent:Character;
+	public var enemy:Character;
 	public var crowd:Character;
 
 	public function new(?constructor:PlayStateStruct):Void {
@@ -190,24 +190,24 @@ class PlayState extends MusicBeatState {
 		if (gameStage.displayCrowd)
 			crowd = new Character(400 + gameStage.crowdOffset.x, 130 + gameStage.crowdOffset.y).loadChar(songMetadata.characters[2]);
 
-		opponent = new Character(100 + gameStage.opponentOffset.x, 100 + gameStage.opponentOffset.y).loadChar(songMetadata.characters[1]);
+		enemy = new Character(100 + gameStage.enemyOffset.x, 100 + gameStage.enemyOffset.y).loadChar(songMetadata.characters[1]);
 		player = new Character(770 + gameStage.playerOffset.x, 450 + gameStage.playerOffset.y).loadChar(songMetadata.characters[0], true);
 
 		if (crowd != null) {
 			if (songMetadata.characters[1] == songMetadata.characters[2]) {
 				crowd.visible = false;
-				opponent.setPosition(crowd.x, crowd.y);
+				enemy.setPosition(crowd.x, crowd.y);
 			}
 			add(crowd);
 		}
 
-		add(opponent);
+		add(enemy);
 		add(player);
 
 		if (gameStage.camPosition.x == Math.NEGATIVE_INFINITY)
-			gameStage.camPosition.x = Math.floor(opponent.getMidpoint().x + FlxG.width / 4);
+			gameStage.camPosition.x = Math.floor(enemy.getMidpoint().x + FlxG.width / 4);
 		if (gameStage.camPosition.y == Math.NEGATIVE_INFINITY)
-			gameStage.camPosition.y = Math.floor(opponent.getGraphicMidpoint().y - FlxG.height / 2);
+			gameStage.camPosition.y = Math.floor(enemy.getGraphicMidpoint().y - FlxG.height / 2);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.setPosition(gameStage.camPosition.x, gameStage.camPosition.y);
@@ -240,7 +240,7 @@ class PlayState extends MusicBeatState {
 			var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 60;
 			var character:Character = switch (i) {
 				case 1: player;
-				default: opponent;
+				default: enemy;
 			};
 
 			if (i == 0)
@@ -272,7 +272,7 @@ class PlayState extends MusicBeatState {
 		if (gameStage.bgScript != null) {
 			gameStage.bgScript.call('createPost', []);
 			gameStage.bgScript.set('player', player);
-			gameStage.bgScript.set('opponent', opponent);
+			gameStage.bgScript.set('enemy', enemy);
 			gameStage.bgScript.set('crowd', crowd);
 		}
 		#end
@@ -511,7 +511,7 @@ class PlayState extends MusicBeatState {
 			var shift:Bool = FlxG.keys.pressed.SHIFT;
 			var alt:Bool = FlxG.keys.pressed.ALT;
 
-			var char:Character = shift && alt ? crowd : shift ? player : opponent;
+			var char:Character = shift && alt ? crowd : shift ? player : enemy;
 			FlxG.switchState(new CharacterEditor(char.name, char.isPlayer));
 		}
 		#end
@@ -539,18 +539,18 @@ class PlayState extends MusicBeatState {
 						player.loadChar(charColumn.get(name).get(newChar).name);
 					case 'gf', 'girlfriend', 'crowd':
 						crowd.loadChar(charColumn.get(name).get(newChar).name);
-					case 'dad', 'player2', 'opponent':
-						opponent.loadChar(charColumn.get(name).get(newChar).name);
+					case 'dad', 'player2', 'enemy':
+						enemy.loadChar(charColumn.get(name).get(newChar).name);
 				}
 
 			case ChangeCameraPosition(section):
 				if (section != null) {
-					var char:Character = opponent;
+					var char:Character = enemy;
 
 					if (section.camPoint == 2 && crowd != null)
 						char = crowd;
 					else
-						char = (section.camPoint == 1) ? player : opponent;
+						char = (section.camPoint == 1) ? player : enemy;
 					if (camFollow.x != char.getMidpoint().x - 100)
 						camFollow.setPosition(char.getMidpoint().x - 100 + char.cameraOffset[0], char.getMidpoint().y - 100 + char.cameraOffset[1]);
 				}

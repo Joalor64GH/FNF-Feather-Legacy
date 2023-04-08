@@ -1,4 +1,4 @@
-package game.system.charting;
+package game.system;
 
 import game.PlayState.GameplayEvent;
 
@@ -19,7 +19,7 @@ typedef ChartMeta = {
 typedef ChartNote = {
 	var step:Float;
 	var index:Int;
-	var ?strumline:Int; // defaults to 0 (opponent)
+	var ?strumline:Int; // defaults to 0 (enemy)
 	var ?sustainTime:Float;
 	var ?type:String;
 }

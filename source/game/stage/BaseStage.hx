@@ -43,7 +43,7 @@ class BaseStage extends FlxGroup {
 	#end
 
 	public var playerOffset:FlxPoint = new FlxPoint(0, 0);
-	public var opponentOffset:FlxPoint = new FlxPoint(0, 0);
+	public var enemyOffset:FlxPoint = new FlxPoint(0, 0);
 	public var crowdOffset:FlxPoint = new FlxPoint(0, 0);
 
 	public var camPosition:FlxPoint = new FlxPoint(Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY);

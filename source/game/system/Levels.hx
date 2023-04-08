@@ -1,7 +1,21 @@
 package game.system;
 
+import flixel.util.typeLimit.OneOfTwo;
 import sys.FileSystem;
 import sys.io.File;
+
+typedef GameWeek = {
+	var songs:Array<ListableSong>;
+	var chars:Array<String>;
+	var ?diffs:Array<String>;
+	var label:String;
+}
+
+typedef ListableSong = {
+	var name:String;
+	var enemy:String;
+	var ?color:OneOfTwo<String, FlxColor>; // using OneOfTwo here because YAML data uses strings instead
+}
 
 class Levels {
 	public static final DEFAULT_DIFFICULTIES:Array<String> = ["easy", "normal", "hard"];
@@ -12,11 +26,15 @@ class Levels {
 		GAME_LEVELS = [];
 
 		for (week in Utils.readText(Paths.getPath('data/weeks/order', TXT, true))) {
-			if (FileSystem.exists(Paths.getPath('data/weeks/${week}', JSON, true))) {
-				var newWeek:GameWeek = cast tjson.TJSON.parse(AssetHandler.getAsset('data/weeks/${week}', JSON, true));
+			if (FileSystem.exists(Paths.getPath('data/weeks/${week}', YAML, true))) {
+				var newWeek:GameWeek = cast yaml.Yaml.parse(AssetHandler.getAsset('data/weeks/${week}', YAML, true), yaml.Parser.options().useObjects());
 
-				for (i in 0...newWeek.songs.length) // convert string to color
-					newWeek.songs[i].color = FlxColor.fromString(Std.string(newWeek.songs[i].color));
+				for (i in 0...newWeek.songs.length) {
+					if (newWeek.songs[i].color == null)
+						newWeek.songs[i].color = FlxColor.fromInt(0xFFFFFFFF);
+					if (Std.isOfType(newWeek.songs[i].color, String))
+						newWeek.songs[i].color = FlxColor.fromString(Std.string(newWeek.songs[i].color));
+				}
 
 				if (!GAME_LEVELS.contains(newWeek))
 					GAME_LEVELS.push(newWeek);
@@ -28,11 +46,16 @@ class Levels {
 			var modName:String = core.assets.ModHandler.activeMods[i].folder;
 
 			for (modWeek in Utils.readText(core.assets.ModHandler.getFromMod(modName, 'data/weeks/order', TXT))) {
-				if (FileSystem.exists(core.assets.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}', JSON))) {
-					var modWeek:GameWeek = cast tjson.TJSON.parse(File.getContent(core.assets.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}', JSON)));
+				if (FileSystem.exists(core.assets.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}', YAML))) {
+					var modWeek:GameWeek = cast yaml.Yaml.parse(File.getContent(core.assets.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}', YAML)),
+						yaml.Parser.options().useObjects());
 
-					for (i in 0...modWeek.songs.length)
-						modWeek.songs[i].color = FlxColor.fromString(Std.string(modWeek.songs[i].color));
+					for (i in 0...modWeek.songs.length) {
+						if (modWeek.songs[i].color == null)
+							modWeek.songs[i].color = FlxColor.fromInt(0xFFFFFFFF);
+						if (Std.isOfType(modWeek.songs[i].color, String))
+							modWeek.songs[i].color = FlxColor.fromString(Std.string(modWeek.songs[i].color));
+					}
 
 					if (!GAME_LEVELS.contains(modWeek))
 						GAME_LEVELS.push(modWeek);
@@ -41,17 +64,4 @@ class Levels {
 		}
 		#end
 	}
-}
-
-typedef GameWeek = {
-	var songs:Array<ListableSong>;
-	var chars:Array<String>;
-	var ?diffs:Array<String>;
-	var label:String;
-}
-
-typedef ListableSong = {
-	var name:String;
-	var opponent:String;
-	var ?color:FlxColor;
 }
