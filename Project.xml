@@ -60,7 +60,7 @@
 	<haxelib name="SScript" if="SCRIPTING_ENABLED" />
 
 	<!-- Adobe Animate Atlas Support -->
-	<haxelib name="flxAnimate" />
+	<haxelib name="flxanimate" />
 
 	<!-- Needed for Characters -->
 	<haxelib name="yaml" />
