@@ -114,9 +114,12 @@ class GameplayUI extends FlxSpriteGroup {
 	public var separator:String = ' ~ ';
 
 	public function updateScore(miss:Bool = false):Void {
-		var newScore:String = 'SCORE: ${game.currentStat.score}';
-		newScore += separator + 'BREAKS: ${game.currentStat.misses}${game.currentStat.clearType}';
-		newScore += separator + 'GRADE: ${game.currentStat.gradeType} [${game.currentStat.getPercent()}%]';
+		var score:Int = game.currentStat.score;
+		var misses:Int = game.currentStat.misses;
+
+		var newScore:String = 'SCORE: ${score}';
+		newScore += separator + (misses < 2 ? 'MISS: ' : 'MISSES: ') + '${misses}${game.currentStat.clearType}';
+		newScore += separator + '${game.currentStat.gradeType} [${game.currentStat.getPercent()}%]';
 		scoreText.text = newScore;
 
 		scoreText.screenCenter(X);

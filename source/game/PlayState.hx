@@ -3,6 +3,7 @@ package game;
 import flixel.FlxCamera;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxPoint;
 import game.editors.*;
 import game.gameplay.*;
 import game.gameplay.Highscore.Rating;
@@ -79,6 +80,7 @@ class PlayState extends MusicBeatState {
 	public var camOver:FlxCamera;
 
 	public var camFollow:FlxObject;
+	public var camPointer:FlxPoint;
 
 	// Objects
 	public var gameStage:BaseStage = null;
@@ -210,9 +212,11 @@ class PlayState extends MusicBeatState {
 			gameStage.camPosition.y = Math.floor(enemy.getGraphicMidpoint().y - FlxG.height / 2);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
-		camFollow.setPosition(gameStage.camPosition.x, gameStage.camPosition.y);
+
+		camPointer = new FlxPoint();
+		camPointer.set(gameStage.camPosition.x, gameStage.camPosition.y);
 		camGame.follow(camFollow, LOCKON, 0.04);
-		camGame.focusOn(camFollow.getPosition());
+		camGame.focusOn(camPointer);
 
 		fireEvents(ChangeCameraPosition(song.sections[0]));
 
@@ -385,11 +389,10 @@ class PlayState extends MusicBeatState {
 		switch (constructor.gamemode) {
 			case STORY_MODE:
 			// placeholder
-			case FREEPLAY:
-				Highscore.saveScore(Utils.removeForbidden(constructor.songName), constructor.difficulty, currentStat.score);
+			case FREEPLAY, CHARTING:
+				if (constructor.gamemode != CHARTING)
+					Highscore.saveScore(Utils.removeForbidden(constructor.songName), constructor.difficulty, currentStat.score);
 				FlxG.switchState(new game.menus.FreeplayMenu());
-			case CHARTING:
-				FlxG.switchState(new game.editors.ChartEditor(constructor));
 		}
 	}
 
@@ -399,6 +402,8 @@ class PlayState extends MusicBeatState {
 
 	public override function update(elapsed:Float):Void {
 		callFn("update", [elapsed, false]);
+
+		camFollow.setPosition(camPointer.x, camPointer.y);
 
 		if (startingSong) {
 			if (startedCountdown && !paused) {
@@ -501,7 +506,7 @@ class PlayState extends MusicBeatState {
 
 		if (FlxG.keys.justPressed.SEVEN) {
 			music.cease();
-			FlxG.switchState(new ChartEditor({songName: constructor.songName, difficulty: constructor.difficulty}));
+			FlxG.switchState(new game.editors.ChartEditor({songName: constructor.songName, difficulty: constructor.difficulty}));
 		}
 
 		#if debug
@@ -551,8 +556,11 @@ class PlayState extends MusicBeatState {
 						char = crowd;
 					else
 						char = (section.camPoint == 1) ? player : enemy;
+
+					var midX:Float = char.getMidpoint().x - 100 + char.cameraOffset[0];
+					var midY:Float = char.getMidpoint().y - 100 + char.cameraOffset[1];
 					if (camFollow.x != char.getMidpoint().x - 100)
-						camFollow.setPosition(char.getMidpoint().x - 100 + char.cameraOffset[0], char.getMidpoint().y - 100 + char.cameraOffset[1]);
+						camPointer.set(midX, midY);
 				}
 
 			default:

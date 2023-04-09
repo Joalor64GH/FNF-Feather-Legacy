@@ -60,7 +60,7 @@ class Main extends Sprite {
 }
 
 class CustomGame extends FlxGame {
-	public static var logSavePath:String = 'logs/FF-${Date.now().toString().replace(' ', '-').replace(':', "'")}.txt';
+	public static final logSavePath:String = 'logs/FF-${Date.now().toString().replace(' ', '-').replace(':', "'")}.txt';
 
 	override function create(_):Void {
 		try super.create(_) catch (e:Exception)

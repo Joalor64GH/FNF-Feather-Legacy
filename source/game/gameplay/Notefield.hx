@@ -110,6 +110,8 @@ class Notefield extends FlxGroup {
 
 		splash.antialiasing = UserSettings.get("antialiasing");
 		splash.depth = -Conductor.songPosition;
+
+		splash.alpha = 0.6;
 		splash.setPosition(receptor.x - receptor.width, receptor.y - receptor.height);
 		splash.playAnim('impact ${colors[index]}0' /*+ FlxG.random.int(0, 1)*/);
 		if (preload)

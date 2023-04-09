@@ -31,6 +31,11 @@ class BaseStage extends FlxGroup {
 	public var hudZoom:Float = 1.0;
 
 	/**
+	 * Defines the in-game camera speed
+	 */
+	public var cameraSpeed:Float = 1.0;
+
+	/**
 	 * Defines whether or not the crowd should appear on Stage
 	 */
 	public var displayCrowd:Bool = true;
