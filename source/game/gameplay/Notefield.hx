@@ -79,7 +79,7 @@ class Notefield extends FlxGroup {
 			receptor.setGraphicSize(Std.int(receptor.width * 0.7));
 			receptor.updateHitbox();
 
-			receptor.antialiasing = Settings.get("antialiasing");
+			receptor.antialiasing = UserSettings.get("antialiasing");
 
 			receptor.animation.finishCallback = function(name:String):Void {
 				if (name == 'confirm') {
@@ -98,8 +98,8 @@ class Notefield extends FlxGroup {
 	}
 
 	public function doSplash(index:Int, type:String, preload:Bool = false):Void {
-		if (!Settings.get("noteSplashes")
-			|| (Settings.get("noteSplashes") && !sys.FileSystem.exists(Paths.getPath('images/notes/${type}/NOTE_splashes', XML))))
+		if (!UserSettings.get("noteSplashes")
+			|| (UserSettings.get("noteSplashes") && !sys.FileSystem.exists(Paths.getPath('images/notes/${type}/NOTE_splashes', XML))))
 			return;
 
 		var receptor:FNFSprite = receptorObjects.members[index];
@@ -108,7 +108,7 @@ class Notefield extends FlxGroup {
 		splash.alpha = preload ? 0.000001 : 1;
 		splash.scale.set(1, 1);
 
-		splash.antialiasing = Settings.get("antialiasing");
+		splash.antialiasing = UserSettings.get("antialiasing");
 		splash.depth = -Conductor.songPosition;
 		splash.setPosition(receptor.x - receptor.width, receptor.y - receptor.height);
 		splash.playAnim('impact ${colors[index]}0' /*+ FlxG.random.int(0, 1)*/);

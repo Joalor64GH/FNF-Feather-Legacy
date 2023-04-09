@@ -32,7 +32,7 @@ class RatingPopup {
 		rating.depth = -Conductor.songPosition;
 		rating.playAnim(name);
 
-		rating.antialiasing = Settings.get("antialiasing");
+		rating.antialiasing = UserSettings.get("antialiasing");
 		rating.screenCenter();
 
 		rating.setGraphicSize(Std.int(rating.frameWidth * 0.7));
@@ -76,7 +76,7 @@ class RatingPopup {
 
 				numScore.depth = -Conductor.songPosition;
 				numScore.alpha = preload ? 0.000001 : 1;
-				numScore.antialiasing = Settings.get("antialiasing");
+				numScore.antialiasing = UserSettings.get("antialiasing");
 				numScore.screenCenter();
 				numScore.x = ratingLast.x - (35 * i);
 				numScore.playAnim('${scoreSeparated[i]}');

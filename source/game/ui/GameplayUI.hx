@@ -22,7 +22,7 @@ class GameplayUI extends FlxSpriteGroup {
 	public var infoText:FlxText;
 	public var cpuText:FlxText;
 
-	public var downscroll:Bool = Settings.get("scrollType") == "DOWN";
+	public var downscroll:Bool = UserSettings.get("scrollType") == "DOWN";
 
 	public function new():Void {
 		super();
@@ -53,8 +53,8 @@ class GameplayUI extends FlxSpriteGroup {
 		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(scoreText);
 
-		if (Settings.get("infoText") != 'NONE') {
-			infoText = new FlxText(0, 0, 0, Settings.get("infoText") == 'SONG' ? '- ${game.songMetadata.name} -' : '');
+		if (UserSettings.get("infoText") != 'NONE') {
+			infoText = new FlxText(0, 0, 0, UserSettings.get("infoText") == 'SONG' ? '- ${game.songMetadata.name} -' : '');
 			infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 			infoText.y = downscroll ? FlxG.height - infoText.height - 15 : 15;
 			infoText.screenCenter(X);
@@ -79,7 +79,7 @@ class GameplayUI extends FlxSpriteGroup {
 		add(featherText);
 
 		forEachOfType(FlxText, function(text:FlxText):Void text.borderSize = 1.5);
-		antialiasing = Settings.get("antialiasing");
+		antialiasing = UserSettings.get("antialiasing");
 		scrollFactor.set();
 
 		updateScore(true);
@@ -99,7 +99,7 @@ class GameplayUI extends FlxSpriteGroup {
 		iconPL.updateAnim(healthBar.percent);
 		iconOPP.updateAnim(100 - healthBar.percent);
 
-		if (Settings.get("infoText") == 'TIME') {
+		if (UserSettings.get("infoText") == 'TIME') {
 			if (game != null && infoText != null && Conductor.songPosition > 0) {
 				var time:Float = Math.floor(Conductor.songPosition / 1000);
 				var length:Float = Math.floor(game.music.inst.length / 1000);

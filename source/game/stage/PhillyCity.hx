@@ -39,7 +39,7 @@ class PhillyCity extends BaseStage {
 
 		phillyLight = new FlxSprite(phillyCity.x).loadGraphic(getObject('philly/win'));
 		phillyLight.scrollFactor.set(0.3, 0.3);
-		phillyLight.antialiasing = Settings.get("antialiasing");
+		phillyLight.antialiasing = UserSettings.get("antialiasing");
 		phillyLight.shader = lightShader.shader;
 		phillyLight.visible = false;
 		phillyLight.setGraphicSize(Std.int(phillyLight.width * 0.85));
@@ -56,7 +56,7 @@ class PhillyCity extends BaseStage {
 		add(phillyStreet);
 
 		// set antialiasing
-		forEachOfType(FlxSprite, function(sprite:FlxSprite):Void sprite.antialiasing = Settings.get("antialiasing"));
+		forEachOfType(FlxSprite, function(sprite:FlxSprite):Void sprite.antialiasing = UserSettings.get("antialiasing"));
 	}
 
 	var trainFrameTime:Float = 0;

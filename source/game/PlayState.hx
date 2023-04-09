@@ -231,13 +231,13 @@ class PlayState extends MusicBeatState {
 
 			var strumInitDist:Float = FlxG.width / 10;
 			var strumDistance:Float = FlxG.width / 2 * i;
-			if (isPlayer && Settings.get("centerScroll")) {
+			if (isPlayer && UserSettings.get("centerScroll")) {
 				strumInitDist = FlxG.width / 4;
 				strumDistance = 115;
 			}
 
 			var xPos:Float = (strumInitDist) + strumDistance;
-			var yPos:Float = Settings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 60;
+			var yPos:Float = UserSettings.get("scrollType") == "DOWN" ? FlxG.height - 150 : 60;
 			var character:Character = switch (i) {
 				case 1: player;
 				default: enemy;
@@ -248,7 +248,7 @@ class PlayState extends MusicBeatState {
 
 			var newField:Notefield = new Notefield(xPos, yPos, character, spacing);
 			newField.cpuControlled = !isPlayer;
-			if (Settings.get("centerScroll"))
+			if (UserSettings.get("centerScroll"))
 				newField.visible = isPlayer;
 			newField.ID = i;
 			noteFields.add(newField);
@@ -737,7 +737,7 @@ class PlayState extends MusicBeatState {
 					}
 				}
 			} else {
-				if (!Settings.get("ghostTapping"))
+				if (!UserSettings.get("ghostTapping"))
 					noteMiss(index, playerNotefield);
 			}
 

@@ -86,7 +86,7 @@ class Note extends FlxSpriteGroup {
 
 			if (isEnd) {
 				sustainEnd = new FNFSprite().loadFrames('images/notes/${type}/NOTE_assets', [{name: 'end', prefix: '${Notefield.colors[index]} hold end'}]);
-				sustainEnd.antialiasing = Settings.get("antialiasing");
+				sustainEnd.antialiasing = UserSettings.get("antialiasing");
 				sustainEnd.setGraphicSize(Std.int(sustainEnd.width * 0.7));
 				sustainEnd.updateHitbox();
 				sustainEnd.playAnim('end');
@@ -125,7 +125,7 @@ class NoteObj extends FNFSprite {
 		updateHitbox();
 
 		playAnim('${Notefield.colors[_note.index]} note');
-		antialiasing = Settings.get("antialiasing");
+		antialiasing = UserSettings.get("antialiasing");
 		moves = false;
 	}
 }
@@ -154,7 +154,7 @@ class SustainObj extends FlxTiledSprite {
 		setGraphicSize(Std.int(width * 0.7));
 		// updateHitbox();
 
-		antialiasing = Settings.get("antialiasing");
+		antialiasing = UserSettings.get("antialiasing");
 		moves = false;
 	}
 }

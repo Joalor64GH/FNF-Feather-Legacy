@@ -25,7 +25,7 @@ class HealthIcon extends FlxSprite {
 		initialWidth = width;
 		initialHeight = height;
 
-		antialiasing = Settings.get("antialiasing") && !char.endsWith("-pixel");
+		antialiasing = UserSettings.get("antialiasing") && !char.endsWith("-pixel");
 		scrollFactor.set();
 	}
 

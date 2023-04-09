@@ -171,7 +171,7 @@ class ChartLoader {
 				type = note.type;
 
 			var spawnedNote:Note = new Note(note.step, note.index, 0, type);
-			spawnedNote.downscroll = Settings.get("scrollType") == "DOWN";
+			spawnedNote.downscroll = UserSettings.get("scrollType") == "DOWN";
 			spawnedNote.strumline = note.strumline;
 			unspawnNoteList.push(spawnedNote);
 
@@ -181,7 +181,7 @@ class ChartLoader {
 				for (noteSustain in 0...Math.floor(note.sustainTime / Conductor.stepCrochet)) {
 					var sustainStep:Float = note.step + (Conductor.stepCrochet * Math.floor(noteSustain)) + Conductor.stepCrochet;
 					var spawnedSustain:Note = new Note(sustainStep, note.index, note.sustainTime, type, prevNote);
-					spawnedSustain.downscroll = Settings.get("scrollType") == "DOWN";
+					spawnedSustain.downscroll = UserSettings.get("scrollType") == "DOWN";
 					spawnedSustain.strumline = note.strumline;
 					if (note.sustainTime == noteSustain - 1)
 						spawnedSustain.isEnd = true;

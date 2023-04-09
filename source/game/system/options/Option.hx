@@ -74,11 +74,11 @@ class Option {
 	}
 
 	public inline function get_value():Dynamic {
-		return Settings.get(apiKey);
+		return UserSettings.get(apiKey);
 	}
 
 	public inline function set_value(Value:Dynamic):Dynamic {
-		Settings.set(apiKey, Value);
+		UserSettings.set(apiKey, Value);
 		if (onSet != null)
 			onSet();
 
@@ -86,10 +86,10 @@ class Option {
 	}
 
 	@:noCompletion inline function getType():Int {
-		if (Std.isOfType(Settings.get(apiKey), Int) || Std.isOfType(Settings.get(apiKey), Float))
+		if (Std.isOfType(UserSettings.get(apiKey), Int) || Std.isOfType(UserSettings.get(apiKey), Float))
 			return Number;
 
-		if (Std.isOfType(Settings.get(apiKey), String))
+		if (Std.isOfType(UserSettings.get(apiKey), String))
 			return StringList;
 
 		return Checkmark;

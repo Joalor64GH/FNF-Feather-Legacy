@@ -71,7 +71,7 @@ class Character extends FNFSprite {
 		name = _name;
 		isPlayer = _isPlayer;
 
-		antialiasing = Settings.get("antialiasing") && !name.endsWith("-pixel");
+		antialiasing = UserSettings.get("antialiasing") && !name.endsWith("-pixel");
 
 		if (icon == null)
 			icon = name;

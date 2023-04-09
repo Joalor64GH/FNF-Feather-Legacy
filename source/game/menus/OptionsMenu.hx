@@ -114,9 +114,9 @@ class OptionsMenu extends MusicBeatSubState {
 
 						case Number:
 							var nextValue:Int = controls.justPressed("left") ? -1 : 1;
-							var keyValue:Int = Settings.get(curOption.apiKey) + curOption.decimals * nextValue;
+							var keyValue:Int = UserSettings.get(curOption.apiKey) + curOption.decimals * nextValue;
 							if (keyValue < curOption.minimum || keyValue > curOption.maximum)
-								keyValue = Settings.get(curOption.apiKey) + nextValue;
+								keyValue = UserSettings.get(curOption.apiKey) + nextValue;
 
 							curOption.value = FlxMath.wrap(keyValue, curOption.minimum, curOption.maximum);
 					}
@@ -126,8 +126,8 @@ class OptionsMenu extends MusicBeatSubState {
 				}
 
 				if (controls.justPressed("back")) {
-					Settings.save();
-					Settings.update();
+					UserSettings.save();
+					UserSettings.update();
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 					isChanging = false;
 				}

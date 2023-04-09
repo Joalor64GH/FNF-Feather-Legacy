@@ -39,7 +39,7 @@ class Main extends Sprite {
 
 		CacheHandler.gcEnable();
 		Controls.self = new Controls();
-		game.system.Settings.load();
+		game.system.UserSettings.load();
 
 		TransitionState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
 		TransitionState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, new FlxPoint(0, 1));
