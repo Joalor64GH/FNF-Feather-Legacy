@@ -2,7 +2,7 @@ package game.system;
 
 class UserSettings {
 	/**
-	 * when creating UserSettings, do remember that a value can affect it's type
+	 * when creating Options, do remember that a value can affect it's type
 	 * for instance, String values will require you to assign an array to your option
 	 * integers and floats will require you to assign a minimum and maximum value to your option
 	 * and so on...
