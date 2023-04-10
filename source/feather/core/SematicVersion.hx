@@ -1,4 +1,4 @@
-package flixel.system;
+package feather.core;
 
 import sys.io.Process;
 
@@ -6,8 +6,7 @@ import sys.io.Process;
  * Helper object for semantic versioning.
  * @see   http://semver.org/
  */
-@:build(flixel.system.macros.FlxGitSHA.buildGitSHA("flixel"))
-class FlxVersion {
+class SematicVersion {
 	public var major(default, null):Int;
 	public var minor(default, null):Int;
 	public var patch(default, null):Int;
@@ -29,9 +28,10 @@ class FlxVersion {
 		var returnString:String = '${major}.${minor}.${patch}';
 		if (showGitSHA) {
 			var sha:String = getGitSHA();
-			if (sha != "")
+			if (sha != "") {
 				sha = "@" + sha.substring(0, 7);
-			returnString += ' ${sha}';
+				returnString += ' ${sha}';
+			}
 		}
 		return returnString;
 	}
@@ -46,10 +46,8 @@ class FlxVersion {
 
 	public static function getProcessOutput(cmd:String, args:Array<String>):String {
 		try {
-			var process = new Process(cmd, args);
-			var output = "";
-
-			try output = process.stdout.readAll().toString() catch (_:Dynamic) {}
+			var process:Process = new Process(cmd, args);
+			var output:String = try process.stdout.readAll().toString() catch (_:Dynamic) "";
 			process.close();
 			return output;
 		} catch (_:Dynamic)

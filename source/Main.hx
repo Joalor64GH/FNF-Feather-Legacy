@@ -2,12 +2,12 @@ package;
 
 import feather.core.Controls;
 import feather.core.FPS;
+import feather.core.SematicVersion;
 import feather.core.Utils.TransitionState;
 import feather.core.handlers.CacheHandler;
 import flixel.FlxGame;
 import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
-import flixel.system.FlxVersion;
 import openfl.display.Sprite;
 import sys.FileSystem;
 import sys.io.File;
@@ -20,8 +20,8 @@ class Main extends Sprite {
 	public static var self:Main;
 
 	// don't set "branch" as null, set it to "" instead!!!
-	public static var featherVer:FlxVersion = new FlxVersion(1, 0, 0, true);
-	public static var fnfVer:FlxVersion = new FlxVersion(0, 2, 8, false);
+	public static var featherVer:SematicVersion = new SematicVersion(1, 0, 0, true);
+	public static var fnfVer:SematicVersion = new SematicVersion(0, 2, 8, false);
 
 	public var fpsCounter:FPS;
 
