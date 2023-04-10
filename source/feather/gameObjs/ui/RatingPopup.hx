@@ -75,22 +75,22 @@ class RatingPopup {
 					return combo;
 				});
 
-				numSfeather.core.depth = -Conductor.songPosition;
-				numSfeather.core.alpha = preload ? 0.000001 : 1;
-				numSfeather.core.antialiasing = UserSettings.get("antialiasing");
-				numSfeather.core.screenCenter();
-				numSfeather.core.x = ratingLast.x - (35 * i);
-				numSfeather.core.playAnim('${scoreSeparated[i]}');
+				numScore.depth = -Conductor.songPosition;
+				numScore.alpha = preload ? 0.000001 : 1;
+				numScore.antialiasing = UserSettings.get("antialiasing");
+				numScore.screenCenter();
+				numScore.x = ratingLast.x - (35 * i);
+				numScore.playAnim('${scoreSeparated[i]}');
 
-				numSfeather.core.setGraphicSize(Std.int(numSfeather.core.frameWidth * 0.5));
-				// numSfeather.core.updateHitbox();
+				numScore.setGraphicSize(Std.int(numScore.frameWidth * 0.5));
+				// numScore.updateHitbox();
 
-				numSfeather.core.acceleration.y = FlxG.random.int(200, 300);
-				numSfeather.core.velocity.y -= FlxG.random.int(140, 160);
-				numSfeather.core.velocity.x = FlxG.random.float(-5, 5);
+				numScore.acceleration.y = FlxG.random.int(200, 300);
+				numScore.velocity.y -= FlxG.random.int(140, 160);
+				numScore.velocity.x = FlxG.random.float(-5, 5);
 
 				FlxTween.tween(numScore, {alpha: 0}, (Conductor.stepCrochet * 2) / 1000, {
-					onComplete: (twn:FlxTween) -> numSfeather.core.kill(),
+					onComplete: (twn:FlxTween) -> numScore.kill(),
 					startDelay: (Conductor.beatCrochet) / 1000
 				});
 			}
