@@ -1,6 +1,7 @@
 package feather.state;
 
 import feather.core.Highscore;
+import feather.core.FNFSprite;
 import feather.core.music.ChartDefs;
 import feather.core.music.ChartLoader;
 import feather.core.music.Conductor;
@@ -70,7 +71,8 @@ class PlayState extends MusicBeatState {
 		return noteFields.members[playerStrumline];
 
 	public var gameUI:GameplayUI;
-	public var ratingUI:RatingPopup;
+	public var ratingGroup:FlxTypedGroup<FNFSprite>;
+	public var numberGroup:FlxTypedGroup<FNFSprite>;
 	public var currentStat:Highscore;
 
 	// Cameras
@@ -226,8 +228,6 @@ class PlayState extends MusicBeatState {
 		noteFields = new FlxTypedGroup<Notefield>();
 		addOnHUD(noteFields);
 
-		ratingUI = new RatingPopup();
-
 		for (i in 0...2) {
 			var isPlayer:Bool = i == playerStrumline;
 			var spacing:Float = 160 * 0.7;
@@ -266,6 +266,11 @@ class PlayState extends MusicBeatState {
 		for (type in uniqueNoteStorage)
 			noteFields.members[0].doSplash(0, type, true);
 
+		ratingGroup = new FlxTypedGroup<FNFSprite>();
+		add(ratingGroup);
+		numberGroup = new FlxTypedGroup<FNFSprite>();
+		add(numberGroup);
+
 		controls.onKeyPressed.add(onKeyPress);
 		controls.onKeyReleased.add(onKeyRelease);
 
@@ -286,6 +291,9 @@ class PlayState extends MusicBeatState {
 	public var inCutscene:Bool = true;
 
 	public function songCutscene():Void {
+		displayRating('sick', true);
+		displayCombo(true);
+
 		Conductor.songPosition = Conductor.beatCrochet * 16;
 		startCountdown();
 	}
@@ -686,8 +694,9 @@ class PlayState extends MusicBeatState {
 
 					rating = currentStat.judgeNote(note.step);
 					currentStat.gottenRatings.set(rating, currentStat.gottenRatings.get(rating) + 1);
-					ratingUI.popRating(rating);
-					ratingUI.popCombo();
+					displayRating(rating);
+					if (currentStat.combo >= 5)
+						displayCombo();
 
 					if (rating == SICK && note.doSplash)
 						strum.doSplash(note.index, note.type);
@@ -702,6 +711,88 @@ class PlayState extends MusicBeatState {
 			if (!note.isSustain)
 				strum.remove(note, true);
 		}
+	}
+
+	var lastRating:FNFSprite;
+
+	public function displayRating(name:String, preload:Bool = false):Void {
+		var curRating:FNFSprite = ratingGroup.recycle(FNFSprite, function():FNFSprite {
+			var sprite:FNFSprite = new FNFSprite(0, 0);
+			sprite.frames = Utils.getUIAsset('ratingSheet', XML);
+			for (i in 0...Highscore.RATINGS[0].length)
+				sprite.addAnim(Highscore.RATINGS[0][i], Highscore.RATINGS[0][i]);
+			return sprite;
+		});
+
+		curRating.alpha = preload ? 0.000001 : 1;
+		curRating.depth = -Conductor.songPosition;
+		curRating.animation.play(name);
+
+		curRating.antialiasing = UserSettings.get("antialiasing");
+		curRating.screenCenter();
+
+		curRating.setGraphicSize(Std.int(curRating.frameWidth * 0.7));
+		// curRating.updateHitbox();
+
+		curRating.acceleration.y = 550;
+		curRating.velocity.y = -FlxG.random.int(140, 175);
+		curRating.velocity.x = -FlxG.random.int(0, 10);
+
+		FlxTween.tween(curRating, {alpha: 0}, Conductor.beatCrochet / 1000, {
+			onComplete: (twn:FlxTween) -> curRating.kill(),
+			startDelay: ((Conductor.beatCrochet + Conductor.stepCrochet * 2) / 1000)
+		});
+		lastRating = curRating;
+		ratingGroup.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
+	}
+
+	public function displayCombo(preload:Bool = false):Void {
+		var scoreSeparated:Array<Int> = [];
+
+		var tempCombo:Int = currentStat.combo;
+		while (tempCombo != 0) {
+			scoreSeparated.push(tempCombo % 10);
+			tempCombo = Std.int(tempCombo / 10);
+		}
+		while (scoreSeparated.length < 3)
+			scoreSeparated.push(0);
+
+		for (i in 0...scoreSeparated.length) {
+			/* // todo: make this work (it crashes)
+				var numberCombo:FNFSprite = numberGroup.recycle(FNFSprite, function():FNFSprite {
+					var sprite:FNFSprite = new FNFSprite(0, 0).loadGraphic(Utils.getUIAsset('comboNumbers'), true, 108, 142);
+					for (i in 0...10)
+						sprite.animation.add('num${i}', [i]);
+					return sprite;
+				});
+				numberCombo.depth = -Conductor.songPosition;
+			 */
+
+			var numberCombo:flixel.FlxSprite = new flixel.FlxSprite().loadGraphic(Utils.getUIAsset('comboNumbers'), true, 108, 142);
+			for (i in 0...10)
+				numberCombo.animation.add('num${i}', [i]);
+			numberCombo.setGraphicSize(Std.int(numberCombo.frameWidth * 0.5));
+			numberCombo.updateHitbox();
+
+			numberCombo.alpha = preload ? 0.000001 : 1;
+			numberCombo.antialiasing = UserSettings.get("antialiasing");
+			numberCombo.screenCenter();
+			numberCombo.x = lastRating.x - (45 * i) + 150;
+			numberCombo.y = lastRating.y + 120;
+
+			numberCombo.acceleration.y = 550;
+			numberCombo.velocity.y = -FlxG.random.int(140, 175);
+			numberCombo.velocity.x = -FlxG.random.int(0, 10);
+
+			numberCombo.animation.play('num${scoreSeparated[i]}');
+			add(numberCombo);
+
+			FlxTween.tween(numberCombo, {alpha: 0}, Conductor.beatCrochet / 1000, {
+				onComplete: (twn:FlxTween) -> numberCombo.kill(),
+				startDelay: ((Conductor.beatCrochet + Conductor.stepCrochet * 2) / 1000)
+			});
+		}
+		numberGroup.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
 	}
 
 	public var notesPressed:Array<Bool> = [];
@@ -752,12 +843,11 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function noteMiss(direction:Int = 0, ?strum:Notefield, ?showMiss:Bool = true):Void {
-		if (currentStat.combo < 0)
+		if (currentStat.combo > 0)
 			currentStat.combo = 0;
 		else {
 			if (currentStat.combo > 1)
 				currentStat.breaks++;
-
 			// miss combo numbers
 			currentStat.combo--;
 		}
@@ -781,7 +871,7 @@ class PlayState extends MusicBeatState {
 		strum.character.playAnim(animName, true);
 
 		if (showMiss)
-			ratingUI.popRating('miss');
+			displayRating('miss');
 
 		currentStat.updateHealth(4);
 		currentStat.updateRatings(4);

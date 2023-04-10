@@ -39,6 +39,7 @@
 
 	<define name="MODDING_ENABLED" />
 	<define name="SCRIPTING_ENABLED" />
+	<define name="CRASH_HANDLER_ENABLED" />
 
 	<!-- _______ Paths _______ -->
 
@@ -84,8 +85,10 @@
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 
 	<!-- Always enable Null Object Reference check -->
-	<haxedef name="HXCPP_CHECK_POINTER" />
-	<haxedef name="HXCPP_STACK_LINE" />
+	<section if="CRASH_HANDLER_ENABLED">
+		<haxedef name="HXCPP_CHECK_POINTER" />
+		<haxedef name="HXCPP_STACK_LINE" />
+	</section>
 
 	<!-- Error Handling at Runtime for Scripts -->
 	<haxedef name="hscriptPos" if="SCRIPTING_ENABLED" />

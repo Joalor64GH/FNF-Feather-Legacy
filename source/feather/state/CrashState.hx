@@ -71,7 +71,7 @@ class CrashState extends FlxUIState {
 
 		var finalText:String = '';
 		if (_error != 'FORCED CRASH') {
-			finalText += 'Log saved at "${Main.CustomGame.logSavePath}"\n';
+			finalText += 'Log saved at "${Main.logSavePath}"\n';
 			finalText += 'Consider taking a Screenshot and reporting this error';
 			finalText += '\nThank you for your Patience';
 		} else

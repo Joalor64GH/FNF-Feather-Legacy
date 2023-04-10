@@ -7,8 +7,6 @@ import feather.core.handlers.CacheHandler;
 import flixel.FlxGame;
 import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
-import haxe.CallStack;
-import haxe.Exception;
 import openfl.display.Sprite;
 import sys.FileSystem;
 import sys.io.File;
@@ -18,7 +16,11 @@ typedef VersionScheme = {
 	var branch:String;
 }
 
+typedef BaseGameObject = #if CRASH_HANDLER_ENABLED CustomGame #else FlxGame #end;
+
 class Main extends Sprite {
+	public static final logSavePath:String = 'logs/FF-${Date.now().toString().replace(' ', '-').replace(':', "'")}.txt';
+
 	public static var self:Main;
 
 	// don't set "branch" as null, set it to "" instead!!!
@@ -32,7 +34,7 @@ class Main extends Sprite {
 
 		self = this;
 
-		var baseGame:CustomGame = new CustomGame(1280, 720, feather.state.menus.MainMenu, 60, 60, true, false);
+		var baseGame:BaseGameObject = new BaseGameObject(1280, 720, feather.state.menus.MainMenu, 60, 60, true, false);
 		addChild(baseGame);
 
 		fpsCounter = new FPS(/*10, 5, FlxColor.WHITE*/);
@@ -61,42 +63,40 @@ class Main extends Sprite {
 }
 
 class CustomGame extends FlxGame {
-	public static final logSavePath:String = 'logs/FF-${Date.now().toString().replace(' ', '-').replace(':', "'")}.txt';
-
 	override function create(_):Void {
-		try super.create(_) catch (e:Exception)
+		try super.create(_) catch (e:haxe.Exception)
 			return onError(e);
 	}
 
 	override function onFocus(_):Void {
-		try super.onFocus(_) catch (e:Exception)
+		try super.onFocus(_) catch (e:haxe.Exception)
 			return onError(e);
 	}
 
 	override function onFocusLost(_):Void {
-		try super.onFocusLost(_) catch (e:Exception)
+		try super.onFocusLost(_) catch (e:haxe.Exception)
 			return onError(e);
 	}
 
 	override function onEnterFrame(_):Void {
-		try super.onEnterFrame(_) catch (e:Exception)
+		try super.onEnterFrame(_) catch (e:haxe.Exception)
 			return onError(e);
 	}
 
 	override function update():Void {
-		try super.update() catch (e:Exception)
+		try super.update() catch (e:haxe.Exception)
 			return onError(e);
 	}
 
 	override function draw():Void {
-		try super.draw() catch (e:Exception)
+		try super.draw() catch (e:haxe.Exception)
 			return onError(e);
 	}
 
-	public function onError(e:Exception):Void {
+	public function onError(e:haxe.Exception):Void {
 		var caughtErrors:Array<String> = [];
 
-		for (item in CallStack.exceptionStack(true)) {
+		for (item in haxe.CallStack.exceptionStack(true)) {
 			switch (item) {
 				case CFunction:
 					caughtErrors.push('Non-Haxe (C) Function');
@@ -119,7 +119,7 @@ class CustomGame extends FlxGame {
 			if (!FileSystem.exists('logs'))
 				FileSystem.createDirectory('logs');
 
-			File.saveContent(logSavePath,
+			File.saveContent(Main.logSavePath,
 				'[Error Stack]\n-----------\n${msg}\n-----------\n[Caught: ${e.message}]\n-----------\nConsider reporting this error to our GitHub Page: https://github.com/BeastlyGabi/FNF-Feather\n');
 		} catch (e:Dynamic)
 			Sys.println('Error!\nCouldn\'t save crash log\nCaught: ${e}');

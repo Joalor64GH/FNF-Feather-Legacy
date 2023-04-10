@@ -54,7 +54,6 @@ class FNFSprite extends FlxSprite implements ISpriteOffset {
 		if (animations != null)
 			for (i in animations)
 				addAnim(i.name, i.prefix, i.animOffsets, i.framerate, i.looped, i.indices, i.flipX, i.flipY);
-
 		return this;
 	}
 
