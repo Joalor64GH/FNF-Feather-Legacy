@@ -2,10 +2,11 @@ package feather.state;
 
 import feather.gameObjs.ui.Alphabet;
 import flixel.FlxG;
+import flixel.addons.ui.FlxUIState;
 import flixel.effects.FlxFlicker;
 import flixel.text.FlxText;
 
-class WarningState extends MusicBeatState {
+class WarningState extends FlxUIState {
 	var titleThingy:Alphabet;
 	var textThingy:FlxText;
 
@@ -35,7 +36,7 @@ class WarningState extends MusicBeatState {
 		warningText += '\nWith it containing all the essential features it needs.\n\nThank you for your patience.';
 		warningText += '\n\nPress ENTER or ESCAPE to leave this screen\nand go back to the main menu.';
 
-		textThingy = new FlxText(titleThingy.x - titleThingy.width, titleThingy.y + 130, FlxG.width, warningText);
+		textThingy = new FlxText(titleThingy.x - titleThingy.width, titleThingy.y + 110, FlxG.width, warningText);
 		textThingy.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 32, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		textThingy.screenCenter(X);
 		add(textThingy);
