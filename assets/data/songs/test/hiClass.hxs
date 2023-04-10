@@ -1,4 +1,4 @@
-import game.PlayState;
+import feather.state.PlayState;
 
 class Hi
 {

@@ -35,8 +35,6 @@ class FlxTransitionableState extends FlxState {
 	public static var skipNextTransIn:Bool = false;
 	public static var skipNextTransOut:Bool = false;
 
-	public static var nextStateCamera:FlxCamera = null;
-
 	// beginning & ending transitions for THIS state:
 	public var transIn:TransitionData;
 	public var transOut:TransitionData;
@@ -111,8 +109,8 @@ class FlxTransitionableState extends FlxState {
 			}
 
 			var _trans = createTransition(transIn);
-			if (nextStateCamera != null)
-				_trans.camera = nextStateCamera;
+			if (FlxG.cameras.list[FlxG.cameras.list.length - 1] != null)
+				_trans.camera = FlxG.cameras.list[FlxG.cameras.list.length - 1];
 
 			_trans.setStatus(FULL);
 			openSubState(_trans);
@@ -129,8 +127,8 @@ class FlxTransitionableState extends FlxState {
 		_onExit = OnExit;
 		if (hasTransOut) {
 			var _trans = createTransition(transOut);
-			if (nextStateCamera != null)
-				_trans.camera = nextStateCamera;
+			if (FlxG.cameras.list[FlxG.cameras.list.length - 1] != null)
+				_trans.camera = FlxG.cameras.list[FlxG.cameras.list.length - 1];
 
 			_trans.setStatus(EMPTY);
 			openSubState(_trans);
@@ -177,7 +175,5 @@ class FlxTransitionableState extends FlxState {
 		if (_onExit != null) {
 			_onExit();
 		}
-
-		nextStateCamera = null;
 	}
 }

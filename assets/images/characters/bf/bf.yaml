@@ -4,7 +4,7 @@ animations:
       animOffsets: [5 0]
     - name: hey
       prefix: "BF HEY!!"
-      animOffsets:  [7, 5]
+      animOffsets: [7, 5]
     - name: scared
       prefix: "BF idle shaking"
       animOffsets: [4, 1]

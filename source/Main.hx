@@ -1,8 +1,9 @@
 package;
 
-import core.Controls;
-import core.FPS;
-import core.assets.CacheHandler;
+import feather.core.Controls;
+import feather.core.FPS;
+import feather.core.Utils.TransitionState;
+import feather.core.handlers.CacheHandler;
 import flixel.FlxGame;
 import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
@@ -31,7 +32,7 @@ class Main extends Sprite {
 
 		self = this;
 
-		var baseGame:CustomGame = new CustomGame(1280, 720, game.menus.MainMenu, 60, 60, true, false);
+		var baseGame:CustomGame = new CustomGame(1280, 720, feather.state.menus.MainMenu, 60, 60, true, false);
 		addChild(baseGame);
 
 		fpsCounter = new FPS(/*10, 5, FlxColor.WHITE*/);
@@ -39,7 +40,7 @@ class Main extends Sprite {
 
 		CacheHandler.gcEnable();
 		Controls.self = new Controls();
-		game.system.UserSettings.load();
+		feather.core.handlers.UserSettings.load();
 
 		TransitionState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
 		TransitionState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, new FlxPoint(0, 1));
@@ -124,7 +125,7 @@ class CustomGame extends FlxGame {
 			Sys.println('Error!\nCouldn\'t save crash log\nCaught: ${e}');
 
 		@:privateAccess {
-			FlxG.game._requestedState = new core.CrashState(msg, e.message, Type.getClass(FlxG.state));
+			FlxG.game._requestedState = new feather.state.CrashState(msg, e.message, Type.getClass(FlxG.state));
 			FlxG.game.switchState();
 		}
 	}
