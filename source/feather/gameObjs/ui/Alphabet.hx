@@ -31,7 +31,7 @@ class Alphabet extends FlxSpriteGroup {
 	override function set_color(color:Int):Int {
 		for (object in this.members)
 			if (Std.isOfType(object, Letter))
-				cast(object, Letter).setColor(color, bold);
+				cast(object, Letter).setColor(color);
 
 		return super.set_color(color);
 	}
@@ -69,7 +69,7 @@ class Alphabet extends FlxSpriteGroup {
 					offsetX += 40 * textSpaces;
 				textSpaces = 0;
 
-				var newLetter:Letter = new Letter(offsetX, 0, size);
+				var newLetter:Letter = new Letter(offsetX, 0, !bold, size);
 				if (symbol)
 					newLetter.createSym(txt);
 				if (number) {
@@ -77,7 +77,7 @@ class Alphabet extends FlxSpriteGroup {
 					newLetter.playAnim(txt);
 					newLetter.updateHitbox();
 				}
-				newLetter.createSprite(txt, !bold);
+				newLetter.createSprite(txt);
 				add(newLetter);
 
 				storedLetters.push(newLetter);
@@ -135,6 +135,7 @@ class Letter extends FNFSprite {
 			symbols: "!@#$%&*()[]{}'`´~^.,;:/|\\?<>+-_=<>"
 		};
 
+	public var bold:Bool = false;
 	public var size(default, set):Float = 1;
 
 	public var row:Int = 0;
@@ -149,10 +150,11 @@ class Letter extends FNFSprite {
 
 		frames = AssetHandler.getAsset("images/ui/default/alphabet", XML);
 		antialiasing = UserSettings.get("antialiasing");
+		this.bold = bold;
 		this.size = size;
 	}
 
-	public function setColor(color:FlxColor, bold:Bool = false):Void {
+	public function setColor(color:FlxColor):Void {
 		if (bold) {
 			colorTransform.redMultiplier = color.redFloat;
 			colorTransform.greenMultiplier = color.greenFloat;
@@ -164,7 +166,7 @@ class Letter extends FNFSprite {
 		}
 	}
 
-	public function createSprite(char:String, bold:Bool = false):Void {
+	public function createSprite(char:String):Void {
 		var animName:String = '';
 		animName = char + " lowercase";
 		if (bold)

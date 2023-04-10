@@ -4,7 +4,7 @@ import feather.core.Controls;
 import feather.core.music.Conductor;
 import flixel.FlxSubState;
 
-class MusicBeatSubState extends FlxSubState implements IMusicFunctions {
+class MusicBeatSubState extends FlxSubState implements IBeatState {
 	public var controls(get, never):Controls;
 
 	function get_controls():Controls
@@ -37,11 +37,9 @@ class MusicBeatSubState extends FlxSubState implements IMusicFunctions {
 			beatContainer.update(elapsed);
 	}
 
-	public function onBeat():Void {}
+	public function onBeat(curBeat:Int):Void {}
 
-	public function onStep():Void {}
+	public function onStep(curStep:Int):Void {}
 
-	public function onSec():Void {}
-
-	public function onTick():Void {}
+	public function onSec(curSec:Int):Void {}
 }

@@ -65,15 +65,7 @@ class MainMenu extends MusicBeatState {
 			optionsGroup.add(option);
 		}
 
-		var branchFunkin:String = '';
-		if (Main.fnfVer.branch != '' && Main.fnfVer.branch != null)
-			branchFunkin = '(${Main.fnfVer.branch})';
-
-		var branchFeather:String = '';
-		if (Main.featherVer.branch != '' && Main.featherVer.branch != null)
-			branchFeather = '(${Main.featherVer.branch})';
-
-		var versionText:FlxText = new FlxText(0, 0, 0, 'Funkin\' v${Main.fnfVer.number} ${branchFunkin}\nFeather v${Main.featherVer.number} ${branchFeather}');
+		var versionText:FlxText = new FlxText(0, 0, 0, 'Funkin\' v${Main.fnfVer.toString()}\nFeather v${Main.featherVer.toString()}');
 		versionText.setFormat(Paths.font('vcr'), 16, FlxColor.WHITE, LEFT, OUTLINE, 0xFF000000);
 		versionText.setPosition(5, FlxG.height - versionText.height - 5);
 		add(versionText);

@@ -604,8 +604,8 @@ class PlayState extends MusicBeatState {
 
 	public var zoomBeat:Int = 4;
 
-	public override function onBeat():Void {
-		super.onBeat();
+	public override function onBeat(curBeat:Int):Void {
+		super.onBeat(curBeat);
 
 		callFn("beatHit", [curBeat]);
 		charactersDance(curBeat);
@@ -620,16 +620,16 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public override function onStep():Void {
-		super.onStep();
+	public override function onStep(curStep:Int):Void {
+		super.onStep(curStep);
 
 		callFn("stepHit", [curStep]);
 		gameStage.onStep(curStep);
 		music.resyncFunction();
 	}
 
-	public override function onSec():Void {
-		super.onSec();
+	public override function onSec(curSec:Int):Void {
+		super.onSec(curSec);
 
 		callFn("secHit", [curSec]);
 		gameStage.onSec(curSec);

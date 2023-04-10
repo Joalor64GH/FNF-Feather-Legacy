@@ -1,5 +1,6 @@
 package feather.stage;
 
+import feather.core.music.Conductor.IBeatState;
 import feather.state.PlayState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
@@ -7,7 +8,7 @@ import flixel.math.FlxPoint;
 /*
  * Extensible Class for handling the game's backgrounds, the so called "Stages"
 **/
-class BaseStage extends FlxGroup {
+class BaseStage extends FlxGroup implements IBeatState {
 	/**
 	 * Helper variable, gives access to `PlayState`
 	 */

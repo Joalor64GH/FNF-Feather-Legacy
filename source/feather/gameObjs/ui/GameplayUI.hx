@@ -68,11 +68,7 @@ class GameplayUI extends FlxSpriteGroup {
 		cpuText.alpha = 0.6;
 		add(cpuText);
 
-		var engineName:String = 'Feather';
-		if (Main.featherVer.branch != '' && Main.featherVer.branch != null)
-			engineName += ' ${Main.featherVer.branch}';
-
-		var featherText:FlxText = new FlxText(0, 0, 0, '[${engineName.toUpperCase()} v${Main.featherVer.number}]');
+		var featherText:FlxText = new FlxText(0, 0, 0, '[FEATHER v${Main.featherVer.toString()}]');
 		featherText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 16, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
 		featherText.setPosition(FlxG.width - featherText.width - 5, FlxG.height - featherText.height - 5);
 		add(featherText);

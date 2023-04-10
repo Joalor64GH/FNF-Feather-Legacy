@@ -7,14 +7,10 @@ import feather.core.handlers.CacheHandler;
 import flixel.FlxGame;
 import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
+import flixel.system.FlxVersion;
 import openfl.display.Sprite;
 import sys.FileSystem;
 import sys.io.File;
-
-typedef VersionScheme = {
-	var number:String;
-	var branch:String;
-}
 
 typedef BaseGameObject = #if CRASH_HANDLER_ENABLED CustomGame #else FlxGame #end;
 
@@ -24,8 +20,8 @@ class Main extends Sprite {
 	public static var self:Main;
 
 	// don't set "branch" as null, set it to "" instead!!!
-	public static var featherVer:VersionScheme = {number: "1.0.0", branch: "BETA"};
-	public static var fnfVer:VersionScheme = {number: "0.2.8", branch: ""};
+	public static var featherVer:FlxVersion = new FlxVersion(1, 0, 0, true);
+	public static var fnfVer:FlxVersion = new FlxVersion(0, 2, 8, false);
 
 	public var fpsCounter:FPS;
 
@@ -34,18 +30,18 @@ class Main extends Sprite {
 
 		self = this;
 
-		var baseGame:BaseGameObject = new BaseGameObject(1280, 720, feather.state.menus.MainMenu, 60, 60, true, false);
+		var baseGame:BaseGameObject = new BaseGameObject(1280, 720, feather.state.WarningState, 60, 60, true, false);
 		addChild(baseGame);
 
 		fpsCounter = new FPS(/*10, 5, FlxColor.WHITE*/);
 		addChild(fpsCounter);
 
+		TransitionState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
+		TransitionState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, new FlxPoint(0, 1));
+
 		CacheHandler.gcEnable();
 		Controls.self = new Controls();
 		feather.core.handlers.UserSettings.load();
-
-		TransitionState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
-		TransitionState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, new FlxPoint(0, 1));
 
 		FlxG.autoPause = false;
 		FlxG.fixedTimestep = true;

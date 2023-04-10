@@ -4,7 +4,7 @@ import feather.core.Controls;
 import feather.core.music.Conductor;
 import flixel.addons.ui.FlxUIState;
 
-class MusicBeatState extends FlxUIState implements IMusicFunctions {
+class MusicBeatState extends FlxUIState implements IBeatState {
 	public var globals:Array<ScriptHandler> = [];
 
 	public var controls(get, never):Controls;
@@ -76,19 +76,15 @@ class MusicBeatState extends FlxUIState implements IMusicFunctions {
 		}
 	}
 
-	public function onBeat():Void {
+	public function onBeat(curBeat:Int):Void {
 		// receive beats here
 	}
 
-	public function onStep():Void {
+	public function onStep(curStep:Int):Void {
 		// receive steps here
 	}
 
-	public function onSec():Void {
+	public function onSec(curSec:Int):Void {
 		// receive sections here
-	}
-
-	public function onTick():Void {
-		// receive music ticks here
 	}
 }

@@ -231,8 +231,8 @@ class ChartEditor extends MusicBeatState {
 		infoText.text = getInfoText();
 	}
 
-	public override function onStep():Void {
-		super.onStep();
+	public override function onStep(curStep:Int):Void {
+		super.onStep(curStep);
 		music.resyncFunction();
 	}
 
