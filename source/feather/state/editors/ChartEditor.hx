@@ -166,7 +166,7 @@ class ChartEditor extends MusicBeatState {
 		super.update(elapsed);
 
 		crochetObject.y = getYFromStep(Conductor.songPosition);
-		cameraObject.screenCenter(X);
+		cameraObject.centerOverlay(checkerboard, X);
 		cameraObject.y = crochetObject.y + (FlxG.height / 2);
 
 		checkerCursor.visible = FlxG.mouse.overlaps(checkerboard);
@@ -275,7 +275,7 @@ class ChartEditor extends MusicBeatState {
 		var note:FNFSprite = noteBase.arrow;
 		note.setGraphicSize(cellSize, cellSize);
 		note.updateHitbox();
-		note.screenCenter(X);
+		note.centerOverlay(checkerboard, X);
 
 		// center
 		note.x -= cellSize * (getTotalStrumlines() / 2) - (cellSize / 2);

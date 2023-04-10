@@ -54,7 +54,7 @@ class WarningState extends FlxUIState {
 		lockedMovement = true;
 		if (!flickerText) {
 			FlxG.sound.play(AssetHandler.getAsset('sounds/cancelMenu', SOUND));
-			FlxG.camera.fade(0xFFFFFFFF, 1, () -> FlxG.switchState(new feather.state.menus.MainMenu()));
+			FlxG.camera.fade(0, 1, () -> FlxG.switchState(new feather.state.menus.MainMenu()));
 		} else {
 			FlxG.sound.play(AssetHandler.getAsset('sounds/confirmMenu', SOUND));
 			for (i in [titleThingy, textThingy])

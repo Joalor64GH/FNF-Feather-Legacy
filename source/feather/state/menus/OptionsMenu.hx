@@ -29,6 +29,10 @@ class OptionsMenu extends MusicBeatSubState {
 	public override function create():Void {
 		super.create();
 
+		#if DISCORD_ENABLED
+		DiscordHandler.updateInfo('In the Menus', 'OPTIONS MENU');
+		#end
+
 		blackBG = new FlxSprite().makeGraphic(Std.int(FlxG.width / 1.3), Std.int(FlxG.height / 1.1), FlxColor.BLACK);
 		blackBG.screenCenter(XY);
 		blackBG.alpha = 0;

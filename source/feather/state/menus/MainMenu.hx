@@ -26,6 +26,10 @@ class MainMenu extends MusicBeatState {
 		#if MODDING_ENABLED
 		feather.core.handlers.ModHandler.scanMods();
 		#end
+		#if DISCORD_ENABLED
+		DiscordHandler.updateInfo('In the Menus', 'MAIN MENU');
+		#end
+
 		feather.core.music.Levels.loadLevels();
 		Utils.resetMusic();
 

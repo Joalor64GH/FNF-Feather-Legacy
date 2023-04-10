@@ -43,6 +43,10 @@ class FreeplayMenu extends MenuBase {
 		mutex = new sys.thread.Mutex();
 		#end
 
+		#if DISCORD_ENABLED
+		DiscordHandler.updateInfo('In the Menus', 'FREEPLAY MENU');
+		#end
+
 		// get week songs and add them
 		for (i in 0...Levels.GAME_LEVELS.length) {
 			var week:GameWeek = Levels.GAME_LEVELS[i];

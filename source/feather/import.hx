@@ -1,5 +1,8 @@
 package feather; // imports that only apply here
 
+#if DISCORD_ENABLED
+import feather.core.handlers.DiscordHandler;
+#end
 #if SCRIPTING_ENABLED
 import feather.core.handlers.ScriptHandler;
 #end

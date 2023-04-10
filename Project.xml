@@ -40,6 +40,7 @@
 	<define name="MODDING_ENABLED" />
 	<define name="SCRIPTING_ENABLED" />
 	<define name="CRASH_HANDLER_ENABLED" />
+	<define name="DISCORD_ENABLED" if="cpp" />
 
 	<!-- _______ Paths _______ -->
 
@@ -62,6 +63,9 @@
 
 	<!-- Adobe Animate Atlas Support -->
 	<haxelib name="flxanimate" />
+
+	<!-- Discord Rich Presence Support -->
+	<haxelib name="discord_rpc" if="DISCORD_ENABLED"/>
 
 	<!-- Needed for some of the custom data -->
 	<haxelib name="yaml" />

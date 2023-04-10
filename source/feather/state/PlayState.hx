@@ -90,6 +90,10 @@ class PlayState extends MusicBeatState {
 	public var enemy:Character;
 	public var crowd:Character;
 
+	// Discord Presence Values
+	public var rpcTopDetails:String = '';
+	public var rpcBottomDetails:String = '';
+
 	public function new(?constructor:PlayStateStruct):Void {
 		super();
 
@@ -131,6 +135,10 @@ class PlayState extends MusicBeatState {
 		for (i in ChartLoader.unspawnNoteList)
 			if (!uniqueNoteStorage.contains(i.type))
 				uniqueNoteStorage.push(i.type);
+
+		var currentGamemode:String = constructor.gamemode == STORY_MODE ? 'Story Mode' : 'Freeplay';
+		rpcTopDetails = 'In ${currentGamemode}';
+		rpcBottomDetails = '${songMetadata.name} [${constructor.difficulty.toUpperCase()}]';
 
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -529,6 +537,12 @@ class PlayState extends MusicBeatState {
 		callFn("update", [elapsed, true]);
 	}
 
+	public function updateDiscord():Void {
+		#if DISCORD_ENABLED
+		DiscordHandler.updateInfo(rpcTopDetails, rpcBottomDetails, Conductor.songPosition > 0, music.inst.length);
+		#end
+	}
+
 	var charColumn:Map<String, Map<String, Character>> = [];
 
 	public function preloadEvents(event:GameplayEvent):Void {
@@ -600,6 +614,16 @@ class PlayState extends MusicBeatState {
 			gameStage.onPauseDispatch(false);
 		}
 		super.closeSubState();
+	}
+
+	public override function onFocus():Void {
+		updateDiscord();
+		super.onFocus();
+	}
+
+	public override function onFocusLost():Void {
+		updateDiscord();
+		super.onFocusLost();
 	}
 
 	public var zoomBeat:Int = 4;

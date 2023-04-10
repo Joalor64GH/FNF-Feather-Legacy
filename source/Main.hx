@@ -36,6 +36,10 @@ class Main extends Sprite {
 		fpsCounter = new FPS(/*10, 5, FlxColor.WHITE*/);
 		addChild(fpsCounter);
 
+		#if DISCORD_ENABLED
+		feather.core.handlers.DiscordHandler.init("814588678700924999");
+		#end
+
 		TransitionState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
 		TransitionState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, new FlxPoint(0, 1));
 
