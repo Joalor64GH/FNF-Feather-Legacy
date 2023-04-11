@@ -105,6 +105,7 @@ class Main extends Sprite {
  * @author YoshiCrafter29
  */
 class CustomAPI {
+	#if windows
 	@:functionCode('
 		int darkMode = active ? 1 : 0;
 		HWND window = GetActiveWindow();
@@ -112,6 +113,7 @@ class CustomAPI {
 			DwmSetWindowAttribute(window, 20, &darkMode, sizeof(darkMode));
 	')
 	public static function setDarkBorder(active:Bool):Void {}
+	#end
 }
 
 class CustomGame extends FlxGame {
