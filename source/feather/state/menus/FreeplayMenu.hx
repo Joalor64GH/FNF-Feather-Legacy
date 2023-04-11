@@ -58,7 +58,7 @@ class FreeplayMenu extends MenuBase {
 		for (folder in FileSystem.readDirectory(AssetHandler.getPath("data/songs", true))) {
 			var path:String = 'data/songs/${folder}/freeplay';
 			if (FileSystem.exists(AssetHandler.getPath(path, YAML))) {
-				var data:ListableSong = cast MultiPurpAPI.initYAML(path, true);
+				var data:ListableSong = cast yaml.Yaml.parse(AssetHandler.getAsset(path, YAML, true), yaml.Parser.options().useObjects());
 				data.color = FlxColor.fromString(Std.string(data.color));
 				if (!songList.contains(data))
 					songList.push(data);

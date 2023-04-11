@@ -112,8 +112,4 @@ class MultiPurpAPI {
 	')
 	public static function setDarkBorder(active:Bool):Void {}
 	#end
-
-	public static function initYAML(path:String, ?ignoreMods:Bool = false):yaml.Yaml {
-		return yaml.Yaml.parse(AssetHandler.getAsset(path, YAML, ignoreMods), yaml.Parser.options().useObjects());
-	}
 }

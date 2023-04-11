@@ -107,7 +107,8 @@ class Character extends FNFSprite {
 
 			default:
 				if (sys.FileSystem.exists(AssetHandler.getPath('images/characters/${name}/${name}', YAML))) {
-					var file:CharacterFormat = cast MultiPurpAPI.initYAML('images/characters/${name}/${name}');
+					var file:CharacterFormat = cast yaml.Yaml.parse(AssetHandler.getAsset('images/characters/${name}/${name}', YAML),
+						yaml.Parser.options().useObjects());
 					if (file != null) {
 						if (file.image != null)
 							frames = getFrames(file.image);
