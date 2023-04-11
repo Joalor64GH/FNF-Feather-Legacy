@@ -137,6 +137,21 @@ class Utils {
 	}
 
 	/**
+	 * Helper Function to check if an Object is out of range
+	 * 
+	 * USAGE:
+	 * ```haxe
+	 * var myObject:FlxObject = new FlxObject(0, 0, 1, 1);
+	 * trace('is myObject out of range? - ' + myObject.outOfRange()); // true or
+	 * ```
+	 */
+	@:keep public static inline function outOfRange(object:FlxObject):Bool {
+		if (object.y > FlxG.height || object.y < -object.height)
+			return true;
+		return false;
+	}
+
+	/**
 	 * Returns a folder for use with FlxG.save
 	 * if on flixel 5.0.0 or greater, it will be formatted `COMPANY/EXECUTABLE_NAME/FOLDER`
 	 * - so `BeastlyGhost/FunkinFeather/FOLDER` by default

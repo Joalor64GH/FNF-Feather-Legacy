@@ -30,8 +30,6 @@ class ChartEditor extends MusicBeatState {
 	public var sideBar:FlxSprite;
 	public var infoText:FlxText;
 
-	public var renderedNotes:FlxTypedGroup<FNFSprite>;
-	public var renderedSustains:FlxTypedGroup<FlxTiledSprite>;
 	public var renderedSections:FlxTypedGroup<FlxSprite>;
 	public var renderedLanes:FlxTypedGroup<FlxSprite>;
 
@@ -69,15 +67,7 @@ class ChartEditor extends MusicBeatState {
 		add(renderedSustains);
 		add(renderedNotes);
 
-		// note strumline
-		crochetObject = new FlxSprite().makeGraphic(cellSize * getTotalStrumlines(), 5);
-		crochetObject.screenCenter(X);
-		add(crochetObject);
-
-		checkerCursor.makeGraphic(cellSize, cellSize);
-		add(checkerCursor);
-
-		loadUI();
+		generateUI();
 
 		// camera that objects will follow
 		cameraObject = new FlxObject(0, 0, 1, 1);
@@ -109,12 +99,10 @@ class ChartEditor extends MusicBeatState {
 	}
 
 	var checkerboard:FlxTiledSprite;
-	var checkerCursor:FlxSprite = new FlxSprite();
 	var cellSize:Int = 40;
 
 	function generateCheckerboard():Void {
 		var checkerBit:openfl.display.BitmapData = FlxGridOverlay.createGrid(cellSize, cellSize, cellSize * 2, cellSize * 2, true, 0xFF9AB671, 0xFF549235);
-		checkerBit.colorTransform(checkerBit.rect, new ColorTransform(1, 1, 1, 90 / 255));
 
 		checkerboard = new FlxTiledSprite(null, cellSize * getTotalStrumlines(), cellSize);
 		checkerboard.loadGraphic(checkerBit);
@@ -128,6 +116,11 @@ class ChartEditor extends MusicBeatState {
 			separator.x = checkerboard.x + cellSize * (4 * i);
 			renderedLanes.add(separator);
 		}
+
+		// TODO: generate multiple of these and change the Y based on the next beat
+		var beatSeparator:FlxSprite = new FlxSprite().makeGraphic(Std.int(checkerboard.width), 1, 0xFFFFFFFF);
+		beatSeparator.centerOverlay(checkerboard, X);
+		renderedLanes.add(beatSeparator);
 	}
 
 	function generateSection():Void {
@@ -138,7 +131,28 @@ class ChartEditor extends MusicBeatState {
 		}
 	}
 
-	function loadUI():Void {
+	var scrollBar:FlxSprite;
+	var scrollBarLine:FlxSprite;
+	var noteCursor:FlxSprite;
+
+	function generateUI():Void {
+		// note strumline
+		crochetObject = new FlxSprite().makeGraphic(cellSize * getTotalStrumlines(), 5);
+		crochetObject.screenCenter(X);
+		add(crochetObject);
+
+		noteCursor = new FlxSprite().makeGraphic(cellSize, cellSize);
+		add(noteCursor);
+
+		scrollBar = new FlxSprite(350, 0).makeGraphic(30, 600, FlxColor.WHITE);
+		scrollBar.screenCenter(Y);
+		scrollBar.scrollFactor.set();
+		add(scrollBar);
+
+		scrollBarLine = new FlxSprite(0, 0).makeGraphic(30, 1, FlxColor.BLUE);
+		scrollBar.scrollFactor.set();
+		add(scrollBarLine);
+
 		infoText = new FlxText(0, 0, 0, getInfoText());
 		infoText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, OUTLINE);
 		infoText.setPosition(5, FlxG.height - infoText.height - 5);
@@ -151,12 +165,14 @@ class ChartEditor extends MusicBeatState {
 
 	function getInfoText():String {
 		var curBPM:Float = songMetadata.bpm;
-		if (song.sections[curSec] != null) {
+		if (song.sections[curSec] != null)
 			if (song.sections[curSec].bpm != null && song.sections[curSec].bpm != curBPM)
 				curBPM = song.sections[curSec].bpm;
-		}
 
-		return '${songMetadata.name} - BPM: ${curBPM}\nBEAT: ${curBeat} - STEP: ${curStep} - BAR: ${curSec + 1}';
+		var songTime:String = Std.string(FlxMath.roundDecimal((Conductor.songPosition) / 1000, 2));
+		var songEndTime:String = Std.string(FlxMath.roundDecimal((music.inst.length) / 1000, 2));
+
+		return '${songMetadata.name}\nBPM: ${curBPM} - TIME: ${songTime} / ${songEndTime}\nBEAT: ${curBeat} - STEP: ${curStep} - BAR: ${curSec + 1}';
 	}
 
 	public override function update(elapsed:Float):Void {
@@ -164,21 +180,25 @@ class ChartEditor extends MusicBeatState {
 
 		super.update(elapsed);
 
+		scrollBarLine.y = scrollBar.y + getYFromStep(music.inst.length / Conductor.stepCrochet);
+		if (scrollBarLine.outOfRange())
+			trace('scroll bar line is out of range');
+
 		crochetObject.y = getYFromStep(Conductor.songPosition);
 		cameraObject.centerOverlay(checkerboard, X);
 		cameraObject.y = crochetObject.y + (FlxG.height / 2);
 
-		checkerCursor.visible = FlxG.mouse.overlaps(checkerboard);
+		noteCursor.visible = FlxG.mouse.overlaps(checkerboard);
 
 		if (FlxG.mouse.x > checkerboard.x
 			&& FlxG.mouse.x < checkerboard.x + checkerboard.width
 			&& FlxG.mouse.y > checkerboard.y
 			&& FlxG.mouse.y < checkerboard.y + getYFromStep(music.inst.length)) {
-			checkerCursor.x = Math.floor(FlxG.mouse.x / cellSize) * cellSize;
+			noteCursor.x = Math.floor(FlxG.mouse.x / cellSize) * cellSize;
 			if (FlxG.keys.pressed.SHIFT)
-				checkerCursor.y = FlxG.mouse.y;
+				noteCursor.y = FlxG.mouse.y;
 			else
-				checkerCursor.y = Math.floor(FlxG.mouse.y / cellSize) * cellSize;
+				noteCursor.y = Math.floor(FlxG.mouse.y / cellSize) * cellSize;
 
 			if (FlxG.mouse.justPressed) {
 				if (FlxG.mouse.overlaps(renderedNotes)) {
@@ -192,6 +212,15 @@ class ChartEditor extends MusicBeatState {
 						addNote();
 				}
 			}
+		}
+
+		if (FlxG.mouse.wheel != 0) {
+			var scrollSpeed:Float = 0.4;
+			if (FlxG.keys.pressed.SHIFT)
+				scrollSpeed = 1.2;
+
+			music.inst.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * scrollSpeed);
+			music.pause();
 		}
 
 		if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.RIGHT) {
@@ -252,6 +281,9 @@ class ChartEditor extends MusicBeatState {
 		// regenerate notes
 		reloadNotes();
 	}
+
+	var renderedNotes:FlxTypedGroup<FNFSprite>;
+	var renderedSustains:FlxTypedGroup<FlxTiledSprite>;
 
 	function reloadNotes(clearBefore:Bool = true):Void {
 		if (clearBefore) {
@@ -329,13 +361,13 @@ class ChartEditor extends MusicBeatState {
 	}
 
 	function addNote(pushNext:Bool = true):Void {
-		var stepTime:Float = getNoteStep(checkerCursor.y);
+		var stepTime:Float = getNoteStep(noteCursor.y);
 		var stepSection:Int = Math.floor(stepTime / (Conductor.stepCrochet * 16));
 		var sustainLength:Float = 0;
 
 		for (i in 0...song.sections[curSec].notes.length) {
 			var note:ChartNote = song.sections[curSec].notes[i];
-			var currentIndex:Int = getNoteSide(Math.floor((checkerCursor.x - checkerboard.x) / cellSize), note.strumline);
+			var currentIndex:Int = getNoteSide(Math.floor((noteCursor.x - checkerboard.x) / cellSize), note.strumline);
 
 			if (pushNext) {
 				song.sections[stepSection].notes.push({step: stepTime, index: currentIndex, sustainTime: sustainLength});
