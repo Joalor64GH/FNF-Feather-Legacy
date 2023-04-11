@@ -2,7 +2,6 @@ package feather.state;
 
 import feather.core.Highscore;
 import feather.core.FNFSprite;
-import feather.core.music.ChartDefs;
 import feather.core.music.ChartLoader;
 import feather.core.music.Conductor;
 import feather.gameObjs.*;

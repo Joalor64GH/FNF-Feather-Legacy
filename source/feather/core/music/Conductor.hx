@@ -1,6 +1,6 @@
 package feather.core.music;
 
-import feather.core.music.ChartDefs.ChartFormat;
+import feather.core.music.ChartLoader;
 
 typedef ChangeBPMEvent = {
 	var step:Int;

@@ -1,11 +1,65 @@
 package feather.core.music;
 
-import feather.core.music.ChartDefs;
 import feather.core.music.Conductor;
 import feather.gameObjs.Note;
+import feather.state.PlayState.GameplayEvent;
 import flixel.system.FlxSound;
 import flixel.util.FlxSort;
 import openfl.media.Sound;
+
+typedef ChartFormat = {
+	var speed:Float;
+	var sections:Array<ChartSection>;
+}
+
+typedef ChartMeta = {
+	var name:String;
+	var characters:Array<String>;
+	var origin:String;
+	var uiStyle:String;
+	var ?stage:String; // defaults to "stage"
+	var bpm:Float;
+}
+
+typedef ChartNote = {
+	var step:Float;
+	var index:Int;
+	var ?strumline:Int; // defaults to 0 (enemy)
+	var ?sustainTime:Float;
+	var ?type:String;
+}
+
+typedef ChartSection = {
+	var camPoint:Int;
+	var notes:Array<ChartNote>;
+	var ?animation:String; // e.g: "singLEFT-alt"
+	var ?length:Int; // in steps
+	var ?bpm:Float;
+}
+
+typedef FNFSong = {
+	var song:String;
+	var notes:Array<FNFSection>;
+	var events:Array<Dynamic>;
+	var bpm:Float;
+	var speed:Float;
+
+	var player1:String;
+	var player2:String;
+	var gfVersion:String;
+	var stage:String;
+}
+
+typedef FNFSection = {
+	var sectionNotes:Array<Dynamic>;
+	var sectionBeats:Float;
+	var lengthInSteps:Int;
+	var mustHitSection:Bool;
+	var gfSection:Bool;
+	var bpm:Float;
+	var changeBPM:Bool;
+	var altAnim:Bool;
+}
 
 /**
  * Class for parsing and loading song charts
