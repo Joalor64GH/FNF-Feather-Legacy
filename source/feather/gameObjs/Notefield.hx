@@ -123,7 +123,7 @@ class Notefield extends FlxGroup {
 				splash.kill();
 		}
 
-		splashObjects.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
+		splashObjects.sort(FNFSprite.depthOrder, flixel.util.FlxSort.DESCENDING);
 	}
 
 	public override function update(elapsed:Float):Void {

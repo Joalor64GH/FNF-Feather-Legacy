@@ -282,7 +282,7 @@ class DiscordHandler {
 			onDisconnected: eventERR,
 			onError: eventERR
 		});
-		lime.app.Application.current.onExit.add((e:Dynamic) -> DiscordRpc.shutdown());
+		lime.app.Application.current.onExit.add(function(e:Dynamic):Void DiscordRpc.shutdown());
 
 		if (!eventInitialized)
 			eventRDY();

@@ -20,6 +20,9 @@ interface ISpriteOffset {
 class FNFSprite extends FlxSprite implements ISpriteOffset {
 	public var depth:Float = 0;
 
+	public static function depthOrder(Order:Int, a:FNFSprite, b:FNFSprite):Int
+		return a.depth > b.depth ? -Order : Order;
+
 	public var offsets:Map<String, Array<Float>> = new Map<String, Array<Float>>();
 
 	public function addOffset(anim:String, ?newOffset:Array<Float>):Void {

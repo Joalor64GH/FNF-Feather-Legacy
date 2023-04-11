@@ -40,16 +40,14 @@ class GameplayUI extends FlxSpriteGroup {
 
 		iconPL = new HealthIcon(game.player.icon, true);
 		iconPL.y = healthBar.y - (iconPL.height / 2);
-		iconPL.scrollFactor.set();
 		add(iconPL);
 
 		iconOPP = new HealthIcon(game.enemy.icon, false);
 		iconOPP.y = healthBar.y - (iconOPP.height / 2);
-		iconOPP.scrollFactor.set();
 		add(iconOPP);
 
-		scoreText = new FlxText(0, healthBG.y + 35, Std.int(healthBG.width + 55));
-		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 18, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
+		scoreText = new FlxText(healthBG.x + 50, healthBG.y + 50, Std.int(healthBG.width + 50));
+		scoreText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 20, 0xFFFFFFFF, CENTER, OUTLINE, 0xFF000000);
 		add(scoreText);
 
 		if (UserSettings.get("infoText") != 'NONE') {
@@ -68,15 +66,8 @@ class GameplayUI extends FlxSpriteGroup {
 		cpuText.alpha = 0.6;
 		add(cpuText);
 
-		var featherText:FlxText = new FlxText(0, 0, 0, '[FEATHER v${Main.featherVer.toString()}]');
-		featherText.setFormat(AssetHandler.getAsset('data/fonts/vcr', FONT), 16, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
-		featherText.setPosition(FlxG.width - featherText.width - 5, FlxG.height - featherText.height - 5);
-		add(featherText);
-
 		forEachOfType(FlxText, function(text:FlxText):Void text.borderSize = 1.5);
-		antialiasing = UserSettings.get("antialiasing");
-		scrollFactor.set();
-
+		forEach(function(object:FlxSprite):Void object.antialiasing = UserSettings.get("antialiasing"));
 		updateScore(true);
 	}
 
@@ -111,11 +102,15 @@ class GameplayUI extends FlxSpriteGroup {
 	public function updateScore(miss:Bool = false):Void {
 		var score:Int = game.currentStat.score;
 		var misses:Int = game.currentStat.misses;
+		var clear:String = game.currentStat.clearType;
+		var percent:Float = game.currentStat.getPercent();
+		var grade:String = game.currentStat.gradeType;
 
-		var newScore:String = 'SCORE: ${score}';
-		newScore += separator + (misses == 1 ? 'MISS: ' : 'MISSES: ') + '${misses}${game.currentStat.clearType}';
-		newScore += separator + '${game.currentStat.gradeType} [${game.currentStat.getPercent()}%]';
-		scoreText.text = newScore;
+		var myScore:String = misses == 1 ? 'MISS: ' : 'MISSES: ' + '${misses}${clear}';
+		myScore += separator + 'SCORE: ${score}';
+		myScore += separator + '${percent}% [${grade}]';
+		scoreText.text = myScore;
+
 		scoreText.screenCenter(X);
 	}
 

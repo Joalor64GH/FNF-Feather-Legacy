@@ -152,12 +152,12 @@ class NoteRenderTest extends feather.state.MusicBeatState {
 			var possibleNotes:Array<Note> = [];
 
 			playerNotefield.noteObjects.forEachAlive(function(note:Note):Void {
-				if (note.canHit && note.strumline == 1 && !note.wasGoodHit) {
+				if (note.canHit && note.mustHit && !note.wasGoodHit) {
 					if (note.index == index)
 						possibleNotes.push(note);
 				}
 			});
-			possibleNotes.sort((a:Note, b:Note) -> flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.step, b.step));
+			possibleNotes.sort(function(a:Note, b:Note):Int return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.step, b.step));
 
 			if (possibleNotes.length > 0) {
 				var canBeHit:Bool = true;

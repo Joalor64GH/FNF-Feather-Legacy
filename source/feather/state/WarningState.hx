@@ -24,7 +24,7 @@ class WarningState extends FlxUIState {
 			FlxG.resetState();
 		}
 
-		FlxG.camera.flash(0xFF000000, 1.35, () -> lockedMovement = false);
+		FlxG.camera.flash(0xFF000000, 0.8, function():Void lockedMovement = false);
 
 		titleThingy = new Alphabet(0, 0, 'WARNING', false);
 		titleThingy.screenCenter(XY).y -= 185;
@@ -54,7 +54,7 @@ class WarningState extends FlxUIState {
 		lockedMovement = true;
 		if (!flickerText) {
 			FlxG.sound.play(AssetHandler.getAsset('sounds/cancelMenu', SOUND));
-			FlxG.camera.fade(0, 1, () -> FlxG.switchState(new feather.state.menus.MainMenu()));
+			FlxG.camera.fade(0, 1, function():Void FlxG.switchState(new feather.state.menus.MainMenu()));
 		} else {
 			FlxG.sound.play(AssetHandler.getAsset('sounds/confirmMenu', SOUND));
 			for (i in [titleThingy, textThingy])

@@ -225,7 +225,7 @@ class FreeplayMenu extends MenuBase {
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		playbackThread = Thread.create(() -> {
+		playbackThread = Thread.create(function():Void {
 			while (playbackActive) {
 				var curThread:Null<Int> = Thread.readMessage(false);
 				if (curThread != null) {

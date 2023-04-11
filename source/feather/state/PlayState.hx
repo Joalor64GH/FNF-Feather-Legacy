@@ -356,7 +356,7 @@ class PlayState extends MusicBeatState {
 		countdownSprite.alpha = 0;
 		add(countdownSprite);
 
-		new FlxTimer().start(Conductor.beatCrochet / 1000, (tmr:FlxTimer) -> {
+		new FlxTimer().start(Conductor.beatCrochet / 1000, function(tmr:FlxTimer):Void {
 			gameStage.onCountdownTick(countdownPosition);
 			charactersDance(countdownPosition);
 
@@ -369,7 +369,7 @@ class PlayState extends MusicBeatState {
 				countdownTween.cancel();
 
 			countdownTween = FlxTween.tween(countdownSprite, {alpha: 0}, 0.6, {
-				onComplete: (twn:FlxTween) -> {
+				onComplete: function(twn:FlxTween):Void {
 					if (tmr.loopsLeft == 0) // die
 						countdownSprite.destroy();
 				},
@@ -496,12 +496,12 @@ class PlayState extends MusicBeatState {
 
 			gameStage.onPauseDispatch(true);
 
-			FlxTween.globalManager.forEach((twn:FlxTween) -> {
+			FlxTween.globalManager.forEach(function(twn:FlxTween):Void {
 				if (twn != null && twn.active)
 					twn.active = false;
 			});
 
-			FlxTimer.globalManager.forEach((tmr:FlxTimer) -> {
+			FlxTimer.globalManager.forEach(function(tmr:FlxTimer):Void {
 				if (tmr != null && tmr.active)
 					tmr.active = false;
 			});
@@ -599,12 +599,12 @@ class PlayState extends MusicBeatState {
 			if (!startingSong)
 				music.resyncVocals();
 
-			FlxTween.globalManager.forEach((twn:FlxTween) -> {
+			FlxTween.globalManager.forEach(function(twn:FlxTween):Void {
 				if (twn != null && !twn.active)
 					twn.active = true;
 			});
 
-			FlxTimer.globalManager.forEach((tmr:FlxTimer) -> {
+			FlxTimer.globalManager.forEach(function(tmr:FlxTimer):Void {
 				if (tmr != null && !tmr.active)
 					tmr.active = true;
 			});
@@ -762,11 +762,11 @@ class PlayState extends MusicBeatState {
 		curRating.velocity.x = -FlxG.random.int(0, 10);
 
 		FlxTween.tween(curRating, {alpha: 0}, Conductor.beatCrochet / 1000, {
-			onComplete: (twn:FlxTween) -> curRating.kill(),
+			onComplete: function(twn:FlxTween):Void curRating.kill(),
 			startDelay: ((Conductor.beatCrochet + Conductor.stepCrochet * 2) / 1000)
 		});
 		lastRating = curRating;
-		ratingGroup.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
+		ratingGroup.sort(FNFSprite.depthOrder, flixel.util.FlxSort.DESCENDING);
 	}
 
 	public function displayCombo(preload:Bool = false):Void {
@@ -811,11 +811,11 @@ class PlayState extends MusicBeatState {
 			add(numberCombo);
 
 			FlxTween.tween(numberCombo, {alpha: 0}, Conductor.beatCrochet / 1000, {
-				onComplete: (twn:FlxTween) -> numberCombo.kill(),
+				onComplete: function(twn:FlxTween):Void numberCombo.kill(),
 				startDelay: ((Conductor.beatCrochet + Conductor.stepCrochet * 2) / 1000)
 			});
 		}
-		numberGroup.sort((Order:Int, a:FNFSprite, b:FNFSprite) -> return a.depth > b.depth ? -Order : Order, flixel.util.FlxSort.DESCENDING);
+		numberGroup.sort(FNFSprite.depthOrder, flixel.util.FlxSort.DESCENDING);
 	}
 
 	public var notesPressed:Array<Bool> = [];
@@ -837,7 +837,7 @@ class PlayState extends MusicBeatState {
 						possibleNotes.push(note);
 				}
 			});
-			possibleNotes.sort((a:Note, b:Note) -> flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.step, b.step));
+			possibleNotes.sort(function(a:Note, b:Note):Int return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.step, b.step));
 
 			if (possibleNotes.length > 0) {
 				var canBeHit:Bool = true;
