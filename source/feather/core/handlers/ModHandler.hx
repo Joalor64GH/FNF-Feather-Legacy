@@ -26,7 +26,7 @@ class ModHandler {
 	 * a Enabled Mod that has priority over other mods
 	 * usually being the first one on the sorted mod list
 	 */
-	public static var dominantMod:ModFormat = null;
+	public static var dominantMod:String = null;
 
 	/**
 	 * a List of Active Mods that will be taken into account when searching assets
@@ -55,8 +55,8 @@ class ModHandler {
 
 		var modFolder:String = null;
 		if (dominantMod != null) {
-			if (FileSystem.exists(type.cycleExtensions('mods/${dominantMod.folder}/${folder}')))
-				modFolder = dominantMod.folder;
+			if (FileSystem.exists(type.cycleExtensions('mods/${dominantMod}/${folder}')))
+				modFolder = dominantMod;
 		} else {
 			if (activeMods.length > 0) {
 				for (i in 0...activeMods.length) {

@@ -12,9 +12,18 @@ import openfl.display.Sprite;
 import sys.FileSystem;
 import sys.io.File;
 
-typedef BaseGameObject = #if CRASH_HANDLER_ENABLED CustomGame #else FlxGame #end;
+typedef GameObj = #if CRASH_HANDLER_ENABLED CustomGame #else FlxGame #end;
 
 class Main extends Sprite {
+	public static var baseSettings:Dynamic =
+		{
+			WIDTH: 1280,
+			HEIGHT: 720,
+			STARTSTATE: feather.state.WarningState,
+			MAX_FPS: 60,
+			SKIP_SPLASH: true,
+			START_FULLSCREEN: false
+		};
 	public static final logSavePath:String = 'logs/FF-${Date.now().toString().replace(' ', '-').replace(':', "'")}.txt';
 
 	public static var self:Main;
@@ -30,7 +39,14 @@ class Main extends Sprite {
 
 		self = this;
 
-		var baseGame:BaseGameObject = new BaseGameObject(1280, 720, feather.state.WarningState, 60, 60, true, false);
+		// haxe.ui.Toolkit.init();
+		// haxe.ui.Toolkit.theme = 'dark';
+		#if windows
+		CustomAPI.setDarkBorder(true);
+		#end
+
+		var baseGame:GameObj = new GameObj(baseSettings.WIDTH, baseSettings.HEIGHT, baseSettings.STARTSTATE, baseSettings.MAX_FPS, baseSettings.MAX_FPS,
+			baseSettings.SKIP_SPLASH, baseSettings.START_FULLSCREEN);
 		addChild(baseGame);
 
 		fpsCounter = new FPS(/*10, 5, FlxColor.WHITE*/);
@@ -60,6 +76,42 @@ class Main extends Sprite {
 			Controls.destroy();
 		});
 	}
+}
+
+#if windows // TODO: not limit this to just windows
+@:buildXml('
+<target id="haxe">
+    <lib name="dwmapi.lib" if="windows" />
+    <lib name="shell32.lib" if="windows" />
+    <lib name="gdi32.lib" if="windows" />
+    <lib name="uxtheme.lib" if="windows" />
+</target>
+')
+@:cppFileCode('
+	#include <iostream>
+	#include <Windows.h>
+	#include <dwmapi.h>
+	#include <shellapi.h>
+	#include <uxtheme.h>
+')
+#end
+/*
+ * Multi-usage Custom API which (sometimes) makes use of C++ code
+ *
+ * some of the functions were taken
+ * @from https://github.com/YoshiCrafter29/CodenameEngine
+ *
+ * and where made by
+ * @author YoshiCrafter29
+ */
+class CustomAPI {
+	@:functionCode('
+        int darkMode = active ? 1 : 0;
+        HWND window = GetActiveWindow();
+        if (S_OK != DwmSetWindowAttribute(window, 19, &darkMode, sizeof(darkMode)))
+            DwmSetWindowAttribute(window, 20, &darkMode, sizeof(darkMode));
+    ')
+	public static function setDarkBorder(active:Bool):Void {}
 }
 
 class CustomGame extends FlxGame {
