@@ -10,6 +10,8 @@
     {"name": "yaml", "type": "haxelib"},
     {"name": "SScript", "type": "haxelib"},
     {"name": "flxanimate", "type": "haxelib"},
-    {"name": "discord_rpc", "type": "haxelib"}
+    {"name": "discord_rpc", "type": "haxelib"},
+    {"name": "haxeui-core", "type": "haxelib"},
+    {"name": "haxeui-flixel", "type": "haxelib"}
   ]
 }

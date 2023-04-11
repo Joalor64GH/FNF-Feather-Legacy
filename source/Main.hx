@@ -111,7 +111,7 @@ class CustomAPI {
 		if (S_OK != DwmSetWindowAttribute(window, 19, &darkMode, sizeof(darkMode)))
 			DwmSetWindowAttribute(window, 20, &darkMode, sizeof(darkMode));
 	')
-    public static function setDarkBorder(active:Bool):Void {}
+	public static function setDarkBorder(active:Bool):Void {}
 }
 
 class CustomGame extends FlxGame {
