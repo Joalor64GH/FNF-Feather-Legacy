@@ -106,10 +106,10 @@ class Main extends Sprite {
  */
 class CustomAPI {
 	@:functionCode('
-        int darkMode = active ? 1 : 0;
-        HWND window = GetActiveWindow();
-        if (S_OK != DwmSetWindowAttribute(window, 19, &darkMode, sizeof(darkMode)))
-            DwmSetWindowAttribute(window, 20, &darkMode, sizeof(darkMode));
+		int darkMode = active ? 1 : 0;
+		HWND window = GetActiveWindow();
+		if (S_OK != DwmSetWindowAttribute(window, 19, &darkMode, sizeof(darkMode)))
+			DwmSetWindowAttribute(window, 20, &darkMode, sizeof(darkMode));
     ')
 	public static function setDarkBorder(active:Bool):Void {}
 }
