@@ -404,7 +404,7 @@ class PlayState extends MusicBeatState {
 			case FREEPLAY, CHARTING:
 				if (constructor.gamemode != CHARTING)
 					Highscore.saveScore(Utils.removeForbidden(constructor.songName), constructor.difficulty, currentStat.score);
-				FlxG.switchState(new feather.state.menus.FreeplayMenu());
+				MusicBeatState.switchState(new feather.state.menus.FreeplayMenu());
 		}
 	}
 
@@ -432,7 +432,7 @@ class PlayState extends MusicBeatState {
 			while (localNoteStorage.length > 0) {
 				var unspawnNote:Note = localNoteStorage[0];
 				var strum:Notefield = noteFields.members[unspawnNote.strumline];
-				if (unspawnNote.step - Conductor.songPosition > 2000)
+				if (unspawnNote.stepTime - Conductor.songPosition > 2000)
 					break;
 
 				if (strum != null)
@@ -455,26 +455,32 @@ class PlayState extends MusicBeatState {
 
 				for (strum in noteFields) {
 					strum.noteObjects.forEachAlive(function(note:Note):Void {
-						note.speed = Math.abs(song.speed);
+						note.noteSpeed = Math.abs(song.speed);
 
 						if (strum.cpuControlled) {
-							if (!note.wasGoodHit && note.step <= Conductor.songPosition)
+							if (!note.wasGoodHit && note.stepTime <= Conductor.songPosition)
 								goodNoteHit(note, strum);
 						} // sustain note inputs
 						else if (!playerNotefield.cpuControlled) {
-							if (notesPressed[note.index] && (note.isSustain && note.canHit && note.mustHit))
+							if (notesPressed[note.index] && (note.isSustain && note.canHit && note.mustHit && !note.wasTooLate))
 								goodNoteHit(note, playerNotefield);
 						}
 
-						var rangeReached:Bool = note.downscroll ? note.arrow.y > FlxG.height : note.arrow.y < -note.arrow.height;
-						var sustainHit:Bool = note.isSustain && note.wasGoodHit && note.step <= Conductor.songPosition - note.hitboxEarly;
+						var rangeReached:Bool = note.downscroll ? note.y > FlxG.height : note.y < -note.height;
+						var sustainHit:Bool = note.isSustain
+							&& note.wasGoodHit
+							&& note.stepTime <= Conductor.songPosition - note.hitboxEarly;
 
-						if (Conductor.songPosition > note.killDelay + note.step) {
+						if (!note.wasTooLate && Conductor.songPosition > note.killDelay + note.stepTime) {
 							if (rangeReached || sustainHit) {
-								if (rangeReached && !note.wasGoodHit && !note.ignorable && !note.isMine)
-									if (note.mustHit)
-										noteMiss(note.index, strum);
+								if (rangeReached && !note.wasGoodHit && !note.ignorable && !note.isMine) {
+									note.wasTooLate = true;
+									for (note in note.children)
+										note.wasTooLate = true;
 
+									if (note.mustHit && !note.ignorable && !note.isMine)
+										noteMiss(note.index, strum);
+								}
 								strum.remove(note, true);
 							}
 						}
@@ -518,7 +524,7 @@ class PlayState extends MusicBeatState {
 
 		if (FlxG.keys.justPressed.SEVEN) {
 			music.cease();
-			FlxG.switchState(new ChartEditor({songName: constructor.songName, difficulty: constructor.difficulty}));
+			MusicBeatState.switchState(new ChartEditor({songName: constructor.songName, difficulty: constructor.difficulty}));
 		}
 
 		#if debug
@@ -529,7 +535,7 @@ class PlayState extends MusicBeatState {
 			var alt:Bool = FlxG.keys.pressed.ALT;
 
 			var char:Character = shift && alt ? crowd : shift ? player : enemy;
-			FlxG.switchState(new CharacterEditor(char.name, char.isPlayer));
+			MusicBeatState.switchState(new CharacterEditor(char.name, char.isPlayer));
 		}
 		#end
 
@@ -690,7 +696,7 @@ class PlayState extends MusicBeatState {
 			note.wasGoodHit = true;
 			strum.playAnim('confirm', note.index, true);
 
-			callFn("goodNoteHit", [note.step, note.index, note.type, note.strumline, strum]);
+			callFn("goodNoteHit", [note.stepTime, note.index, note.type, note.strumline, strum]);
 
 			var animName:String = 'sing${Notefield.directions[note.index].toUpperCase()}${strum.character.suffix}';
 			if (song.sections[curSec] != null && song.sections[curSec].animation != null) {
@@ -715,7 +721,7 @@ class PlayState extends MusicBeatState {
 						currentStat.combo = 0;
 					currentStat.combo++;
 
-					rating = currentStat.judgeNote(note.step);
+					rating = currentStat.judgeNote(note.stepTime);
 					currentStat.gottenRatings.set(rating, currentStat.gottenRatings.get(rating) + 1);
 					displayRating(rating);
 					if (currentStat.combo >= 5)
@@ -832,19 +838,19 @@ class PlayState extends MusicBeatState {
 			var possibleNotes:Array<Note> = [];
 
 			playerNotefield.noteObjects.forEachAlive(function(note:Note):Void {
-				if (note.canHit && note.mustHit && !note.wasGoodHit) {
+				if (note.canHit && note.mustHit && !note.wasGoodHit && !note.wasTooLate) {
 					if (note.index == index)
 						possibleNotes.push(note);
 				}
 			});
-			possibleNotes.sort(function(a:Note, b:Note):Int return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.step, b.step));
+			possibleNotes.sort(function(a:Note, b:Note):Int return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.stepTime, b.stepTime));
 
 			if (possibleNotes.length > 0) {
 				var canBeHit:Bool = true;
 				for (note in possibleNotes) {
 					for (dumbNote in dumbNotes) {
 						// "dumb" notes are doubles
-						if (Math.abs(note.step - dumbNote.step) < 10)
+						if (Math.abs(note.stepTime - dumbNote.stepTime) < 10)
 							playerNotefield.remove(dumbNote, true);
 						else
 							canBeHit = false;

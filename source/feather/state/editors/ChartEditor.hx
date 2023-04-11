@@ -53,7 +53,7 @@ class ChartEditor extends MusicBeatState {
 
 		// initialize rendering groups
 		renderedNotes = new FlxTypedGroup<FNFSprite>();
-		renderedSustains = new FlxTypedGroup<FlxTiledSprite>();
+		renderedSustains = new FlxTypedGroup<FNFSprite>();
 		renderedSections = new FlxTypedGroup<FlxSprite>();
 		renderedLanes = new FlxTypedGroup<FlxSprite>();
 
@@ -253,7 +253,7 @@ class ChartEditor extends MusicBeatState {
 				ChartLoader.fillRawList(song);
 			}
 
-			FlxG.switchState(state);
+			MusicBeatState.switchState(state);
 		}
 
 		infoText.text = getInfoText();
@@ -283,7 +283,7 @@ class ChartEditor extends MusicBeatState {
 	}
 
 	var renderedNotes:FlxTypedGroup<FNFSprite>;
-	var renderedSustains:FlxTypedGroup<FlxTiledSprite>;
+	var renderedSustains:FlxTypedGroup<FNFSprite>;
 
 	function reloadNotes(clearBefore:Bool = true):Void {
 		if (clearBefore) {
@@ -298,12 +298,10 @@ class ChartEditor extends MusicBeatState {
 	}
 
 	function generateNotes(step:Float, index:Int, sustainTime:Float, ?type:String = "default", ?strumline:Int = 0):Void {
-		var noteBase:Note = new Note(step, index % 4, 0, type, null);
-		noteBase.debugging = true;
-		noteBase.sustainTime = sustainTime;
-		noteBase.strumline = strumline;
-
-		var note:FNFSprite = noteBase.arrow;
+		var note:Note = new Note(step, index % 4, 0, type, null);
+		note.debugging = true;
+		note.stepSustain = sustainTime;
+		note.strumline = strumline;
 		note.setGraphicSize(cellSize, cellSize);
 		note.updateHitbox();
 		note.centerOverlay(checkerboard, X);
@@ -314,15 +312,13 @@ class ChartEditor extends MusicBeatState {
 		note.y = Math.floor(getYFromStep(step));
 		renderedNotes.add(note);
 
-		/*
-			if (note.sustainTime > 0)
-				for (sustain in generateSustainNote(Conductor.stepCrochet, note))
-					renderedSustains.add(sustain);
-		 */
+		if (note.stepSustain > 0)
+			for (sustain in generateSustainNote(Conductor.stepCrochet, note))
+				renderedSustains.add(sustain);
 	}
 
-	function generateSustainNote(step:Float, note:Note):Array<Note> {
-		var length:Int = Math.floor(note.sustainTime / step);
+	function generateSustainNote(timeStep:Float, note:Note):Array<Note> {
+		var length:Int = Math.floor(note.stepSustain / timeStep);
 		if (length < 1)
 			length = 1;
 
@@ -330,7 +326,7 @@ class ChartEditor extends MusicBeatState {
 		var previous:Note = note;
 
 		for (i in 0...length + 1) {
-			var sustain:Note = new Note(note.step + (step * i) + step, note.index % 4, note.sustainTime, note.type, previous);
+			var sustain:Note = new Note(note.stepTime + (timeStep * i) + timeStep, note.index % 4, note.stepSustain, note.type, previous);
 			sustain.debugging = true;
 			sustain.setPosition(note.x, previous.y + cellSize);
 			sustain.flipY = false;

@@ -11,9 +11,9 @@ class MainMenu extends MusicBeatState {
 	public var optionsGroup:FlxTypedGroup<MainMenuItem>;
 
 	public var optionsList:Array<MenuOption> = [
-		{name: 'story mode', callback: /*function():Void FlxG.switchState(new StoryMenu())*/ null},
-		{name: 'freeplay', callback: function():Void FlxG.switchState(new FreeplayMenu())},
-		{name: 'credits', callback: function():Void FlxG.switchState(new CreditsMenu())},
+		{name: 'story mode', callback: /*function():Void MusicBeatState.switchState(new StoryMenu())*/ null},
+		{name: 'freeplay', callback: function():Void MusicBeatState.switchState(new FreeplayMenu())},
+		{name: 'credits', callback: function():Void MusicBeatState.switchState(new CreditsMenu())},
 		{name: 'options', callback: function():Void FlxG.state.openSubState(new OptionsMenu())}
 	];
 
@@ -135,11 +135,11 @@ class MainMenu extends MusicBeatState {
 			#end
 
 			if (FlxG.keys.justPressed.SEVEN)
-				FlxG.switchState(new test.NoteRenderTest());
+				MusicBeatState.switchState(new test.NoteRenderTest());
 
 			/*
 				if (controls.justPressed("back"))
-					FlxG.switchState(new TitleScreen());
+					MusicBeatState.switchState(new TitleScreen());
 			 */
 		}
 	}

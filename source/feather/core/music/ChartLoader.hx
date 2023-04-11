@@ -244,7 +244,7 @@ class ChartLoader {
 				}
 			}
 		}
-		unspawnNoteList.sort(function(a:Note, b:Note) return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
+		unspawnNoteList.sort(function(a:Note, b:Note) return FlxSort.byValues(FlxSort.ASCENDING, a.stepTime, b.stepTime));
 		trace('Song Total Notes: ${unspawnNoteList.length}');
 	}
 
@@ -334,8 +334,8 @@ class MusicPlayback {
 	}
 
 	public function resyncFunction():Void {
-		if (Math.abs(inst.time - (Conductor.songPosition)) > 20
-			|| (vocals != null && Math.abs(vocals.time - (Conductor.songPosition)) > 20)) {
+		if (Math.abs(inst.time - (Conductor.songPosition)) >= 5
+			|| (vocals != null && Math.abs(vocals.time - (Conductor.songPosition)) >= 5)) {
 			resyncVocals();
 		}
 	}

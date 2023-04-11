@@ -1,6 +1,7 @@
 package feather.state;
 
 import feather.core.Controls;
+import feather.core.data.Handlers.CacheHandler;
 import feather.core.music.Conductor;
 import flixel.addons.ui.FlxUIState;
 
@@ -66,14 +67,14 @@ class MusicBeatState extends FlxUIState implements IBeatState {
 		}
 	}
 
-	public static function switchState(newState:flixel.FlxState, ?assetStack:Array<String>, ?assetType:AssetType = IMAGE):Void {
-		if (assetStack == null || assetStack.length < 1)
+	public static function switchState(newState:flixel.FlxState):Void {
+		// if (!Std.isOfType(MusicBeatState, feather.state.PlayState))
+		CacheHandler.purge([UNUSED_IMAGES, CACHED_SOUNDS]);
+
+		if (newState == FlxG.state)
+			FlxG.resetState();
+		else
 			FlxG.switchState(newState);
-		else {
-			for (i in assetStack)
-				AssetHandler.preload(i, assetType);
-			FlxG.switchState(newState);
-		}
 	}
 
 	public function onBeat(curBeat:Int):Void {

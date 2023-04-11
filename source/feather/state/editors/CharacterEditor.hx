@@ -37,7 +37,7 @@ class CharacterEditor extends MusicBeatState {
 		super.update(elapsed);
 
 		if (FlxG.keys.justPressed.ESCAPE)
-			FlxG.switchState(new feather.state.menus.MainMenu());
+			MusicBeatState.switchState(new feather.state.menus.MainMenu());
 
 		if (FlxG.keys.justPressed.Q || FlxG.keys.justPressed.E) {
 			var mult:Float = FlxG.keys.justPressed.Q ? -0.25 : 0.25;

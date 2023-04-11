@@ -96,7 +96,7 @@ class NoteRenderTest extends feather.state.MusicBeatState {
 			while (localNoteStorage != null && localNoteStorage.length > 0) {
 				var unspawnNote:Note = localNoteStorage[0];
 				var strum:Notefield = noteFields.members[unspawnNote.strumline];
-				if (unspawnNote.step - Conductor.songPosition > 2000)
+				if (unspawnNote.stepTime - Conductor.songPosition > 2000)
 					break;
 
 				if (strum.ID == unspawnNote.strumline)
@@ -106,10 +106,10 @@ class NoteRenderTest extends feather.state.MusicBeatState {
 			}
 
 			strum.noteObjects.forEachAlive(function(note:Note):Void {
-				note.speed = Math.abs(song.speed);
+				note.noteSpeed = Math.abs(song.speed);
 
 				if (strum.cpuControlled) {
-					if (!note.wasGoodHit && note.step <= Conductor.songPosition)
+					if (!note.wasGoodHit && note.stepTime <= Conductor.songPosition)
 						goodNoteHit(note, strum);
 				} // sustain note inputs
 				else if (!playerNotefield.cpuControlled) {
@@ -117,10 +117,10 @@ class NoteRenderTest extends feather.state.MusicBeatState {
 						goodNoteHit(note, playerNotefield);
 				}
 
-				var rangeReached:Bool = note.downscroll ? note.arrow.y > FlxG.height : note.arrow.y < -note.arrow.height;
-				var sustainHit:Bool = note.isSustain && note.wasGoodHit && note.step <= Conductor.songPosition - note.hitboxEarly;
+				var rangeReached:Bool = note.downscroll ? note.y > FlxG.height : note.y < -note.height;
+				var sustainHit:Bool = note.isSustain && note.wasGoodHit && note.stepTime <= Conductor.songPosition - note.hitboxEarly;
 
-				if (Conductor.songPosition > note.killDelay + note.step) {
+				if (Conductor.songPosition > note.killDelay + note.stepTime) {
 					if (rangeReached || sustainHit) {
 						if (rangeReached && !note.wasGoodHit && !note.ignorable && !note.isMine)
 							if (note.strumline == 1)
@@ -157,14 +157,14 @@ class NoteRenderTest extends feather.state.MusicBeatState {
 						possibleNotes.push(note);
 				}
 			});
-			possibleNotes.sort(function(a:Note, b:Note):Int return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.step, b.step));
+			possibleNotes.sort(function(a:Note, b:Note):Int return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.stepTime, b.stepTime));
 
 			if (possibleNotes.length > 0) {
 				var canBeHit:Bool = true;
 				for (note in possibleNotes) {
 					for (dumbNote in dumbNotes) {
 						// "dumb" notes are doubles
-						if (Math.abs(note.step - dumbNote.step) < 10)
+						if (Math.abs(note.stepTime - dumbNote.stepTime) < 10)
 							playerNotefield.remove(dumbNote, true);
 						else
 							canBeHit = false;

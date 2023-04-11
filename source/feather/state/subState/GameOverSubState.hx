@@ -27,11 +27,9 @@ class GameOverSubState extends MusicBeatSubState {
 
 		Conductor.changeBPM(params.tuneBPM);
 
-		/*
-			char = new Character(x, y + PlayState.self.player.height).loadChar(params.name);
-			char.playAnim("firstDeath");
-			add(char);
-		 */
+		char = new Character(x, y + PlayState.self.player.height).loadChar(params.name);
+		char.playAnim("firstDeath");
+		add(char);
 	}
 
 	public override function update(elapsed:Float):Void {
@@ -48,7 +46,7 @@ class GameOverSubState extends MusicBeatSubState {
 		 */
 
 		if (controls.justPressed("back"))
-			FlxG.switchState(new feather.state.menus.FreeplayMenu());
+			MusicBeatState.switchState(new feather.state.menus.FreeplayMenu());
 	}
 
 	public override function onBeat(curBeat:Int):Void {

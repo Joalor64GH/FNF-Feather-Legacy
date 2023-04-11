@@ -68,10 +68,6 @@ class Main extends Sprite {
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 
-		FlxG.signals.preStateSwitch.add(function():Void {
-			CacheHandler.purge([STORED_IMAGES, UNUSED_IMAGES, CACHED_SOUNDS]);
-		});
-
 		openfl.Lib.current.stage.application.onExit.add(function(code:Int):Void {
 			Controls.destroy();
 		});

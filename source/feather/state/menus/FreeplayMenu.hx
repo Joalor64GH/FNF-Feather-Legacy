@@ -148,10 +148,11 @@ class FreeplayMenu extends MenuBase {
 			playbackActive = false;
 
 			if (FlxG.keys.pressed.SHIFT)
-				FlxG.switchState(new ChartEditor(parameters));
+				MusicBeatState.switchState(new ChartEditor(parameters));
 			else {
 				FlxG.sound.play(Paths.sound("confirmMenu"));
-				FlxFlicker.flicker(optionsGroup.members[curSelection], 0.5, true, false, (flick:FlxFlicker) -> FlxG.switchState(new PlayState(parameters)));
+				FlxFlicker.flicker(optionsGroup.members[curSelection], 0.5, true, false,
+					(flick:FlxFlicker) -> MusicBeatState.switchState(new PlayState(parameters)));
 			}
 		}
 
@@ -166,7 +167,7 @@ class FreeplayMenu extends MenuBase {
 			playbackActive = false;
 
 			FlxG.sound.play(Paths.sound("cancelMenu"));
-			FlxG.switchState(new MainMenu());
+			MusicBeatState.switchState(new MainMenu());
 		}
 	}
 

@@ -137,40 +137,41 @@ class Notefield extends FlxGroup {
 
 			if (note != null && receptor != null) {
 				var center:Float = receptor.y + spacing / 2;
-				var stepY:Float = (Conductor.songPosition - note.step) * (0.45 * FlxMath.roundDecimal(note.speed, 2));
+				var stepY:Float = (Conductor.songPosition - note.stepTime) * (0.45 * FlxMath.roundDecimal(note.noteSpeed, 2));
 
 				note.x = receptor.x;
 				if (note.downscroll)
-					note.arrow.y = receptor.y + stepY;
+					note.y = receptor.y + stepY;
 				else // I'm gonna throw up.
-					note.arrow.y = receptor.y - stepY;
+					note.y = receptor.y - stepY;
 
-				/*
-					if (note.isSustain) {
-						if (note.downscroll) {
-							if (note.animation.curAnim != null && note.animation.curAnim.name.endsWith("end")) {
-								if (note.prevNote != null && note.prevNote.isSustain)
-									note.y += Math.ceil(/*note.prevNote.y - note.prevNote.frameHeight);
-							}
+				note.x += note.offX;
+				note.y += note.offY;
 
-							if (note.y - note.offset.y * note.scale.y + note.height >= center
-								&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
-								var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
-								swagRect.height = (center - note.y) / note.scale.y;
-								swagRect.y = note.frameHeight - swagRect.height;
-								note.clipRect = swagRect;
-							}
-						} else {
-							if (note.y + note.offset.y * note.scale.y <= center
-								&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
-								var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
-								swagRect.y = (center - note.y) / note.scale.y;
-								swagRect.height -= swagRect.y;
-								note.clipRect = swagRect;
-							}
+				if (note.isSustain) {
+					if (note.downscroll) {
+						if (note.animation.curAnim != null && note.animation.curAnim.name.endsWith("end")) {
+							if (note.prevNote != null && note.prevNote.isSustain)
+								note.y += Math.ceil(/*note.prevNote.y - */ note.prevNote.frameHeight);
+						}
+
+						if (note.y - note.offset.y * note.scale.y + note.height >= center
+							&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
+							var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
+							swagRect.height = (center - note.y) / note.scale.y;
+							swagRect.y = note.frameHeight - swagRect.height;
+							note.clipRect = swagRect;
+						}
+					} else {
+						if (note.y + note.offset.y * note.scale.y <= center
+							&& (note.mustHit || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canHit)))) {
+							var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+							swagRect.y = (center - note.y) / note.scale.y;
+							swagRect.height -= swagRect.y;
+							note.clipRect = swagRect;
 						}
 					}
-				 */
+				}
 			}
 		});
 	}

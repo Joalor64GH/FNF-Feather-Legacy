@@ -41,7 +41,7 @@ class CreditsMenu extends MusicBeatState {
 		if (controls.justPressed("accept")) {}
 
 		if (controls.justPressed("back"))
-			FlxG.switchState(new MainMenu());
+			MusicBeatState.switchState(new MainMenu());
 	}
 
 	public function updateSelection(newSelection:Int = 0):Void {

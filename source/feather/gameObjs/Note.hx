@@ -7,14 +7,9 @@ import flixel.addons.display.FlxTiledSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.frames.FlxFrame;
-import flixel.group.FlxSpriteGroup;
 
-class Note extends FlxSpriteGroup {
+class Note extends FNFSprite {
 	final game:PlayState = PlayState.self;
-
-	public var arrow:NoteObj;
-	public var sustain:SustainObj;
-	public var sustainEnd:FNFSprite;
 
 	public var prevNote:Note = null;
 	public var debugging:Bool = false;
@@ -28,24 +23,23 @@ class Note extends FlxSpriteGroup {
 	public var doSplash:Bool = true;
 	public var killDelay:Int = 200;
 
-	public var step:Float = 0.0;
-	public var sustainTime:Float = 0.0;
-	public var speed(default, set):Float = 1.0;
+	public var stepTime:Float = 0.0;
+	public var stepSustain:Float = 0.0;
+	public var noteSpeed(default, set):Float = 1.0;
 
-	function set_speed(newSpeed:Float):Float {
-		if (speed != newSpeed)
-			speed = newSpeed;
-		if (sustain != null) {
-			sustain.centerOverlay(arrow, X);
-			sustain.height = sustainTime;
+	function set_noteSpeed(newSpeed:Float):Float {
+		if (noteSpeed != newSpeed) {
+			noteSpeed = newSpeed;
+			updateSustain();
 		}
-		return speed;
+		return noteSpeed;
 	}
 
 	public var strumline:Int = 0;
+	public var canHit:Bool = false;
 	public var mustHit:Bool = false;
 	public var wasGoodHit:Bool = false;
-	public var canHit:Bool = false;
+	public var wasTooLate:Bool = false;
 
 	public var isSustain:Bool = false;
 	public var isEnd:Bool = false;
@@ -55,44 +49,70 @@ class Note extends FlxSpriteGroup {
 	public var hitboxEarly:Float = 1;
 	public var hitboxLate:Float = 1;
 
-	public function new(step:Float, index:Int, ?sustainTime:Float, ?type:String = "default", ?prevNote:Note):Void {
+	public var parent:Note;
+	public var children:Array<Note> = [];
+
+	public var offX:Float = 0;
+	public var offY:Float = 0;
+
+	final noteBeatCrochet:Float = Conductor.beatCrochet;
+	final noteStepCrochet:Float = Conductor.stepCrochet;
+
+	public function new(stepTime:Float, index:Int, ?stepSustain:Float, ?type:String = "default", ?prevNote:Note):Void {
 		super(0, -2000);
 
 		if (prevNote == null)
 			prevNote = this;
 
-		this.step = step;
+		this.stepTime = stepTime;
 		this.index = index;
-		this.sustainTime = sustainTime;
+		this.stepSustain = stepSustain;
 		this.type = type;
 		this.prevNote = prevNote;
 
-		if (this.sustainTime > 0)
+		if (this.stepSustain > 0)
 			this.isSustain = true;
 
 		hitboxEarly = 1;
 
-		arrow = new NoteObj(this);
-		add(arrow);
+		loadFrames('images/notes/${type}/NOTE_assets', [
+			{name: '${Notefield.colors[index]}Scroll', prefix: '${Notefield.colors[index]}0'},
+			{name: '${Notefield.colors[index]}Hold', prefix: '${Notefield.colors[index]} hold piece'},
+			{name: '${Notefield.colors[index]}End', prefix: '${Notefield.colors[index]} hold end'}
+		]);
+		setGraphicSize(Std.int(width * 0.7));
+		updateHitbox();
 
-		if (isSustain) {
+		playAnim('${Notefield.colors[index]}Scroll');
+
+		if (isSustain && prevNote != null) {
 			hitboxEarly = 0.5;
-			sustain = new SustainObj(this);
-			sustain.centerOverlay(arrow, X);
-			sustain.height = sustainTime;
-			sustain.visible = true;
-			arrow.visible = false;
-			add(sustain);
+			parent = prevNote;
+			// oh, my god.
+			while (parent.parent != null)
+				parent = parent.parent;
+			children.push(this);
+		} else if (!isSustain)
+			parent = null;
 
-			if (isEnd) {
-				sustainEnd = new FNFSprite().loadFrames('images/notes/${type}/NOTE_assets', [{name: 'end', prefix: '${Notefield.colors[index]} hold end'}]);
-				sustainEnd.antialiasing = UserSettings.get("antialiasing");
-				sustainEnd.setGraphicSize(Std.int(sustainEnd.width * 0.7));
-				sustainEnd.updateHitbox();
-				sustainEnd.playAnim('end');
-				sustainEnd.visible = true;
-				// sustainEnd.setPosition(sustain.x, 10 + arrow.y + sustainTime);
-				add(sustainEnd);
+		antialiasing = UserSettings.get("antialiasing");
+		moves = false;
+	}
+
+	public function updateSustain():Void {
+		if (isSustain) {
+			alpha = 0.6;
+			flipX = downscroll;
+			playAnim('${Notefield.colors[index]}End');
+
+			if (prevNote != null && prevNote.exists) {
+				playAnim('${Notefield.colors[index]}Hold');
+				if (prevNote.isSustain) {
+					prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * noteStepCrochet / 50 * 1.05 * noteSpeed;
+					prevNote.updateHitbox();
+					offX = prevNote.x;
+				} else
+					offX = ((prevNote.width / 2) - (width / 2));
 			}
 		}
 	}
@@ -102,60 +122,14 @@ class Note extends FlxSpriteGroup {
 
 		if (!debugging) {
 			if (mustHit) {
-				canHit = (step > Conductor.songPosition - (Conductor.safeZone * hitboxEarly)
-					&& step < Conductor.songPosition + (Conductor.safeZone * hitboxLate));
+				canHit = (stepTime > Conductor.songPosition - (Conductor.safeZone * hitboxEarly)
+					&& stepTime < Conductor.songPosition + (Conductor.safeZone * hitboxLate));
 			} else
 				canHit = false;
+
+			if (wasTooLate || (parent != null && parent.wasTooLate))
+				alpha = 0.3;
 		}
-	}
-}
-
-class NoteObj extends FNFSprite {
-	public var note:Note;
-
-	public function new(_note:Note):Void {
-		super();
-
-		note = _note;
-
-		loadFrames('images/notes/${_note.type}/NOTE_assets', [
-			{name: '${Notefield.colors[_note.index]} note', prefix: '${Notefield.colors[_note.index]}0'}
-		]);
-		setGraphicSize(Std.int(width * 0.7));
-		updateHitbox();
-
-		playAnim('${Notefield.colors[_note.index]} note');
-		antialiasing = UserSettings.get("antialiasing");
-		moves = false;
-	}
-}
-
-class SustainObj extends FlxTiledSprite {
-	public var note:Note;
-
-	var graphicsStored:Array<FlxGraphic> = [];
-
-	public function new(_note:Note):Void {
-		super(null, 0, 1);
-
-		note = _note;
-
-		final atlas:FlxAtlasFrames = AssetHandler.getAsset('images/notes/${_note.type}/NOTE_assets', XML);
-		for (prefix in atlas.framesHash.keys()) {
-			if (prefix.endsWith('hold piece0000')) {
-				var frameGraphic:FlxGraphic = FlxGraphic.fromFrame(atlas.framesHash.get(prefix));
-				if (!graphicsStored.contains(frameGraphic))
-					graphicsStored.push(frameGraphic);
-			}
-		}
-
-		loadGraphic(graphicsStored[_note.index]);
-		width = graphicsStored[_note.index].width * 0.7;
-		setGraphicSize(Std.int(width * 0.7));
-		// updateHitbox();
-
-		antialiasing = UserSettings.get("antialiasing");
-		moves = false;
 	}
 }
 

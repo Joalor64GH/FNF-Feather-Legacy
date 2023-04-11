@@ -18,7 +18,7 @@ class PauseSubState extends MusicBeatSubState {
 					name: "Restart",
 					callback: function():Void {
 						var oldConstructor = PlayState.self.constructor;
-						FlxG.switchState(new PlayState(oldConstructor));
+						MusicBeatState.switchState(new PlayState(oldConstructor));
 					}
 				},
 				{name: "Options", callback: null},
@@ -28,7 +28,7 @@ class PauseSubState extends MusicBeatSubState {
 						switch (PlayState.self.constructor.gamemode) {
 							case STORY_MODE:
 							default:
-								FlxG.switchState(new feather.state.menus.FreeplayMenu());
+								MusicBeatState.switchState(new feather.state.menus.FreeplayMenu());
 						}
 					}
 				}
@@ -56,7 +56,7 @@ class PauseSubState extends MusicBeatSubState {
 					name: Levels.DEFAULT_DIFFICULTIES[i].toUpperCase(),
 					callback: function():Void {
 						var oldConstructor = PlayState.self.constructor;
-						FlxG.switchState(new PlayState({
+						MusicBeatState.switchState(new PlayState({
 							songName: oldConstructor.songName,
 							difficulty: Levels.DEFAULT_DIFFICULTIES[i],
 							gamemode: oldConstructor.gamemode
