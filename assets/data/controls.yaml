@@ -1,7 +1,0 @@
-presets:
-  - name: "ALT"
-    keys:
-      "left": [LEFT, D]
-      "down": [DOWN, F]
-      "up": [UP, J]
-      "right": [RIGHT, K]

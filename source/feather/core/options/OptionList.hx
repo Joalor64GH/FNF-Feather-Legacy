@@ -7,7 +7,6 @@ class OptionList {
 	public static function get():Array<Option> {
 		var options:Array<Option> = [];
 
-		// options.push(new Option("Controls Preset", "Define a Controls Preset.", "keyPreset", feather.core.Controls.self.myPresetNames));
 		options.push(new Option("Scroll Type", "In which direction should notes spawn?", "scrollType", ["UP", "DOWN"], true));
 		options.push(new Option("Center Notes", "Attaches your notes to the center of the screen.", "centerScroll", true));
 		options.push(new Option("Ghost Tapping", "If mashing keys should be allowed during gameplay.", "ghostTapping"));

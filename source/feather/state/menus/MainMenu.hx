@@ -24,7 +24,7 @@ class MainMenu extends MusicBeatState {
 		super.create();
 
 		#if MODDING_ENABLED
-		feather.core.handlers.ModHandler.scanMods();
+		feather.core.data.ModHandler.scanMods();
 		#end
 		#if DISCORD_ENABLED
 		DiscordHandler.updateInfo('In the Menus', 'MAIN MENU');

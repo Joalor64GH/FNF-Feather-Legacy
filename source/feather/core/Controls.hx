@@ -211,8 +211,6 @@ class Controls {
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		FlxG.signals.preUpdate.add(updateGamepadEvents);
-
-		loadPresets();
 	}
 
 	public static function destroy():Void {
@@ -220,19 +218,5 @@ class Controls {
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, self.onKeyDown);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, self.onKeyUp);
 		FlxG.signals.preUpdate.remove(self.updateGamepadEvents);
-	}
-
-	public var myPresetNames:Array<String> = ["DEFAULT"];
-
-	public function loadPresets():Void {
-		myPresetNames = ["DEFAULT"];
-		var controlsData:KeybindPreset = yaml.Yaml.parse(AssetHandler.getAsset('data/controls', YAML), yaml.Parser.options().useObjects());
-		for (i in 0...controlsData.presets.length)
-			if (!myPresetNames.contains(controlsData.presets[i].name))
-				myPresetNames.push(controlsData.presets[i].name);
-	}
-
-	public function changePreset(newPreset:String):Void {
-		var controlsData:KeybindPreset = yaml.Yaml.parse(AssetHandler.getAsset('data/controls', YAML), yaml.Parser.options().useObjects());
 	}
 }

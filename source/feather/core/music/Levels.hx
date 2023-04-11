@@ -42,14 +42,13 @@ class Levels {
 		}
 
 		#if MODDING_ENABLED
-		for (i in 0...feather.core.handlers.ModHandler.activeMods.length) {
-			var modName:String = feather.core.handlers.ModHandler.activeMods[i].folder;
+		for (i in 0...feather.core.data.ModHandler.activeMods.length) {
+			var modName:String = feather.core.data.ModHandler.activeMods[i].folder;
 
-			for (modWeek in Utils.readText(feather.core.handlers.ModHandler.getFromMod(modName, 'data/weeks/order', TXT))) {
-				if (FileSystem.exists(feather.core.handlers.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}', YAML))) {
-					var modWeek:GameWeek = cast yaml.Yaml.parse(File.getContent(feather.core.handlers.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}',
-						YAML)),
-						yaml.Parser.options().useObjects());
+			for (modWeek in Utils.readText(feather.core.data.ModHandler.getFromMod(modName, 'data/weeks/order', TXT))) {
+				if (FileSystem.exists(feather.core.data.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}', YAML))) {
+					var modWeek:GameWeek = cast yaml.Yaml.parse(File.getContent(feather.core.data.ModHandler.getFromMod(modName, 'data/weeks/${modWeek}',
+						YAML)), yaml.Parser.options().useObjects());
 
 					for (i in 0...modWeek.songs.length) {
 						if (modWeek.songs[i].color == null)

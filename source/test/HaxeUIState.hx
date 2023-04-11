@@ -1,7 +1,7 @@
 package test;
 
 import feather.Paths;
-import feather.core.handlers.HaxeUIGroup;
+import feather.core.data.HaxeUIGroup;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.ui.FlxUIState;

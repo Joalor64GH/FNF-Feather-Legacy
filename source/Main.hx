@@ -4,7 +4,7 @@ import feather.core.Controls;
 import feather.core.FPS;
 import feather.core.SematicVersion;
 import feather.core.Utils.TransitionState;
-import feather.core.handlers.CacheHandler;
+import feather.core.data.Handlers.CacheHandler;
 import flixel.FlxGame;
 import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
@@ -42,7 +42,7 @@ class Main extends Sprite {
 		// haxe.ui.Toolkit.init();
 		// haxe.ui.Toolkit.theme = 'dark';
 		#if windows
-		CustomAPI.setDarkBorder(true);
+		feather.core.data.APIs.MultiPurpAPI.setDarkBorder(true);
 		#end
 
 		var baseGame:GameObj = new GameObj(baseSettings.WIDTH, baseSettings.HEIGHT, baseSettings.STARTSTATE, baseSettings.MAX_FPS, baseSettings.MAX_FPS,
@@ -53,7 +53,7 @@ class Main extends Sprite {
 		addChild(fpsCounter);
 
 		#if DISCORD_ENABLED
-		feather.core.handlers.DiscordHandler.init("814588678700924999");
+		feather.core.data.Handlers.DiscordHandler.init("814588678700924999");
 		#end
 
 		TransitionState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.8, new FlxPoint(0, -1));
@@ -61,7 +61,7 @@ class Main extends Sprite {
 
 		CacheHandler.gcEnable();
 		Controls.self = new Controls();
-		feather.core.handlers.UserSettings.load();
+		feather.core.data.APIs.UserSettings.load();
 
 		FlxG.autoPause = false;
 		FlxG.fixedTimestep = true;
@@ -76,44 +76,6 @@ class Main extends Sprite {
 			Controls.destroy();
 		});
 	}
-}
-
-#if windows // TODO: not limit this to just windows
-@:buildXml('
-<target id="haxe">
-    <lib name="dwmapi.lib" if="windows" />
-    <lib name="shell32.lib" if="windows" />
-    <lib name="gdi32.lib" if="windows" />
-    <lib name="uxtheme.lib" if="windows" />
-</target>
-')
-@:cppFileCode('
-	#include <iostream>
-	#include <Windows.h>
-	#include <dwmapi.h>
-	#include <shellapi.h>
-	#include <uxtheme.h>
-')
-#end
-/*
- * Multi-usage Custom API which (sometimes) makes use of C++ code
- *
- * some of the functions were taken
- * @from https://github.com/YoshiCrafter29/CodenameEngine
- *
- * and where made by
- * @author YoshiCrafter29
- */
-class CustomAPI {
-	#if windows
-	@:functionCode('
-		int darkMode = active ? 1 : 0;
-		HWND window = GetActiveWindow();
-		if (S_OK != DwmSetWindowAttribute(window, 19, &darkMode, sizeof(darkMode)))
-			DwmSetWindowAttribute(window, 20, &darkMode, sizeof(darkMode));
-	')
-	public static function setDarkBorder(active:Bool):Void {}
-	#end
 }
 
 class CustomGame extends FlxGame {

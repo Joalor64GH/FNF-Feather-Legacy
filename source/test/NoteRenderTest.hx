@@ -1,7 +1,7 @@
 package test;
 
-import feather.core.handlers.AssetHandler;
-import feather.core.handlers.UserSettings;
+import feather.core.data.APIs.UserSettings;
+import feather.core.data.Handlers.AssetHandler;
 import feather.core.music.ChartLoader;
 import feather.core.music.Conductor;
 import feather.gameObjs.Note;

@@ -1,4 +1,4 @@
-package feather.core.handlers;
+package feather.core.data;
 
 import flixel.FlxG;
 import flixel.group.FlxGroup;

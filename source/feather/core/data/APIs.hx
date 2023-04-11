@@ -1,4 +1,4 @@
-package feather.core.handlers;
+package feather.core.data;
 
 class UserSettings {
 	/**
@@ -8,7 +8,7 @@ class UserSettings {
 	 * and so on...
 	 */
 	@:noPrivateAccess
-	private static var defaultPreferences:Map<String, Dynamic> = [
+	private static final defaultPreferences:Map<String, Dynamic> = [
 		// ACCESSIBILITY
 		"antialiasing" => true,
 		"flasingLights" => true,
@@ -18,7 +18,6 @@ class UserSettings {
 		"centerScroll" => false,
 		"ghostTapping" => true,
 		"noteSplashes" => true,
-		"keyPreset" => "DEFAULT",
 		"scrollType" => "UP",
 		"infoText" => "TIME",
 	];
@@ -74,6 +73,47 @@ class UserSettings {
 	public static function update():Void {
 		FlxG.save.bind("UserSettings", Utils.saveFolder());
 		Utils.updateFramerateCap(UserSettings.get("framerateCap"));
-		feather.core.Controls.self.changePreset(UserSettings.get("keyPreset"));
+	}
+}
+
+#if windows // TODO: not limit this to just windows
+@:buildXml('
+<target id="haxe">
+    <lib name="dwmapi.lib" if="windows" />
+    <lib name="shell32.lib" if="windows" />
+    <lib name="gdi32.lib" if="windows" />
+    <lib name="uxtheme.lib" if="windows" />
+</target>
+')
+@:cppFileCode('
+	#include <iostream>
+	#include <Windows.h>
+	#include <dwmapi.h>
+	#include <shellapi.h>
+	#include <uxtheme.h>
+')
+#end
+/*
+ * Multi-purpose Custom API which (sometimes) makes use of C++ code
+ *
+ * some of the functions were taken
+ * @from https://github.com/YoshiCrafter29/CodenameEngine
+ *
+ * and where made by
+ * @author YoshiCrafter29
+ */
+class MultiPurpAPI {
+	#if windows
+	@:functionCode('
+		int darkMode = active ? 1 : 0;
+		HWND window = GetActiveWindow();
+		if (S_OK != DwmSetWindowAttribute(window, 19, &darkMode, sizeof(darkMode)))
+			DwmSetWindowAttribute(window, 20, &darkMode, sizeof(darkMode));
+	')
+	public static function setDarkBorder(active:Bool):Void {}
+	#end
+
+	public static function initYAML(path:String, ?ignoreMods:Bool = false):yaml.Yaml {
+		return yaml.Yaml.parse(AssetHandler.getAsset(path, YAML, ignoreMods), yaml.Parser.options().useObjects());
 	}
 }

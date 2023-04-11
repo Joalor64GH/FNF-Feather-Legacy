@@ -1,6 +1,6 @@
 package feather.state.subState;
 
-import feather.core.handlers.ModHandler;
+import feather.core.data.ModHandler;
 import feather.gameObjs.ui.Alphabet;
 import feather.state.subState.MusicBeatSubState;
 import flixel.FlxG;

@@ -85,5 +85,8 @@
 	<!-- Error Handling at Runtime for Scripts -->
 	<haxedef name="hscriptPos" if="SCRIPTING_ENABLED" />
 
+	<!-- Disable Deprecation Warnings -->
+	<haxedef name="no-deprecation-warnings" />
+
 	<!-- _______ Custom _______ -->
 </project>

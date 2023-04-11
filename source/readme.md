@@ -28,16 +28,18 @@ The folder structure goes as follows:
 		and are instead used as backend files for the game to work with,
 		such as `Controls`, `Highscore`, and `Utils`
 		----------------
-		- `handlers`
-			- The `handlers` folder contains many of the classes that the game actively uses,
-			such as the `AssetHandler` class, or the `UserSettings` class
+		- `data`
+			- The `data` folder contains many of the classes that the game actively uses,
+			if you wish to add/edit game settings or mess with the assets system,
+			`APIs` and `Handlers` is for you
 		----------------
 		- `music`
 			- The `music` folder contains classes that handle song playing and events during gameplay,
 			along with chart parsing and loading
 		----------------
 		- `options`
-			- The `options` folder contains a few objects to handle options
+			- The `options` folder contains a few objects to handle options,
+			those having some level of visual look in-game, but still just being initializable objects
 	- `gameObjs`
 		- This is where all the files related to Game Objects are stored,
 		if you wish to modify `Character`s or `Note`s,

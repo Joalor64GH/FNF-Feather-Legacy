@@ -58,7 +58,7 @@ class FreeplayMenu extends MenuBase {
 		for (folder in FileSystem.readDirectory(AssetHandler.getPath("data/songs", true))) {
 			var path:String = 'data/songs/${folder}/freeplay';
 			if (FileSystem.exists(AssetHandler.getPath(path, YAML))) {
-				var data:ListableSong = cast yaml.Yaml.parse(AssetHandler.getAsset(path, YAML, true), yaml.Parser.options().useObjects());
+				var data:ListableSong = cast MultiPurpAPI.initYAML(path, true);
 				data.color = FlxColor.fromString(Std.string(data.color));
 				if (!songList.contains(data))
 					songList.push(data);
@@ -66,13 +66,13 @@ class FreeplayMenu extends MenuBase {
 		}
 
 		#if MODDING_ENABLED
-		for (i in 0...feather.core.handlers.ModHandler.activeMods.length) {
-			var modName:String = feather.core.handlers.ModHandler.activeMods[i].folder;
-			if (FileSystem.exists(feather.core.handlers.ModHandler.getFromMod(modName, 'data/songs'))) {
-				for (modFolder in FileSystem.readDirectory(feather.core.handlers.ModHandler.getFromMod(modName, 'data/songs'))) {
+		for (i in 0...feather.core.data.ModHandler.activeMods.length) {
+			var modName:String = feather.core.data.ModHandler.activeMods[i].folder;
+			if (FileSystem.exists(feather.core.data.ModHandler.getFromMod(modName, 'data/songs'))) {
+				for (modFolder in FileSystem.readDirectory(feather.core.data.ModHandler.getFromMod(modName, 'data/songs'))) {
 					var path:String = 'data/songs/${modFolder}/freeplay';
-					if (FileSystem.exists(feather.core.handlers.ModHandler.getFromMod(modName, path, YAML))) {
-						var data:ListableSong = cast yaml.Yaml.parse(sys.io.File.getContent(feather.core.handlers.ModHandler.getFromMod(modName, path, YAML)),
+					if (FileSystem.exists(feather.core.data.ModHandler.getFromMod(modName, path, YAML))) {
+						var data:ListableSong = cast yaml.Yaml.parse(sys.io.File.getContent(feather.core.data.ModHandler.getFromMod(modName, path, YAML)),
 							yaml.Parser.options().useObjects());
 						data.color = FlxColor.fromString(Std.string(data.color));
 						if (!songList.contains(data))
