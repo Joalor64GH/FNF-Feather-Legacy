@@ -3,6 +3,10 @@
     "origin": "FNF LEGACY/HYBRID",
     "stage": "highway",
     "uiStyle": "default",
-    "characters": ["bf-car", "mom-car", "gf-car"],
+    "characters": [
+        "bf-car",
+        "mom-car",
+        "gf-car"
+    ],
     "bpm": 125
 }

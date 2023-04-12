@@ -1,6 +1,6 @@
-chars: ['', bf, gf]
+chars: ["", bf, gf]
 songs:
-  - color: '#9271FD'
+  - color: "#9271FD"
     enemy: gf
     name: Tutorial
-label: ''
+label: ""

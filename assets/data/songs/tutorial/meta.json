@@ -3,6 +3,10 @@
     "origin": "FNF LEGACY/HYBRID",
     "stage": "stage",
     "uiStyle": "default",
-    "characters": ["bf", "gf", "gf"],
+    "characters": [
+        "bf",
+        "gf",
+        "gf"
+    ],
     "bpm": 100
 }

@@ -3,6 +3,10 @@
     "origin": "FNF LEGACY/HYBRID",
     "stage": "school-glitch",
     "uiStyle": "pixel",
-    "characters": ["bf-pixel", "spirit", "gf-pixel"],
+    "characters": [
+        "bf-pixel",
+        "spirit",
+        "gf-pixel"
+    ],
     "bpm": 190
 }

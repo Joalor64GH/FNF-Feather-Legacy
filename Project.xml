@@ -7,8 +7,7 @@
 	<app title="Friday Night Funkin': Feather" file="FunkinFeather" company="BeastlyGhost" />
 
 	<!-- Initial Class, Package Name (Mac), Package Name (Other) -->
-	<app main="Main" package="com.BeastlyGhost.FunkinFeather"
-		packageName="com.BeastlyGhost.FunkinFeather" />
+	<app main="Main" package="com.BeastlyGhost.FunkinFeather" packageName="com.BeastlyGhost.FunkinFeather" />
 
 	<app preloader="flixel.system.FlxPreloader" />
 
@@ -55,7 +54,7 @@
 	<haxelib name="flxanimate" />
 
 	<!-- Discord Rich Presence Support -->
-	<haxelib name="discord_rpc" if="DISCORD_ENABLED"/>
+	<haxelib name="discord_rpc" if="DISCORD_ENABLED" />
 
 	<!-- Needed for some of the custom data -->
 	<haxelib name="yaml" />

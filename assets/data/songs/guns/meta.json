@@ -3,6 +3,10 @@
     "origin": "FNF LEGACY/HYBRID",
     "stage": "military-zone",
     "uiStyle": "default",
-    "characters": ["bf", "tankman", "gf-tankmen"],
+    "characters": [
+        "bf",
+        "tankman",
+        "gf-tankmen"
+    ],
     "bpm": 185
 }

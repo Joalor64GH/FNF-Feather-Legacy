@@ -1,1 +1,2283 @@
-{"speed":2.2,"sections":[{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[{"index":3,"sustainTime":0,"step":11636.3633},{"index":3,"sustainTime":0,"step":12000},{"index":0,"sustainTime":0,"step":12363.6367},{"index":3,"sustainTime":0,"step":12545.4541},{"index":2,"sustainTime":0,"step":12727.2725},{"index":3,"sustainTime":0,"step":12909.0908}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":13090.9092},{"index":1,"sustainTime":0,"step":13454.5449},{"index":3,"sustainTime":0,"step":13818.1816},{"index":3,"sustainTime":0,"step":14000},{"index":3,"sustainTime":181.818176,"step":14181.8184}],"camPoint":0},{"length":16,"notes":[{"index":3,"sustainTime":0,"step":14545.4541},{"index":3,"sustainTime":0,"step":14909.0908},{"index":3,"sustainTime":0,"step":15272.7275},{"index":2,"sustainTime":0,"step":15454.5449},{"index":0,"sustainTime":0,"step":15636.3633},{"index":1,"sustainTime":0,"step":15818.1816}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":16000},{"index":0,"sustainTime":0,"step":16363.6357},{"index":2,"sustainTime":0,"step":16727.2734},{"index":0,"sustainTime":0,"step":17090.9082},{"index":3,"sustainTime":0,"step":17272.7266}],"camPoint":0},{"length":16,"notes":[{"strumline":1,"index":3,"sustainTime":0,"step":17454.5449},{"strumline":1,"index":3,"sustainTime":0,"step":17818.1816},{"strumline":1,"index":0,"sustainTime":0,"step":18181.8184},{"strumline":1,"index":3,"sustainTime":0,"step":18363.6367},{"strumline":1,"index":2,"sustainTime":0,"step":18545.4551},{"strumline":1,"index":3,"sustainTime":0,"step":18727.2734}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":18909.09},{"strumline":1,"index":1,"sustainTime":0,"step":19272.7266},{"strumline":1,"index":3,"sustainTime":0,"step":19636.3633},{"strumline":1,"index":3,"sustainTime":0,"step":19818.1816},{"strumline":1,"index":3,"sustainTime":181.818176,"step":20000}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":3,"sustainTime":0,"step":20363.6367},{"strumline":1,"index":3,"sustainTime":0,"step":20727.2734},{"strumline":1,"index":3,"sustainTime":0,"step":21090.9082},{"strumline":1,"index":2,"sustainTime":0,"step":21272.7266},{"strumline":1,"index":0,"sustainTime":0,"step":21454.5449},{"strumline":1,"index":1,"sustainTime":0,"step":21636.3633}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":21818.1816},{"strumline":1,"index":0,"sustainTime":0,"step":22181.8184},{"strumline":1,"index":2,"sustainTime":0,"step":22545.4551},{"strumline":1,"index":0,"sustainTime":0,"step":22909.09},{"strumline":1,"index":3,"sustainTime":0,"step":23090.9082}],"camPoint":1},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":23272.7266},{"index":1,"sustainTime":0,"step":23454.5449},{"index":0,"sustainTime":0,"step":23636.3633},{"index":0,"sustainTime":0,"step":23818.1816},{"index":3,"sustainTime":0,"step":23909.09},{"index":2,"sustainTime":0,"step":24000},{"index":0,"sustainTime":0,"step":24181.8184},{"index":2,"sustainTime":0,"step":24363.6367},{"index":1,"sustainTime":0,"step":24545.4551}],"camPoint":0},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":24727.2734},{"index":2,"sustainTime":0,"step":25090.9082},{"index":2,"sustainTime":0,"step":25454.5449},{"index":1,"sustainTime":0,"step":25636.3633},{"index":0,"sustainTime":0,"step":25818.1816},{"index":3,"sustainTime":0,"step":26000}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":26181.8184},{"index":0,"sustainTime":0,"step":26545.4551},{"index":0,"sustainTime":0,"step":26727.2734},{"index":2,"sustainTime":0,"step":26818.1816},{"index":3,"sustainTime":0,"step":26909.09},{"index":0,"sustainTime":0,"step":27090.9082},{"index":1,"sustainTime":0,"step":27272.7266},{"index":3,"sustainTime":0,"step":27454.5449}],"camPoint":0},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":27636.3633},{"index":2,"sustainTime":0,"step":28000},{"index":2,"sustainTime":0,"step":28363.6367},{"index":3,"sustainTime":0,"step":28545.4551},{"index":0,"sustainTime":0,"step":28727.2715},{"index":1,"sustainTime":0,"step":28909.09}],"camPoint":0},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":29090.9082},{"strumline":1,"index":1,"sustainTime":0,"step":29272.7266},{"strumline":1,"index":0,"sustainTime":0,"step":29454.5449},{"strumline":1,"index":0,"sustainTime":0,"step":29636.3633},{"strumline":1,"index":3,"sustainTime":0,"step":29727.2715},{"strumline":1,"index":2,"sustainTime":0,"step":29818.1816},{"strumline":1,"index":0,"sustainTime":0,"step":30000},{"strumline":1,"index":2,"sustainTime":0,"step":30181.8184},{"strumline":1,"index":1,"sustainTime":0,"step":30363.6367}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":30545.4551},{"strumline":1,"index":2,"sustainTime":0,"step":30909.09},{"strumline":1,"index":2,"sustainTime":0,"step":31272.7266},{"strumline":1,"index":1,"sustainTime":0,"step":31454.5449},{"strumline":1,"index":0,"sustainTime":0,"step":31636.3633},{"strumline":1,"index":3,"sustainTime":0,"step":31818.1816}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":32000},{"strumline":1,"index":0,"sustainTime":0,"step":32363.6367},{"strumline":1,"index":0,"sustainTime":0,"step":32545.4551},{"strumline":1,"index":2,"sustainTime":0,"step":32636.3633},{"strumline":1,"index":3,"sustainTime":0,"step":32727.2715},{"strumline":1,"index":0,"sustainTime":0,"step":32909.09},{"strumline":1,"index":1,"sustainTime":0,"step":33090.91},{"strumline":1,"index":3,"sustainTime":0,"step":33272.7266}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":33454.5469},{"strumline":1,"index":2,"sustainTime":0,"step":33818.18},{"strumline":1,"index":2,"sustainTime":0,"step":34181.8164},{"strumline":1,"index":3,"sustainTime":0,"step":34363.6367},{"strumline":1,"index":0,"sustainTime":0,"step":34545.4531},{"strumline":1,"index":1,"sustainTime":0,"step":34727.2734}],"camPoint":1},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":34909.09},{"index":3,"sustainTime":0,"step":35090.91},{"index":0,"sustainTime":0,"step":35272.7266},{"index":2,"sustainTime":0,"step":35454.5469},{"index":3,"sustainTime":0,"step":35636.3633},{"index":0,"sustainTime":0,"step":35818.18},{"index":2,"sustainTime":0,"step":36000},{"index":3,"sustainTime":0,"step":36181.8164}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":36363.6367},{"index":2,"sustainTime":0,"step":36545.4531},{"index":3,"sustainTime":0,"step":36727.2734},{"index":0,"sustainTime":0,"step":36909.09},{"index":0,"sustainTime":0,"step":37090.91},{"index":3,"sustainTime":0,"step":37272.7266},{"index":0,"sustainTime":0,"step":37454.5469}],"camPoint":0},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":37818.18},{"index":3,"sustainTime":0,"step":38000},{"index":0,"sustainTime":0,"step":38181.8164},{"index":2,"sustainTime":0,"step":38363.6367},{"index":3,"sustainTime":0,"step":38545.4531},{"index":0,"sustainTime":0,"step":38727.2734},{"index":2,"sustainTime":0,"step":38909.09},{"index":3,"sustainTime":0,"step":39090.91}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":39272.7266},{"index":1,"sustainTime":0,"step":39454.5469},{"index":1,"sustainTime":0,"step":39545.4531},{"index":3,"sustainTime":0,"step":39636.3633},{"index":0,"sustainTime":0,"step":39818.18},{"index":3,"sustainTime":0,"step":40000},{"index":0,"sustainTime":0,"step":40181.8164},{"index":3,"sustainTime":0,"step":40363.6367}],"camPoint":0},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":40727.2734},{"strumline":1,"index":3,"sustainTime":0,"step":40909.09},{"strumline":1,"index":0,"sustainTime":0,"step":41090.91},{"strumline":1,"index":2,"sustainTime":0,"step":41272.7266},{"strumline":1,"index":3,"sustainTime":0,"step":41454.5469},{"strumline":1,"index":0,"sustainTime":0,"step":41636.3633},{"strumline":1,"index":2,"sustainTime":0,"step":41818.18},{"strumline":1,"index":3,"sustainTime":0,"step":42000}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":42181.8164},{"strumline":1,"index":2,"sustainTime":0,"step":42363.6367},{"strumline":1,"index":3,"sustainTime":0,"step":42545.4531},{"strumline":1,"index":0,"sustainTime":0,"step":42727.2734},{"strumline":1,"index":0,"sustainTime":0,"step":42909.09},{"strumline":1,"index":3,"sustainTime":0,"step":43090.91},{"strumline":1,"index":0,"sustainTime":0,"step":43272.7266}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":43636.3633},{"strumline":1,"index":3,"sustainTime":0,"step":43818.18},{"strumline":1,"index":0,"sustainTime":0,"step":44000},{"strumline":1,"index":2,"sustainTime":0,"step":44181.8164},{"strumline":1,"index":3,"sustainTime":0,"step":44363.6367},{"strumline":1,"index":0,"sustainTime":0,"step":44545.4531},{"strumline":1,"index":2,"sustainTime":0,"step":44727.2734},{"strumline":1,"index":3,"sustainTime":0,"step":44909.09}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":45090.91},{"strumline":1,"index":1,"sustainTime":0,"step":45272.7266},{"strumline":1,"index":1,"sustainTime":0,"step":45363.6367},{"strumline":1,"index":3,"sustainTime":0,"step":45454.5469},{"strumline":1,"index":0,"sustainTime":0,"step":45636.3633},{"strumline":1,"index":3,"sustainTime":0,"step":45818.18},{"strumline":1,"index":0,"sustainTime":0,"step":46000},{"strumline":1,"index":3,"sustainTime":0,"step":46181.8164}],"camPoint":1},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":46545.4531},{"index":3,"sustainTime":0,"step":46818.18},{"index":1,"sustainTime":0,"step":46909.09},{"index":0,"sustainTime":0,"step":47090.91},{"index":3,"sustainTime":0,"step":47272.7266},{"index":1,"sustainTime":0,"step":47454.5469},{"index":2,"sustainTime":0,"step":47636.3633},{"index":3,"sustainTime":0,"step":47818.18}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":48000},{"index":2,"sustainTime":0,"step":48181.8164},{"index":3,"sustainTime":0,"step":48363.6367},{"index":0,"sustainTime":0,"step":48545.4531},{"index":3,"sustainTime":0,"step":48727.2734},{"index":2,"sustainTime":0,"step":48909.09},{"index":0,"sustainTime":0,"step":49090.91}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":49454.5469},{"index":3,"sustainTime":0,"step":49545.4531},{"index":2,"sustainTime":0,"step":49636.3633},{"index":3,"sustainTime":0,"step":49818.18},{"index":0,"sustainTime":0,"step":50000},{"index":2,"sustainTime":0,"step":50181.8164},{"index":3,"sustainTime":0,"step":50363.6367},{"index":0,"sustainTime":0,"step":50545.4531},{"index":3,"sustainTime":0,"step":50636.3633},{"index":2,"sustainTime":0,"step":50727.2734}],"camPoint":0},{"length":16,"notes":[{"index":1,"sustainTime":0,"step":50909.09},{"index":1,"sustainTime":0,"step":51090.91},{"index":1,"sustainTime":0,"step":51181.8164},{"index":0,"sustainTime":0,"step":51272.7266},{"index":3,"sustainTime":0,"step":51454.5469},{"index":2,"sustainTime":0,"step":51636.3633},{"index":3,"sustainTime":0,"step":51818.18},{"index":0,"sustainTime":0,"step":52000}],"camPoint":0},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":52363.6367},{"strumline":1,"index":3,"sustainTime":0,"step":52636.3633},{"strumline":1,"index":1,"sustainTime":0,"step":52727.2734},{"strumline":1,"index":0,"sustainTime":0,"step":52909.09},{"strumline":1,"index":3,"sustainTime":0,"step":53090.91},{"strumline":1,"index":1,"sustainTime":0,"step":53272.7266},{"strumline":1,"index":2,"sustainTime":0,"step":53454.5469},{"strumline":1,"index":3,"sustainTime":0,"step":53636.3633}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":53818.18},{"strumline":1,"index":2,"sustainTime":0,"step":54000},{"strumline":1,"index":3,"sustainTime":0,"step":54181.8164},{"strumline":1,"index":0,"sustainTime":0,"step":54363.6367},{"strumline":1,"index":3,"sustainTime":0,"step":54545.4531},{"strumline":1,"index":2,"sustainTime":0,"step":54727.2734},{"strumline":1,"index":0,"sustainTime":0,"step":54909.09}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":55272.7266},{"strumline":1,"index":3,"sustainTime":0,"step":55363.6367},{"strumline":1,"index":2,"sustainTime":0,"step":55454.5469},{"strumline":1,"index":3,"sustainTime":0,"step":55636.3633},{"strumline":1,"index":0,"sustainTime":0,"step":55818.18},{"strumline":1,"index":2,"sustainTime":0,"step":56000},{"strumline":1,"index":3,"sustainTime":0,"step":56181.8164},{"strumline":1,"index":0,"sustainTime":0,"step":56363.6367},{"strumline":1,"index":3,"sustainTime":0,"step":56454.543},{"strumline":1,"index":2,"sustainTime":0,"step":56545.4531}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":1,"sustainTime":0,"step":56727.2734},{"strumline":1,"index":1,"sustainTime":0,"step":56909.09},{"strumline":1,"index":1,"sustainTime":0,"step":57000},{"strumline":1,"index":0,"sustainTime":0,"step":57090.91},{"strumline":1,"index":3,"sustainTime":0,"step":57272.7266},{"index":0,"sustainTime":0,"step":57454.543},{"strumline":1,"index":2,"sustainTime":0,"step":57454.543},{"strumline":1,"index":3,"sustainTime":0,"step":57636.3633},{"index":3,"sustainTime":0,"step":57636.3633},{"strumline":1,"index":0,"sustainTime":0,"step":57818.18},{"index":1,"sustainTime":0,"step":57818.18},{"index":3,"sustainTime":0,"step":58000}],"camPoint":1},{"length":16,"notes":[{"index":3,"sustainTime":0,"step":58181.8164},{"index":3,"sustainTime":0,"step":58545.4531},{"index":1,"sustainTime":0,"step":58727.2734},{"index":2,"sustainTime":0,"step":58909.09},{"index":0,"sustainTime":0,"step":59090.91},{"index":1,"sustainTime":0,"step":59272.7266},{"index":3,"sustainTime":0,"step":59454.543}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":272.727264,"step":59636.3633},{"index":2,"sustainTime":0,"step":60000},{"index":2,"sustainTime":0,"step":60363.6367},{"index":2,"sustainTime":0,"step":60545.4531},{"index":2,"sustainTime":181.818176,"step":60727.2734}],"camPoint":0},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":61090.91},{"index":2,"sustainTime":0,"step":61454.543},{"index":3,"sustainTime":0,"step":61636.3633},{"index":1,"sustainTime":0,"step":61818.18},{"index":0,"sustainTime":0,"step":62000},{"index":3,"sustainTime":0,"step":62181.8164},{"index":0,"sustainTime":0,"step":62363.6367}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":62545.4531},{"index":0,"sustainTime":0,"step":62909.09},{"index":2,"sustainTime":0,"step":63272.7266},{"strumline":1,"index":0,"sustainTime":0,"step":63272.7266},{"strumline":1,"index":3,"sustainTime":0,"step":63454.543},{"index":0,"sustainTime":0,"step":63636.3633},{"strumline":1,"index":1,"sustainTime":0,"step":63636.3633},{"index":3,"sustainTime":0,"step":63818.18},{"strumline":1,"index":3,"sustainTime":0,"step":63818.18}],"camPoint":0},{"length":16,"notes":[{"strumline":1,"index":3,"sustainTime":0,"step":64000},{"strumline":1,"index":3,"sustainTime":0,"step":64363.6367},{"strumline":1,"index":1,"sustainTime":0,"step":64545.4531},{"strumline":1,"index":2,"sustainTime":0,"step":64727.2734},{"strumline":1,"index":0,"sustainTime":0,"step":64909.09},{"strumline":1,"index":1,"sustainTime":0,"step":65090.91},{"strumline":1,"index":3,"sustainTime":0,"step":65272.7266}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":272.727264,"step":65454.543},{"strumline":1,"index":2,"sustainTime":0,"step":65818.18},{"strumline":1,"index":2,"sustainTime":0,"step":66181.82},{"strumline":1,"index":2,"sustainTime":0,"step":66363.63},{"strumline":1,"index":2,"sustainTime":181.818176,"step":66545.45}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":66909.09},{"strumline":1,"index":2,"sustainTime":0,"step":67272.73},{"strumline":1,"index":3,"sustainTime":0,"step":67454.55},{"strumline":1,"index":1,"sustainTime":0,"step":67636.36},{"strumline":1,"index":0,"sustainTime":0,"step":67818.18},{"strumline":1,"index":3,"sustainTime":0,"step":68000},{"strumline":1,"index":0,"sustainTime":0,"step":68181.82}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":68363.63},{"strumline":1,"index":0,"sustainTime":0,"step":68727.27},{"strumline":1,"index":2,"sustainTime":0,"step":69090.91},{"strumline":1,"index":0,"sustainTime":0,"step":69454.55},{"strumline":1,"index":3,"sustainTime":0,"step":69636.36}],"camPoint":1},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":69818.18},{"index":3,"sustainTime":0,"step":70000},{"index":0,"sustainTime":0,"step":70181.82},{"index":3,"sustainTime":0,"step":70363.63},{"index":2,"sustainTime":0,"step":70454.55},{"index":0,"sustainTime":0,"step":70545.45},{"index":3,"sustainTime":0,"step":70727.27},{"index":2,"sustainTime":0,"step":70909.09},{"index":3,"sustainTime":0,"step":71090.91}],"camPoint":0},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":71272.73},{"index":2,"sustainTime":0,"step":71636.36},{"index":0,"sustainTime":0,"step":71818.18},{"index":2,"sustainTime":0,"step":72000},{"index":3,"sustainTime":0,"step":72181.82},{"index":0,"sustainTime":0,"step":72363.63},{"index":2,"sustainTime":0,"step":72545.45}],"camPoint":0},{"length":16,"notes":[{"index":0,"sustainTime":0,"step":72727.27},{"index":0,"sustainTime":0,"step":73090.91},{"index":0,"sustainTime":0,"step":73272.73},{"index":3,"sustainTime":0,"step":73363.63},{"index":2,"sustainTime":0,"step":73454.55},{"index":3,"sustainTime":0,"step":73636.36},{"index":2,"sustainTime":0,"step":73818.18},{"index":0,"sustainTime":0,"step":74000}],"camPoint":0},{"length":16,"notes":[{"index":2,"sustainTime":0,"step":74181.82},{"index":3,"sustainTime":0,"step":74363.63},{"index":2,"sustainTime":0,"step":74545.45},{"index":0,"sustainTime":0,"step":74727.27},{"index":1,"sustainTime":0,"step":74909.09},{"index":3,"sustainTime":0,"step":75090.91},{"index":0,"sustainTime":0,"step":75272.73},{"index":3,"sustainTime":0,"step":75454.55}],"camPoint":0},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":75636.36},{"strumline":1,"index":3,"sustainTime":0,"step":75818.18},{"strumline":1,"index":0,"sustainTime":0,"step":76000},{"strumline":1,"index":3,"sustainTime":0,"step":76181.82},{"strumline":1,"index":2,"sustainTime":0,"step":76272.73},{"strumline":1,"index":0,"sustainTime":0,"step":76363.63},{"strumline":1,"index":3,"sustainTime":0,"step":76545.45},{"strumline":1,"index":2,"sustainTime":0,"step":76727.27},{"strumline":1,"index":3,"sustainTime":0,"step":76909.09}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":77090.91},{"strumline":1,"index":2,"sustainTime":0,"step":77454.55},{"strumline":1,"index":0,"sustainTime":0,"step":77636.36},{"strumline":1,"index":2,"sustainTime":0,"step":77818.18},{"strumline":1,"index":3,"sustainTime":0,"step":78000},{"strumline":1,"index":0,"sustainTime":0,"step":78181.82},{"strumline":1,"index":2,"sustainTime":0,"step":78363.63}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":0,"sustainTime":0,"step":78545.45},{"strumline":1,"index":0,"sustainTime":0,"step":78909.09},{"strumline":1,"index":0,"sustainTime":0,"step":79090.91},{"strumline":1,"index":3,"sustainTime":0,"step":79181.82},{"strumline":1,"index":2,"sustainTime":0,"step":79272.73},{"strumline":1,"index":3,"sustainTime":0,"step":79454.55},{"strumline":1,"index":2,"sustainTime":0,"step":79636.36},{"strumline":1,"index":0,"sustainTime":0,"step":79818.18}],"camPoint":1},{"length":16,"notes":[{"strumline":1,"index":2,"sustainTime":0,"step":80000},{"strumline":1,"index":3,"sustainTime":0,"step":80181.82},{"strumline":1,"index":2,"sustainTime":0,"step":80363.63},{"strumline":1,"index":0,"sustainTime":0,"step":80545.45},{"strumline":1,"index":1,"sustainTime":0,"step":80727.27},{"strumline":1,"index":3,"sustainTime":0,"step":80909.09},{"strumline":1,"index":0,"sustainTime":0,"step":81090.91},{"strumline":1,"index":3,"sustainTime":0,"step":81272.73}],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1},{"length":16,"notes":[],"camPoint":1}]}
+{
+    "speed": 2.2,
+    "sections": [
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 11636.3633
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 12000
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 12363.6367
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 12545.4541
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 12727.2725
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 12909.0908
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 13090.9092
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 13454.5449
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 13818.1816
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 14000
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 181.818176,
+                    "step": 14181.8184
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 14545.4541
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 14909.0908
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 15272.7275
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 15454.5449
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 15636.3633
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 15818.1816
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 16000
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 16363.6357
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 16727.2734
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 17090.9082
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 17272.7266
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 17454.5449
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 17818.1816
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 18181.8184
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 18363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 18545.4551
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 18727.2734
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 18909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 19272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 19636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 19818.1816
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 181.818176,
+                    "step": 20000
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 20363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 20727.2734
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 21090.9082
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 21272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 21454.5449
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 21636.3633
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 21818.1816
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 22181.8184
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 22545.4551
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 22909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 23090.9082
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 23272.7266
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 23454.5449
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 23636.3633
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 23818.1816
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 23909.09
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 24000
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 24181.8184
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 24363.6367
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 24545.4551
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 24727.2734
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 25090.9082
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 25454.5449
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 25636.3633
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 25818.1816
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 26000
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 26181.8184
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 26545.4551
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 26727.2734
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 26818.1816
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 26909.09
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 27090.9082
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 27272.7266
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 27454.5449
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 27636.3633
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 28000
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 28363.6367
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 28545.4551
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 28727.2715
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 28909.09
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 29090.9082
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 29272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 29454.5449
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 29636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 29727.2715
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 29818.1816
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 30000
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 30181.8184
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 30363.6367
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 30545.4551
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 30909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 31272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 31454.5449
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 31636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 31818.1816
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 32000
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 32363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 32545.4551
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 32636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 32727.2715
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 32909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 33090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 33272.7266
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 33454.5469
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 33818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 34181.8164
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 34363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 34545.4531
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 34727.2734
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 34909.09
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 35090.91
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 35272.7266
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 35454.5469
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 35636.3633
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 35818.18
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 36000
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 36181.8164
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 36363.6367
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 36545.4531
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 36727.2734
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 36909.09
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 37090.91
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 37272.7266
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 37454.5469
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 37818.18
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 38000
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 38181.8164
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 38363.6367
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 38545.4531
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 38727.2734
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 38909.09
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 39090.91
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 39272.7266
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 39454.5469
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 39545.4531
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 39636.3633
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 39818.18
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 40000
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 40181.8164
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 40363.6367
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 40727.2734
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 40909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 41090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 41272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 41454.5469
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 41636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 41818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 42000
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 42181.8164
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 42363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 42545.4531
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 42727.2734
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 42909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 43090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 43272.7266
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 43636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 43818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 44000
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 44181.8164
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 44363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 44545.4531
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 44727.2734
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 44909.09
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 45090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 45272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 45363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 45454.5469
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 45636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 45818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 46000
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 46181.8164
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 46545.4531
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 46818.18
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 46909.09
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 47090.91
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 47272.7266
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 47454.5469
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 47636.3633
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 47818.18
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 48000
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 48181.8164
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 48363.6367
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 48545.4531
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 48727.2734
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 48909.09
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 49090.91
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 49454.5469
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 49545.4531
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 49636.3633
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 49818.18
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 50000
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 50181.8164
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 50363.6367
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 50545.4531
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 50636.3633
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 50727.2734
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 50909.09
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 51090.91
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 51181.8164
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 51272.7266
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 51454.5469
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 51636.3633
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 51818.18
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 52000
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 52363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 52636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 52727.2734
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 52909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 53090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 53272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 53454.5469
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 53636.3633
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 53818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 54000
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 54181.8164
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 54363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 54545.4531
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 54727.2734
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 54909.09
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 55272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 55363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 55454.5469
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 55636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 55818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 56000
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 56181.8164
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 56363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 56454.543
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 56545.4531
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 56727.2734
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 56909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 57000
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 57090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 57272.7266
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 57454.543
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 57454.543
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 57636.3633
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 57636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 57818.18
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 57818.18
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 58000
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 58181.8164
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 58545.4531
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 58727.2734
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 58909.09
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 59090.91
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 59272.7266
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 59454.543
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 272.727264,
+                    "step": 59636.3633
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 60000
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 60363.6367
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 60545.4531
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 181.818176,
+                    "step": 60727.2734
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 61090.91
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 61454.543
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 61636.3633
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 61818.18
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 62000
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 62181.8164
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 62363.6367
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 62545.4531
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 62909.09
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 63272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 63272.7266
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 63454.543
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 63636.3633
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 63636.3633
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 63818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 63818.18
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 64000
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 64363.6367
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 64545.4531
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 64727.2734
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 64909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 65090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 65272.7266
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 272.727264,
+                    "step": 65454.543
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 65818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 66181.82
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 66363.63
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 181.818176,
+                    "step": 66545.45
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 66909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 67272.73
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 67454.55
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 67636.36
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 67818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 68000
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 68181.82
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 68363.63
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 68727.27
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 69090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 69454.55
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 69636.36
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 69818.18
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 70000
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 70181.82
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 70363.63
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 70454.55
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 70545.45
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 70727.27
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 70909.09
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 71090.91
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 71272.73
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 71636.36
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 71818.18
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 72000
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 72181.82
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 72363.63
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 72545.45
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 72727.27
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 73090.91
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 73272.73
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 73363.63
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 73454.55
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 73636.36
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 73818.18
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 74000
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 74181.82
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 74363.63
+                },
+                {
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 74545.45
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 74727.27
+                },
+                {
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 74909.09
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 75090.91
+                },
+                {
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 75272.73
+                },
+                {
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 75454.55
+                }
+            ],
+            "camPoint": 0
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 75636.36
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 75818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 76000
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 76181.82
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 76272.73
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 76363.63
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 76545.45
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 76727.27
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 76909.09
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 77090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 77454.55
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 77636.36
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 77818.18
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 78000
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 78181.82
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 78363.63
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 78545.45
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 78909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 79090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 79181.82
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 79272.73
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 79454.55
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 79636.36
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 79818.18
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 80000
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 80181.82
+                },
+                {
+                    "strumline": 1,
+                    "index": 2,
+                    "sustainTime": 0,
+                    "step": 80363.63
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 80545.45
+                },
+                {
+                    "strumline": 1,
+                    "index": 1,
+                    "sustainTime": 0,
+                    "step": 80727.27
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 80909.09
+                },
+                {
+                    "strumline": 1,
+                    "index": 0,
+                    "sustainTime": 0,
+                    "step": 81090.91
+                },
+                {
+                    "strumline": 1,
+                    "index": 3,
+                    "sustainTime": 0,
+                    "step": 81272.73
+                }
+            ],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        },
+        {
+            "length": 16,
+            "notes": [],
+            "camPoint": 1
+        }
+    ]
+}

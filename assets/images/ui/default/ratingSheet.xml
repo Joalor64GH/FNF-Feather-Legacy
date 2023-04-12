@@ -2,9 +2,9 @@
 <TextureAtlas imagePath="ratingSheet.png">
 	<!-- Created with Adobe Animate version 20.0.0.17400 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="bad" x="602" y="152" width="261" height="131"/>
-	<SubTexture name="good" x="285" y="152" width="317" height="126"/>
-	<SubTexture name="miss" x="403" y="0" width="403" height="152"/>
-	<SubTexture name="shit" x="0" y="152" width="285" height="163"/>
-	<SubTexture name="sick" x="0" y="0" width="403" height="152"/>
+	<SubTexture name="bad" x="602" y="152" width="261" height="131" />
+	<SubTexture name="good" x="285" y="152" width="317" height="126" />
+	<SubTexture name="miss" x="403" y="0" width="403" height="152" />
+	<SubTexture name="shit" x="0" y="152" width="285" height="163" />
+	<SubTexture name="sick" x="0" y="0" width="403" height="152" />
 </TextureAtlas>
