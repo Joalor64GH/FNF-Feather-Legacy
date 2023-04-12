@@ -2,48 +2,48 @@
 <TextureAtlas imagePath="NOTE_splashes.png">
 	<!-- Created with Adobe Animate version 20.0.0.17400 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="blue splash 00000" x="0" y="0" width="357" height="321"/>
-	<SubTexture name="blue splash 00001" x="0" y="321" width="357" height="321"/>
-	<SubTexture name="blue splash 00002" x="0" y="642" width="357" height="321"/>
-	<SubTexture name="blue splash 00003" x="0" y="963" width="357" height="321"/>
-	<SubTexture name="blue splash 00004" x="0" y="1284" width="357" height="321"/>
-	<SubTexture name="blue splash 00005" x="0" y="1605" width="357" height="321"/>
-	<SubTexture name="blue splash 00006" x="357" y="0" width="357" height="321"/>
-	<SubTexture name="blue splash 00007" x="357" y="321" width="357" height="321"/>
-	<SubTexture name="blue splash 00008" x="357" y="642" width="357" height="321"/>
-	<SubTexture name="blue splash 00009" x="357" y="963" width="357" height="321"/>
-	<SubTexture name="blue splash 00010" x="357" y="1284" width="357" height="321"/>
-	<SubTexture name="green splash 00000" x="357" y="1605" width="357" height="321"/>
-	<SubTexture name="green splash 00001" x="714" y="0" width="357" height="321"/>
-	<SubTexture name="green splash 00002" x="1071" y="0" width="357" height="321"/>
-	<SubTexture name="green splash 00003" x="1428" y="0" width="357" height="321"/>
-	<SubTexture name="green splash 00004" x="1785" y="0" width="357" height="321"/>
-	<SubTexture name="green splash 00005" x="2142" y="0" width="357" height="321"/>
-	<SubTexture name="green splash 00006" x="714" y="321" width="357" height="321"/>
-	<SubTexture name="green splash 00007" x="714" y="642" width="357" height="321"/>
-	<SubTexture name="green splash 00008" x="714" y="963" width="357" height="321"/>
-	<SubTexture name="green splash 00009" x="714" y="1284" width="357" height="321"/>
-	<SubTexture name="green splash 00010" x="357" y="1284" width="357" height="321"/>
-	<SubTexture name="purple splash 00000" x="1785" y="642" width="357" height="321"/>
-	<SubTexture name="purple splash 00001" x="2142" y="642" width="357" height="321"/>
-	<SubTexture name="purple splash 00002" x="1428" y="963" width="357" height="321"/>
-	<SubTexture name="purple splash 00003" x="1428" y="1284" width="357" height="321"/>
-	<SubTexture name="purple splash 00004" x="2142" y="321" width="357" height="321"/>
-	<SubTexture name="purple splash 00005" x="1071" y="642" width="357" height="321"/>
-	<SubTexture name="purple splash 00006" x="1071" y="963" width="357" height="321"/>
-	<SubTexture name="purple splash 00007" x="1071" y="1284" width="357" height="321"/>
-	<SubTexture name="purple splash 00008" x="1428" y="1605" width="357" height="321"/>
-	<SubTexture name="purple splash 00009" x="1785" y="963" width="357" height="321"/>
-	<SubTexture name="purple splash 00010" x="357" y="1284" width="357" height="321"/>
-	<SubTexture name="red splash 00000" x="714" y="1605" width="357" height="321"/>
-	<SubTexture name="red splash 00001" x="1071" y="321" width="357" height="321"/>
-	<SubTexture name="red splash 00002" x="1428" y="321" width="357" height="321"/>
-	<SubTexture name="red splash 00003" x="1785" y="321" width="357" height="321"/>
-	<SubTexture name="red splash 00004" x="2142" y="321" width="357" height="321"/>
-	<SubTexture name="red splash 00005" x="1071" y="642" width="357" height="321"/>
-	<SubTexture name="red splash 00006" x="1071" y="963" width="357" height="321"/>
-	<SubTexture name="red splash 00007" x="1071" y="1284" width="357" height="321"/>
-	<SubTexture name="red splash 00008" x="1071" y="1605" width="357" height="321"/>
-	<SubTexture name="red splash 00009" x="1428" y="642" width="357" height="321"/>
-	<SubTexture name="red splash 00010" x="357" y="1284" width="357" height="321"/>
+	<SubTexture name="blue splash 00000" x="0" y="0" width="357" height="321" />
+	<SubTexture name="blue splash 00001" x="0" y="321" width="357" height="321" />
+	<SubTexture name="blue splash 00002" x="0" y="642" width="357" height="321" />
+	<SubTexture name="blue splash 00003" x="0" y="963" width="357" height="321" />
+	<SubTexture name="blue splash 00004" x="0" y="1284" width="357" height="321" />
+	<SubTexture name="blue splash 00005" x="0" y="1605" width="357" height="321" />
+	<SubTexture name="blue splash 00006" x="357" y="0" width="357" height="321" />
+	<SubTexture name="blue splash 00007" x="357" y="321" width="357" height="321" />
+	<SubTexture name="blue splash 00008" x="357" y="642" width="357" height="321" />
+	<SubTexture name="blue splash 00009" x="357" y="963" width="357" height="321" />
+	<SubTexture name="blue splash 00010" x="357" y="1284" width="357" height="321" />
+	<SubTexture name="green splash 00000" x="357" y="1605" width="357" height="321" />
+	<SubTexture name="green splash 00001" x="714" y="0" width="357" height="321" />
+	<SubTexture name="green splash 00002" x="1071" y="0" width="357" height="321" />
+	<SubTexture name="green splash 00003" x="1428" y="0" width="357" height="321" />
+	<SubTexture name="green splash 00004" x="1785" y="0" width="357" height="321" />
+	<SubTexture name="green splash 00005" x="2142" y="0" width="357" height="321" />
+	<SubTexture name="green splash 00006" x="714" y="321" width="357" height="321" />
+	<SubTexture name="green splash 00007" x="714" y="642" width="357" height="321" />
+	<SubTexture name="green splash 00008" x="714" y="963" width="357" height="321" />
+	<SubTexture name="green splash 00009" x="714" y="1284" width="357" height="321" />
+	<SubTexture name="green splash 00010" x="357" y="1284" width="357" height="321" />
+	<SubTexture name="purple splash 00000" x="1785" y="642" width="357" height="321" />
+	<SubTexture name="purple splash 00001" x="2142" y="642" width="357" height="321" />
+	<SubTexture name="purple splash 00002" x="1428" y="963" width="357" height="321" />
+	<SubTexture name="purple splash 00003" x="1428" y="1284" width="357" height="321" />
+	<SubTexture name="purple splash 00004" x="2142" y="321" width="357" height="321" />
+	<SubTexture name="purple splash 00005" x="1071" y="642" width="357" height="321" />
+	<SubTexture name="purple splash 00006" x="1071" y="963" width="357" height="321" />
+	<SubTexture name="purple splash 00007" x="1071" y="1284" width="357" height="321" />
+	<SubTexture name="purple splash 00008" x="1428" y="1605" width="357" height="321" />
+	<SubTexture name="purple splash 00009" x="1785" y="963" width="357" height="321" />
+	<SubTexture name="purple splash 00010" x="357" y="1284" width="357" height="321" />
+	<SubTexture name="red splash 00000" x="714" y="1605" width="357" height="321" />
+	<SubTexture name="red splash 00001" x="1071" y="321" width="357" height="321" />
+	<SubTexture name="red splash 00002" x="1428" y="321" width="357" height="321" />
+	<SubTexture name="red splash 00003" x="1785" y="321" width="357" height="321" />
+	<SubTexture name="red splash 00004" x="2142" y="321" width="357" height="321" />
+	<SubTexture name="red splash 00005" x="1071" y="642" width="357" height="321" />
+	<SubTexture name="red splash 00006" x="1071" y="963" width="357" height="321" />
+	<SubTexture name="red splash 00007" x="1071" y="1284" width="357" height="321" />
+	<SubTexture name="red splash 00008" x="1071" y="1605" width="357" height="321" />
+	<SubTexture name="red splash 00009" x="1428" y="642" width="357" height="321" />
+	<SubTexture name="red splash 00010" x="357" y="1284" width="357" height="321" />
 </TextureAtlas>

@@ -1,18 +1,58 @@
 {
   "dependencies": [
-    {"name": "lime", "type": "haxelib"},
-    {"name": "openfl", "type": "haxelib"},
-    {"name": "flixel", "type": "haxelib"},
-    {"name": "flixel-addons", "type": "haxelib"},
-    {"name": "flixel-ui", "type": "haxelib"},
-    {"name": "hxcpp", "type": "haxelib"},
-    {"name": "tjson", "type": "haxelib"},
-    {"name": "yaml", "type": "haxelib"},
-    {"name": "SScript", "type": "haxelib"},
-    {"name": "flxanimate", "type": "haxelib"},
-    {"name": "discord_rpc", "type": "git", "ref": "master",
-      "url": "https://github.com/Aidan63/linc_discord-rpc"},
-    {"name": "haxeui-core", "type": "haxelib"},
-    {"name": "haxeui-flixel", "type": "haxelib"}
+    {
+      "name": "lime",
+      "type": "haxelib"
+    },
+    {
+      "name": "openfl",
+      "type": "haxelib"
+    },
+    {
+      "name": "flixel",
+      "type": "haxelib"
+    },
+    {
+      "name": "flixel-addons",
+      "type": "haxelib"
+    },
+    {
+      "name": "flixel-ui",
+      "type": "haxelib"
+    },
+    {
+      "name": "hxcpp",
+      "type": "haxelib"
+    },
+    {
+      "name": "tjson",
+      "type": "haxelib"
+    },
+    {
+      "name": "yaml",
+      "type": "haxelib"
+    },
+    {
+      "name": "SScript",
+      "type": "haxelib"
+    },
+    {
+      "name": "flxanimate",
+      "type": "haxelib"
+    },
+    {
+      "name": "discord_rpc",
+      "type": "git",
+      "ref": "master",
+      "url": "https://github.com/Aidan63/linc_discord-rpc"
+    },
+    {
+      "name": "haxeui-core",
+      "type": "haxelib"
+    },
+    {
+      "name": "haxeui-flixel",
+      "type": "haxelib"
+    }
   ]
 }

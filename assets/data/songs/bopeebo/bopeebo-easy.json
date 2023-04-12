@@ -1,11 +1,9 @@
 {
-	"speed": 1,
-    "sections":
-    [
+    "speed": 1,
+    "sections": [
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 2,
                     "sustainTime": 0,
@@ -26,8 +24,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 2,
@@ -51,8 +48,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 1,
                     "sustainTime": 300,
@@ -73,8 +69,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 1,
@@ -98,8 +93,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 1,
                     "sustainTime": 0,
@@ -125,8 +119,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 1,
@@ -156,8 +149,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 3,
                     "sustainTime": 0,
@@ -183,8 +175,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 3,
@@ -214,8 +205,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 0,
                     "sustainTime": 0,
@@ -236,8 +226,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 0,
@@ -261,8 +250,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 1,
                     "sustainTime": 0,
@@ -283,8 +271,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 1,
@@ -308,8 +295,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 2,
                     "sustainTime": 0,
@@ -330,8 +316,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 2,
@@ -355,8 +340,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 0,
                     "sustainTime": 0,
@@ -382,8 +366,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 0,
@@ -413,8 +396,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 2,
                     "sustainTime": 450,
@@ -435,8 +417,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 2,
@@ -460,8 +441,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 1,
                     "sustainTime": 0,
@@ -492,8 +472,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 1,
@@ -529,8 +508,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 2,
                     "sustainTime": 450,
@@ -551,8 +529,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 2,
@@ -576,8 +553,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 3,
                     "sustainTime": 1725,
@@ -588,8 +564,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 3,
@@ -601,8 +576,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 2,
                     "sustainTime": 0,
@@ -623,8 +597,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 2,
@@ -648,8 +621,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 0,
                     "sustainTime": 0,
@@ -675,8 +647,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 0,
@@ -706,8 +677,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 2,
                     "sustainTime": 0,
@@ -738,8 +708,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 2,
@@ -775,8 +744,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "index": 0,
                     "sustainTime": 0,
@@ -802,8 +770,7 @@
         },
         {
             "length": 16,
-            "notes":
-            [
+            "notes": [
                 {
                     "strumline": 1,
                     "index": 0,
@@ -833,38 +800,32 @@
         },
         {
             "length": 16,
-            "notes":
-            [],
+            "notes": [],
             "camPoint": 1
         },
         {
             "length": 16,
-            "notes":
-            [],
+            "notes": [],
             "camPoint": 1
         },
         {
             "length": 16,
-            "notes":
-            [],
+            "notes": [],
             "camPoint": 1
         },
         {
             "length": 16,
-            "notes":
-            [],
+            "notes": [],
             "camPoint": 1
         },
         {
             "length": 16,
-            "notes":
-            [],
+            "notes": [],
             "camPoint": 1
         },
         {
             "length": 16,
-            "notes":
-            [],
+            "notes": [],
             "camPoint": 1
         }
     ]

@@ -1,12 +1,12 @@
 chars: [tankman, bf, gf]
 songs:
-  - color: '#F6B604'
+  - color: "#F6B604"
     enemy: tankman
     name: Ugh
-  - color: '#F6B604'
+  - color: "#F6B604"
     enemy: tankman
     name: Guns
-  - color: '#F6B604'
+  - color: "#F6B604"
     enemy: tankman
     name: Stress
 label: TANKMAN
